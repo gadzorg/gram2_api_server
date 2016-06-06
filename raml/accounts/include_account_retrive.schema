@@ -1,0 +1,134 @@
+{
+  "type": "object",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Accounts",
+  "description": "GrAM Accounts, attached to a natural person.",
+  "properties": {
+    "uuid": {
+      "description": "UUID du compte",
+      "type":"string"
+    },
+    "hruid": {
+      "description": "Human readable unique id",
+      "type":"string"
+    },
+    "idSoce": {
+      "description": "Soce ID",
+      "type":"string",
+      "minLength": 7,
+      "maxLength": 7
+    },
+    "enabled": {
+      "description": "If the account is enable or not",
+      "type":"boolean"
+    },
+    "lastname": {
+       "description": "User Last name",
+      "type":"string"
+    },
+    "firstname": {
+      "description": "User first name",
+      "type":"string"
+    },
+    "birthname": {
+      "description": "User birthdate",
+      "type":"string"
+    },
+    "birthFirstname": {
+      "description": "",
+      "type":"string"
+    },
+    "email": {
+      "description": "",
+      "type":"string"
+    },
+    "gapps_email": {
+      "description": "",
+      "type":"string"
+    },
+    "password": {
+      "description": "",
+      "type":"string"
+    },
+    "birthdate": {
+      "description": "",
+      "type":"string"
+    },
+    "deathdate": {
+      "description": "",
+      "type":"string"
+    },
+    "gender": {
+      "description": "",
+      "type":"string"
+    },
+    "isGadz": {
+      "description": "",
+      "type":"boolean"
+    },
+    "isStudent": {
+      "description": "",
+      "type":"boolean"
+    },
+    "schoolId": {
+      "description": "",
+      "type":"string"
+    },
+    "isAlumni": {
+      "description": "",
+      "type":"boolean"
+    },
+    "dateEntreeEcole": {
+      "description": "",
+      "type":"string"
+    },
+    "dateSortieEcole": {
+      "description": "",
+      "type":"string"
+    },
+    "ecoleEntree": {
+      "description": "",
+      "type":"string"
+    },
+    "buqueTexte": {
+      "description": "",
+      "type":"string"
+    },
+    "buqueZaloeil": {
+      "description": "",
+      "type":"string"
+    },
+    "gadzFams": {
+      "description": "",
+      "type":"string"
+    },
+    "gadzFamsZaloeil": {
+      "description": "",
+      "type":"string"
+    },
+    "gadzPromsPrincipale": {
+      "description": "",
+      "type":"string"
+    },
+    "gadzPromsSecondaire": {
+      "description": "",
+      "type":"string"
+    },
+    "avatar_url": {
+      "description": "",
+      "type":"string"
+    },
+    "alias": {
+      "description": "",
+      "type":"array",
+      "item": {
+        "type": "string"
+      }
+    },
+    "description": {
+      "description": "",
+      "type":"string"
+    }
+  }
+}
+

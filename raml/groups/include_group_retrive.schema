@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Groups",
+  "description": "Groupe du GrAM / Soce, attaché à un compte",
+  "properties": {
+    "name": {
+      "description": "Nom complet du groupe",
+      "type": "string"
+    },
+    "short_name": {
+      "description": "Nom court du groupe. Ce nom est unique.",
+      "type": "string"
+    },
+    "guid": {
+      "description": "ID du group",
+      "type": "string"
+    },
+    "description": {
+      "description": "Description du groupe.",
+      "type": "string"
+    }
+  },
+  "required": ["name","short_name","guid"]
+}
