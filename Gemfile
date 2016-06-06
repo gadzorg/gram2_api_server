@@ -37,7 +37,6 @@ group :development, :test do
   gem 'byebug'
   gem 'database_cleaner'
   gem 'better_errors'
-  gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'faker'
 
@@ -49,5 +48,10 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+end
+
+group :test do
+  gem 'rspec-rails'
+  gem 'vigia'
 end
 
