@@ -13,4 +13,4 @@ test: &default
 master_data_db:
   test:
     <<: *default
-    database: db/myapp_master_data_test.sqlite3
+    database: myapp_master_data_test
