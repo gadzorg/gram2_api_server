@@ -37,6 +37,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.3.8)
+    amq-protocol (2.0.1)
     arel (6.0.3)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
@@ -44,7 +45,11 @@ GEM
       rack (>= 0.9.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
+    bogus (0.1.6)
+      dependor (>= 0.0.4)
     builder (3.2.2)
+    bunny (2.3.1)
+      amq-protocol (>= 2.0.1)
     byebug (9.0.5)
     coderay (1.1.1)
     coffee-rails (4.1.1)
@@ -57,6 +62,7 @@ GEM
     concurrent-ruby (1.0.2)
     database_cleaner (1.5.3)
     debug_inspector (0.0.2)
+    dependor (1.0.1)
     diff-lcs (1.2.5)
     domain_name (0.5.20160310)
       unf (>= 0.0.5, < 1.0.0)
@@ -72,6 +78,9 @@ GEM
     ffi (1.9.10)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
+    gorg_message_sender (1.0.0)
+      bunny (~> 2.2, >= 2.2.2)
+      json-schema (~> 2.6)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     i18n (0.7.0)
@@ -90,10 +99,10 @@ GEM
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
     mime-types (2.99.2)
-    mime-types-data (3.2016.0521)
     mini_portile2 (2.1.0)
     minitest (5.9.0)
     multi_json (1.12.1)
+    mysql2 (0.3.21)
     netrc (0.11.0)
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
@@ -214,14 +223,17 @@ PLATFORMS
 
 DEPENDENCIES
   better_errors
+  bogus
   byebug
   coffee-rails (~> 4.1.0)
   database_cleaner
   factory_girl_rails
   faker
+  gorg_message_sender
   jbuilder (~> 2.0)
   jquery-rails
-  rails (~> 4.2.5)
+  mysql2 (~> 0.3.20)
+  rails (~> 4.2)
   rspec-rails
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)

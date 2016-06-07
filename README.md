@@ -24,3 +24,13 @@ Things you may want to cover:
  - Deployment instructions
 
  - ...
+
+ ## Environment variables :
+
+ * RABBITMQ_SENDER_ID : Sender id. "gram" if not defined
+ * RABBITMQ_HOST
+ * RABBITMQ_PORT
+ * RABBITMQ_VHOST
+ * RABBITMQ_USER
+ * RABBITMQ_PASSWORD
+ * RABBITMQ_EXCHANGE : "agoram_event_exchange" if not defined
