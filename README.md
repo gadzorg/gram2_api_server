@@ -34,3 +34,20 @@ Things you may want to cover:
  * RABBITMQ_USER
  * RABBITMQ_PASSWORD
  * RABBITMQ_EXCHANGE : "agoram_event_exchange" if not defined
+
+## Test
+
+Prepare test MasterData with : 
+```
+RAILS_ENV=test rake master_data:db:migrate
+```
+
+Rspec : 
+```
+rspec --format doc
+```
+
+Test from RAML :
+```
+rake spec:vigia
+```
