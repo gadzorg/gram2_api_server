@@ -58,10 +58,16 @@ Rails.application.routes.draw do
       resources :groups
       resources :roles
       resources :accounts do
+        #accounts/groups
         get 'groups' => 'accounts#index_groups', as: :index_groups
         post 'groups' => 'accounts#add_to_group', as: :add_to_group
         get 'groups/:group_id' => 'accounts#show_groups', as: :show_groups
         delete 'groups/:group_id' => 'accounts#remove_from_group', as: :remove_from_group
+        #accounts/roles
+        get 'roles' => 'accounts#index_roles', as: :index_roles
+        post 'roles' => 'accounts#add_role', as: :add_role
+        get 'roles/:role_id' => 'accounts#show_roles', as: :show_roles
+        delete 'roles/:role_id' => 'accounts#revoke_role', as: :revoke_roles
       end
     end
   end

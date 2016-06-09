@@ -12,4 +12,13 @@ class MasterData::Account < MasterData::Base
 		self.groups.delete group
 	end
 
+	def add_role role
+		#check if account already in tihs group
+		self.roles << role unless self.roles.exists?(role.id)
+	end
+
+	def revoke_role role
+		self.roles.delete role
+	end
+
 end
