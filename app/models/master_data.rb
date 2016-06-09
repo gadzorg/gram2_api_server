@@ -4,6 +4,6 @@
 #
 module MasterData
   def self.table_name_prefix
-    ''
+    'gram_'
   end
 end

@@ -1,6 +1,6 @@
 class CreateMasterDataGroups < ActiveRecord::Migration
   def change
-    create_table :groups do |t|
+    create_table :gram_groups do |t|
       t.string :guid
       t.string :name
       t.string :short_name

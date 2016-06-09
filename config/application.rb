@@ -27,6 +27,3 @@ end
 
 #Manager multiple databases
 db_conf = YAML::load(File.open(File.join(Rails.root,'config','database.yml')))
-
-MASTER_DATA_DB_CONF = db_conf["master_data_db"][Rails.env]
-API_DB_CONF = db_conf[Rails.env]

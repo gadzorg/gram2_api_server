@@ -1,6 +1,6 @@
 class CreateMasterDataAccounts < ActiveRecord::Migration
   def change
-    create_table :accounts do |t|
+    create_table :gram_accounts do |t|
       t.string :uuid
       t.string :hruid
       t.string :id_soce
