@@ -58,4 +58,9 @@ Rails.application.routes.draw do
       resources :groups 
     end
   end
+  namespace :api, constraints: { format: 'json' } do
+    namespace :v2 do
+      resources :roles 
+    end
+  end
 end

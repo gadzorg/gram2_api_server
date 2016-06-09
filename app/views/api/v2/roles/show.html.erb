@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @api_v2_role.name %>
+</p>
+
+<p>
+  <strong>Application:</strong>
+  <%= @api_v2_role.application %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @api_v2_role.description %>
+</p>
+
+<%= link_to 'Edit', edit_api_v2_role_path(@api_v2_role) %> |
+<%= link_to 'Back', api_v2_roles_path %>
