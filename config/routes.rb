@@ -57,7 +57,12 @@ Rails.application.routes.draw do
     namespace :v2 do
       resources :groups
       resources :roles
-      resources :accounts
+      resources :accounts do
+        get 'groups' => 'accounts#index_groups', as: :index_groups
+        post 'groups' => 'accounts#add_to_group', as: :add_to_group
+        get 'groups/:group_id' => 'accounts#show_groups', as: :show_groups
+        delete 'groups/:group_id' => 'accounts#remove_from_group', as: :remove_from_group
+      end
     end
   end
 end

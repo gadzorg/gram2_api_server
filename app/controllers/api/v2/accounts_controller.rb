@@ -2,7 +2,7 @@ class Api::V2::AccountsController < ApplicationController
   before_action :set_api_v2_account, only: [:show, :edit, :update, :destroy]
 
     #TODO : remove line bellow, it skips auth
-  skip_before_action :verify_authenticity_token
+    skip_before_action :verify_authenticity_token
 
   # GET /api/v2/accounts
   # GET /api/v2/accounts.json
@@ -64,6 +64,52 @@ class Api::V2::AccountsController < ApplicationController
     end
   end
 
+  def index_groups
+    account = MasterData::Account.find(params[:account_id])
+    @groups = account.groups
+  end
+
+  def show_groups
+    account = MasterData::Account.find(params[:account_id])
+    if account.groups.exists?(params[:group_id])
+     @group = account.groups.find(params[:group_id])
+   else
+    render json: { error: "Group not found" }, status: :not_found
+    end
+  end
+
+  def add_to_group
+    account = MasterData::Account.find(params[:account_id])
+    group_id = params[:id]
+    @group = MasterData::Group.find(group_id)
+    @groups = account.groups
+
+
+    respond_to do |format|
+      if account.add_to_group @group
+        format.html { redirect_to api_v2_account_groups(account), notice: 'Group was successfully added to the Account.' }
+        format.json { render :index_groups, status: :created, location: :api_v2_account_index_groups }
+      else
+        format.html { render :new }
+        format.json { render json: account.errors, status: :unprocessable_entity }
+      end
+    end
+
+  end
+
+  def remove_from_group
+    account = MasterData::Account.find(params[:account_id])
+    group = account.groups.find(params[:group_id])
+
+    respond_to do |format|
+      if account.remove_from_group group
+        format.html { redirect_to api_v2_accounts_url, notice: 'Group was successfully revomed from this account.' }
+        format.json { head :no_content }
+      end
+    end
+
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_api_v2_account
@@ -74,4 +120,4 @@ class Api::V2::AccountsController < ApplicationController
     def api_v2_account_params
       params.require(:account).permit(:uuid, :hruid, :id_soce, :enabled, :password, :lastname, :firstname, :birthname, :birth_firstname, :email, :gapps_email, :password, :birthdate, :deathdate, :gender, :is_gadz, :is_student, :school_id, :is_alumni, :date_entree_ecole, :date_sortie_ecole, :ecole_entree, :buque_texte, :buque_zaloeil, :gadz_fams, :gadz_fams_zaloeil, :gadz_proms_principale, :gadz_proms_secondaire, :avatar_url, :description)
     end
-end
+  end
