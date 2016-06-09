@@ -67,7 +67,7 @@ class Api::V2::RolesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_api_v2_role
-      @api_v2_role = Api::V2::Role.find(params[:id])
+      @api_v2_role = MasterData::Role.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
