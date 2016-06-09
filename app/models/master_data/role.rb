@@ -1,2 +1,2 @@
-class MasterData::Role < ActiveRecord::Base
+class MasterData::Role < MasterData::Base
 end

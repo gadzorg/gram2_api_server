@@ -1,2 +1,2 @@
-class MasterData::Group < ActiveRecord::Base
+class MasterData::Group < MasterData::Base
 end
