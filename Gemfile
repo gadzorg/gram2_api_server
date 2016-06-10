@@ -32,6 +32,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'active_model_serializers', '~> 0.10.0'
+
 gem 'gorg_message_sender'
 
 group :development, :test do

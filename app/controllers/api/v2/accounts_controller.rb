@@ -8,11 +8,19 @@ class Api::V2::AccountsController < ApplicationController
   # GET /api/v2/accounts.json
   def index
     @api_v2_accounts = MasterData::Account.all
+    @accounts = @api_v2_accounts
+    respond_to do |format|
+      format.json {render json: @accounts}
+    end
   end
 
   # GET /api/v2/accounts/1
   # GET /api/v2/accounts/1.json
   def show
+    @account = @api_v2_account
+    respond_to do |format|
+      format.json {render json: @account}
+    end
   end
 
   # GET /api/v2/accounts/new
@@ -28,11 +36,12 @@ class Api::V2::AccountsController < ApplicationController
   # POST /api/v2/accounts.json
   def create
     @api_v2_account = MasterData::Account.new(api_v2_account_params)
+    @account = @api_v2_account
 
     respond_to do |format|
       if @api_v2_account.save
         format.html { redirect_to @api_v2_account, notice: 'Account was successfully created.' }
-        format.json { render :show, status: :created, location: :api_v2_accounts }
+        format.json { render json: @account, status: :created, location: :api_v2_accounts }
       else
         format.html { render :new }
         format.json { render json: @api_v2_account.errors, status: :unprocessable_entity }
@@ -43,10 +52,11 @@ class Api::V2::AccountsController < ApplicationController
   # PATCH/PUT /api/v2/accounts/1
   # PATCH/PUT /api/v2/accounts/1.json
   def update
+    @account = @api_v2_account
     respond_to do |format|
       if @api_v2_account.update(api_v2_account_params)
         format.html { redirect_to @api_v2_account, notice: 'Account was successfully updated.' }
-        format.json { render :show, status: :ok, location: :api_v2_account }
+        format.json { render json: @account, status: :ok, location: :api_v2_account }
       else
         format.html { render :edit }
         format.json { render json: @api_v2_account.errors, status: :unprocessable_entity }
@@ -70,12 +80,18 @@ class Api::V2::AccountsController < ApplicationController
   def index_groups
     account = MasterData::Account.find(params[:account_id])
     @groups = account.groups
+    respond_to do |format|
+      format.json {render json: @groups}
+    end
   end
 
   def show_groups
     account = MasterData::Account.find(params[:account_id])
     if account.groups.exists?(params[:group_id])
      @group = account.groups.find(params[:group_id])
+      respond_to do |format|
+        format.json {render json: @group}
+      end
    else
     render json: { error: "Group not found" }, status: :not_found
     end
@@ -91,7 +107,7 @@ class Api::V2::AccountsController < ApplicationController
     respond_to do |format|
       if account.add_to_group @group
         format.html { redirect_to api_v2_account_groups(account), notice: 'Group was successfully added to the Account.' }
-        format.json { render :index_groups, status: :created, location: :api_v2_account_index_groups }
+        format.json { render json: @groups, status: :created }
       else
         format.html { render :new }
         format.json { render json: account.errors, status: :unprocessable_entity }
@@ -120,7 +136,10 @@ class Api::V2::AccountsController < ApplicationController
   def index_roles
     account = MasterData::Account.find(params[:account_id])
     @roles = account.roles
-    @api_v2_roles = @roles
+    respond_to do |format|
+      format.json {render json: @roles}
+    end
+
   end
 
   def show_roles
@@ -128,7 +147,7 @@ class Api::V2::AccountsController < ApplicationController
     if account.roles.exists?(params[:role_id])
       @role = account.roles.find(params[:role_id])
       respond_to do |format|
-        format.json {render :show_roles, location: :api_v2_roles}
+        format.json {render json: @role}
       end
       
     else
@@ -146,7 +165,7 @@ class Api::V2::AccountsController < ApplicationController
     respond_to do |format|
       if account.add_role @role
         format.html { redirect_to api_v2_account_roles(account), notice: 'Role was successfully added to the Account.' }
-        format.json { render :index, status: :created, location: :api_v2_roles }
+        format.json { render json: @roles, status: :created }
       else
         format.html { render :new }
         format.json { render json: account.errors, status: :unprocessable_entity }

@@ -8,11 +8,17 @@ class Api::V2::GroupsController < ApplicationController
   # GET /groups.json
   def index
     @groups = MasterData::Group.all
+    respond_to do |format|
+      format.json {render json: @groups}
+    end
   end
 
   # GET /groups/1
   # GET /groups/1.json
   def show
+    respond_to do |format|
+      format.json {render json: @group}
+    end
   end
 
   # GET /groups/new
@@ -32,7 +38,7 @@ class Api::V2::GroupsController < ApplicationController
     respond_to do |format|
       if @group.save
         format.html { redirect_to @group, notice: 'MasterData::Group was successfully created.' }
-        format.json { render :show, status: :created, location:  :api_v2_groups}
+        format.json { render json: @group, status: :created}
       else
         format.html { render :new }
         format.json { render json: @group.errors, status: :unprocessable_entity }
@@ -46,7 +52,7 @@ class Api::V2::GroupsController < ApplicationController
     respond_to do |format|
       if @group.update(group_params)
         format.html { redirect_to @group, notice: 'MasterData::Group was successfully updated.' }
-        format.json { render :show, status: :ok, location: :api_v2_groups }
+        format.json { render json: @group, status: :ok }
       else
         format.html { render :edit }
         format.json { render json: @group.errors, status: :unprocessable_entity }

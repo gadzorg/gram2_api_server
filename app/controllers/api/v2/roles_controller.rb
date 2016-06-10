@@ -8,11 +8,19 @@ class Api::V2::RolesController < ApplicationController
   # GET /api/v2/roles.json
   def index
     @api_v2_roles = MasterData::Role.all
+    @roles = @api_v2_roles
+    respond_to do |format|
+      format.json {render json: @roles}
+    end
   end
 
   # GET /api/v2/roles/1
   # GET /api/v2/roles/1.json
   def show
+    @role = @api_v2_role
+    respond_to do |format|
+      format.json {render json: @role}
+    end
   end
 
   # GET /api/v2/roles/new
@@ -28,11 +36,12 @@ class Api::V2::RolesController < ApplicationController
   # POST /api/v2/roles.json
   def create
     @api_v2_role = MasterData::Role.new(api_v2_role_params)
+    @role = @api_v2_role
 
     respond_to do |format|
       if @api_v2_role.save
         format.html { redirect_to @api_v2_role, notice: 'Role was successfully created.' }
-        format.json { render :show, status: :created, location: :api_v2_roles }
+        format.json { render json: @role, status: :created }
       else
         format.html { render :new }
         format.json { render json: @api_v2_role.errors, status: :unprocessable_entity }
@@ -43,10 +52,11 @@ class Api::V2::RolesController < ApplicationController
   # PATCH/PUT /api/v2/roles/1
   # PATCH/PUT /api/v2/roles/1.json
   def update
+    @role = @api_v2_role
     respond_to do |format|
       if @api_v2_role.update(api_v2_role_params)
         format.html { redirect_to @api_v2_role, notice: 'Role was successfully updated.' }
-        format.json { render :show, status: :ok, location: @api_v2_role }
+        format.json { render json: @role, status: :ok}
       else
         format.html { render :edit }
         format.json { render json: @api_v2_role.errors, status: :unprocessable_entity }
