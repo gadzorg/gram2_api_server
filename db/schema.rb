@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20160609082358) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "clients", force: :cascade do |t|
     t.string   "name"
     t.string   "password"
@@ -23,9 +26,9 @@ ActiveRecord::Schema.define(version: 20160609082358) do
   end
 
   create_table "gram_accounts", force: :cascade do |t|
-    t.string   "uuid"
+    t.uuid     "uuid"
     t.string   "hruid"
-    t.string   "id_soce"
+    t.string   "id_soce",               default: "nextval('id_soce_seq'::regclass)"
     t.boolean  "enabled"
     t.string   "password"
     t.string   "lastname"
@@ -52,9 +55,13 @@ ActiveRecord::Schema.define(version: 20160609082358) do
     t.string   "gadz_proms_secondaire"
     t.string   "avatar_url"
     t.string   "description"
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.datetime "created_at",                                                         null: false
+    t.datetime "updated_at",                                                         null: false
   end
+
+  add_index "gram_accounts", ["hruid"], name: "index_gram_accounts_on_hruid", using: :btree
+  add_index "gram_accounts", ["id_soce"], name: "index_gram_accounts_on_id_soce", using: :btree
+  add_index "gram_accounts", ["uuid"], name: "index_gram_accounts_on_uuid", using: :btree
 
   create_table "gram_accounts_groups", force: :cascade do |t|
     t.integer  "account_id"

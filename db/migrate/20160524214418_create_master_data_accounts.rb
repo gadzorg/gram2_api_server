@@ -1,11 +1,11 @@
 class CreateMasterDataAccounts < ActiveRecord::Migration
-  def change
+  def self.up
     create_table :gram_accounts do |t|
-      t.string :uuid
-      t.string :hruid
-      t.string :id_soce
+      t.uuid :uuid, :unique => true, :index => true
+      t.string :hruid, :unique => true, :unsigned => true, :index => true
+      t.string :id_soce, :unique => true, :unsigned => true, :index => true
       t.boolean :enabled
-      t.string :password
+      t.string :password, :null => false
       t.string :lastname
       t.string :firstname
       t.string :birthname
@@ -33,6 +33,21 @@ class CreateMasterDataAccounts < ActiveRecord::Migration
       t.string :description 
 
       t.timestamps null: false
-    end
+  end
+
+
+     # ALTER TABLE profiles ALTER COLUMN uuid SET DEFAULT uuid_generate_v4();
+  execute <<-SQL
+     CREATE SEQUENCE id_soce_seq START 1000;
+     ALTER SEQUENCE id_soce_seq OWNED BY gram_accounts.id_soce;
+     ALTER TABLE gram_accounts ALTER COLUMN id_soce SET DEFAULT nextval('id_soce_seq');
+    SQL
+  end
+  def self.down
+    drop_table :gram_accounts
+
+    execute <<-SQL
+      DROP SEQUENCE id_soce_seq;
+    SQL
   end
 end
