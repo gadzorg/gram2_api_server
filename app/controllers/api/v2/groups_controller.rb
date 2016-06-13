@@ -70,6 +70,31 @@ class Api::V2::GroupsController < ApplicationController
     end
   end
 
+  #########################################################
+  #  Accounts management
+  #########################################################
+
+  def index_accounts
+    group = MasterData::Group.find(params[:group_id])
+    @accounts = group.accounts
+    respond_to do |format|
+      format.json {render json: @accounts}
+    end
+
+  end
+
+  def show_accounts
+    group = MasterData::Group.find(params[:group_id])
+    if group.accounts.exists?(params[:account_id])
+     @account = group.accounts.find(params[:account_id])
+      respond_to do |format|
+        format.json {render json: @account}
+      end
+   else
+    render json: { error: "Acount not found" }, status: :not_found
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_group
