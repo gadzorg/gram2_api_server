@@ -1,4 +1,4 @@
-class Hruid
+class HruidService
   # build hruid from user info and check uniqness
   def self.generate(user)
     suffix = self.suffix_for(user)
@@ -13,6 +13,7 @@ class Hruid
     end
   end
 
+private
   # build hruid from user info
   def self.build(first_name, last_name, suffix)
     first_name = "prenom" if first_name.blank?
