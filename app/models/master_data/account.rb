@@ -27,6 +27,8 @@ class MasterData::Account < MasterData::Base
   validates :is_gadz, :inclusion => {:in => [true, false]}
   validates :buque_texte, format: { with: /\A[a-zA-Z0-9\'\-\s]\z/}, allow_nil: true
   validates :gadz_fams, format: { with: /\A[0-9\(\)\!\-\s]\z/}, allow_nil: true
+  validates :is_soce_employee, presence: true
+
 	
   def generate_uuid_if_empty
   	self.uuid ||= self.generate_uuid

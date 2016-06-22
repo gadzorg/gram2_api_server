@@ -15,6 +15,7 @@
   "gender": "male",
   "isGadz": true,
   "isStudent": false,
+  "isSoceEmployee": false,
   "schoolId": "2015-1234",
   "isAlumni": true,
   "dateEntreeEcole": "2015-00-00 00:00:00",

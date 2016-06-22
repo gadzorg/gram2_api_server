@@ -70,6 +70,10 @@
       "description": "",
       "type":"boolean"
     },
+        "isSoceEmployee": {
+      "description": "",
+      "type":"boolean"
+    },
     "schoolId": {
       "description": "",
       "type":"string"

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160609082358) do
+ActiveRecord::Schema.define(version: 20160622102840) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 20160609082358) do
     t.string   "description"
     t.datetime "created_at",                                                         null: false
     t.datetime "updated_at",                                                         null: false
+    t.boolean  "is_soce_employee",      default: false
   end
 
   add_index "gram_accounts", ["hruid"], name: "index_gram_accounts_on_hruid", using: :btree
