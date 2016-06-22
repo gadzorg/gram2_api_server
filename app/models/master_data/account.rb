@@ -22,12 +22,12 @@ class MasterData::Account < MasterData::Base
   validates :id_soce, uniqueness: true
   validates :enabled, :inclusion => {:in => [true, false]}
   validates :password, presence: true
+  validates :hruid,  uniqueness: true
   validates :email, presence: true, uniqueness: true, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i}
 	validates :gender, inclusion: {in: %w(male female)}, allow_nil: true
   validates :is_gadz, :inclusion => {:in => [true, false]}
   validates :buque_texte, format: { with: /\A[a-zA-Z0-9\'\-\s]\z/}, allow_nil: true
   validates :gadz_fams, format: { with: /\A[0-9\(\)\!\-\s]\z/}, allow_nil: true
-  validates :is_soce_employee, presence: true
 
 	
   def generate_uuid_if_empty
