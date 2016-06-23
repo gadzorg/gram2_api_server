@@ -5,6 +5,9 @@ FactoryGirl.define do
   factory :master_data_account, class: 'MasterData::Account' do
       uuid {SecureRandom.uuid}
       hruid {"#{Faker::Name.first_name}.#{Faker::Name.last_name}.#{(1900..2000).to_a.sample}"}
+      firstname Faker::Name.first_name
+      lastname Faker::Name.last_name
+      is_gadz true
       # id_soce {(2000..20000).to_a.sample}
       enabled true
       password {Digest::SHA1.hexdigest uuid}

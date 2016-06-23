@@ -26,48 +26,48 @@ RSpec.describe MasterData::Account, type: :model do
   it {is_expected.to validate_inclusion_of(:gender).in_array(['male','female'])}
   
   #id soce
-  it "validate presence of :soce_id" do
+  it "validate presence of :id_soce" do
     account=FactoryGirl.create(:master_data_account)
-    account.soce_id=nil
+    account.id_soce=nil
     expect(account.valid?).to eq(false)
   end
 
-   describe "validate that :soce_id is an integer" do
-    it "invalidate strings in :soce_id" do
+   describe "validate that :id_soce is an integer" do
+    it "invalidate strings in :id_soce" do
       account=FactoryGirl.create(:master_data_account)
-      account.soce_id="string"
+      account.id_soce="string"
       expect(account.valid?).to eq(false)
     end
 
-    it "invalidate non integer numbers in :soce_id" do
+    it "invalidate non integer numbers in :id_soce" do
       account=FactoryGirl.create(:master_data_account)
-      account.soce_id=157.211
+      account.id_soce=157.211
       expect(account.valid?).to eq(false)
     end
   end
 
-  describe "Soce_id auto_increment" do
+  describe "id_soce auto_increment" do
 
-    it "auto increment soce_id" do
+    it "auto increment id_soce" do
       account1=FactoryGirl.create(:master_data_account)
-      expect(FactoryGirl.create(:master_data_account).soce_id).to eq(account1.soce_id+1)
+      expect(FactoryGirl.create(:master_data_account).id_soce).to eq(account1.id_soce+1)
     end
 
-    describe "update soce_id sequence when user input" do
+    describe "update id_soce sequence when user input" do
       context "when user input greater than actual sequence" do
-        it "update soce_id next value " do
+        it "update id_soce next value " do
           account1=FactoryGirl.create(:master_data_account)
-          account2=FactoryGirl.create(:master_data_account, soce_id: account1.soce_id+10)
-          expect(FactoryGirl.create(:master_data_account).soce_id).to eq(account1.soce_id+11)
+          account2=FactoryGirl.create(:master_data_account, id_soce: account1.id_soce+10)
+          expect(FactoryGirl.create(:master_data_account).id_soce).to eq(account1.id_soce+11)
         end
       end
 
       context "when user input lesser than actual sequence" do
-        it "doens't update soce_id sequence when user input" do
+        it "doens't update id_soce sequence when user input" do
           account1=FactoryGirl.create(:master_data_account)
-          account2=FactoryGirl.create(:master_data_account, soce_id: account1.soce_id+10)
-          account3=FactoryGirl.create(:master_data_account, soce_id: account1.soce_id+5)
-          expect(FactoryGirl.create(:master_data_account).soce_id).to eq(account1.soce_id+11)
+          account2=FactoryGirl.create(:master_data_account, id_soce: account1.id_soce+10)
+          account3=FactoryGirl.create(:master_data_account, id_soce: account1.id_soce+5)
+          expect(FactoryGirl.create(:master_data_account).id_soce).to eq(account1.id_soce+11)
         end
       end
     end
