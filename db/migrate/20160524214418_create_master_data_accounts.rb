@@ -3,8 +3,8 @@ class CreateMasterDataAccounts < ActiveRecord::Migration
     create_table :gram_accounts do |t|
       t.uuid :uuid, :unique => true, :index => true
       t.string :hruid, :unique => true, :unsigned => true, :index => true
-      t.string :id_soce, :unique => true, :unsigned => true, :index => true
-      t.boolean :enabled
+      t.integer :id_soce, :unique => true, :unsigned => true, :index => true
+      t.boolean :enabled, :default => true
       t.string :password, :null => false
       t.string :lastname
       t.string :firstname

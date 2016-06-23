@@ -28,8 +28,8 @@ ActiveRecord::Schema.define(version: 20160622102840) do
   create_table "gram_accounts", force: :cascade do |t|
     t.uuid     "uuid"
     t.string   "hruid"
-    t.string   "id_soce",               default: "nextval('id_soce_seq'::regclass)"
-    t.boolean  "enabled"
+    t.integer  "id_soce",               default: "nextval('id_soce_seq'::regclass)"
+    t.boolean  "enabled",               default: true
     t.string   "password"
     t.string   "lastname"
     t.string   "firstname"

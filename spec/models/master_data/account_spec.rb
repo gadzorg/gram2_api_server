@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe MasterData::Account, type: :model do
-  it "has a valid factory" do
+RSpec.describe MasterData::Account, type: :model do 
+ it "has a valid factory" do
     expect(FactoryGirl.build(:master_data_account)).to be_valid
   end
 
@@ -22,7 +22,7 @@ RSpec.describe MasterData::Account, type: :model do
   it {is_expected.to allow_value('prenom.nom@gadz.org').for(:email)}
   it {is_expected.not_to allow_value('prenom.nom.gadz.org').for(:email)}
   
-  it {is_expected.to validate_presence_of :encrypted_password}
+  it {is_expected.to validate_presence_of :password}
   it {is_expected.to validate_inclusion_of(:gender).in_array(['male','female'])}
   
   #id soce
