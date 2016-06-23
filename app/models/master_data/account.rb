@@ -1,5 +1,7 @@
 class MasterData::Account < MasterData::Base
 
+	require "hruid_service"
+
   #relations
   has_and_belongs_to_many :groups
   has_and_belongs_to_many :roles
@@ -13,6 +15,8 @@ class MasterData::Account < MasterData::Base
   	else
   		self.id_soce = next_id_soce_seq_value
   	end
+  	# set hruid if empty
+  	self.generate_hruid
   end
   
   #model validations
@@ -47,7 +51,11 @@ class MasterData::Account < MasterData::Base
   end
 
   def set_id_soce_seq_value_to_max
-  	self.class.connection.execute(ActiveRecord::Base.send(:sanitize_sql_array, ["SELECT setval('id_soce_seq',(SELECT GREATEST((SELECT MAX(id_soce) FROM profiles),?)))",self.id_soce]))
+  	self.class.connection.execute(ActiveRecord::Base.send(:sanitize_sql_array, ["SELECT setval('id_soce_seq',(SELECT GREATEST((SELECT MAX(id_soce) FROM gram_accounts),?)))",self.id_soce]))
+  end
+
+  def generate_hruid
+  	self.hruid ||= HruidService::generate(self)
   end
 
   def add_to_group group
