@@ -23,7 +23,7 @@ class MasterData::Account < MasterData::Base
   validates :firstname, presence: true
   validates :lastname, presence: true
   validates :uuid, uniqueness: true
-  validates :id_soce, uniqueness: true
+  validates :id_soce, uniqueness: true, presence: true, numericality: { only_integer: true }
   validates :enabled, :inclusion => {:in => [true, false]}
   validates :password, presence: true
   validates :hruid,  uniqueness: true
