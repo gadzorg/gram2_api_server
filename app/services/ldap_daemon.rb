@@ -7,7 +7,7 @@ class LdapDaemon
   end
 
   def request_account_update(account)
-    msg={id_soce: account.id_soce}
+    msg={id_soce: account.id_soce.to_s}
     @message_sender.send_message(msg, 'request.ldapd.update')
   end
 
