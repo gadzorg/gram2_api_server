@@ -4,7 +4,7 @@ class HruidService
     suffix = self.suffix_for(user)
     standard_hruid = self.build(user.firstname, user.lastname, suffix)
     hruid = standard_hruid
-    homonyms_count = 0
+    homonyms_count = 1
 
     loop do
       break hruid unless MasterData::Account.exists?(hruid: hruid)
@@ -19,7 +19,7 @@ private
     first_name = "prenom" if first_name.blank?
     last_name = "nom" if last_name.blank? 
 
-    hruid = "#{first_name}.#{last_name}.#{suffix}"
+    hruid = "#{format_name(first_name)}.#{format_name(last_name.downcase)}.#{suffix}"
   end
 
   # generate hruid from user type
@@ -32,6 +32,17 @@ private
     else
       suffix = "ext"     
     end
+  end
+
+  def self.format_name(name)
+    #replace space by "-"
+    name = name.gsub(' ', '-')
+    #downcase
+    name = name.downcase
+    #convert special letters
+    name = name.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/n,'').to_s
+    #remove special char
+    name = name.gsub(/[^a-z\-]/, '')
   end
 
 end
