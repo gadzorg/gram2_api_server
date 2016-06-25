@@ -1,9 +1,6 @@
 class Api::V2::RolesController < ApplicationController
   before_action :set_api_v2_role, only: [:show, :edit, :update, :destroy]
 
-  #TODO : remove line bellow, it skips auth
-  skip_before_action :verify_authenticity_token
-
   # GET /api/v2/roles
   # GET /api/v2/roles.json
   def index

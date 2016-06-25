@@ -1,9 +1,6 @@
 class Api::V2::GroupsController < ApplicationController
   before_action :set_group, only: [:show, :edit, :update, :destroy]
 
-  #TODO : remove line bellow, it skips auth
-  skip_before_action :verify_authenticity_token
-
   # GET /groups
   # GET /groups.json
   def index

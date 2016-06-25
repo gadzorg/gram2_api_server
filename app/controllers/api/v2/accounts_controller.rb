@@ -1,8 +1,5 @@
 class Api::V2::AccountsController < ApplicationController
-  before_action :set_api_v2_account, only: [:show, :edit, :update, :destroy]
-
-    #TODO : remove line bellow, it skips auth
-    skip_before_action :verify_authenticity_token
+  before_action :set_api_v2_account, only: [:show, :edit, :update, :destroy, :index_groups, :show_groups, :add_to_group, :remove_from_group , :index_roles, :show_roles, :add_role, :revoke_role]
 
   # GET /api/v2/accounts
   # GET /api/v2/accounts.json
@@ -78,7 +75,6 @@ class Api::V2::AccountsController < ApplicationController
   #  Groups management
   #########################################################
   def index_groups
-    account = MasterData::Account.find(params[:account_id])
     @groups = account.groups
     respond_to do |format|
       format.json {render json: @groups}
@@ -86,7 +82,6 @@ class Api::V2::AccountsController < ApplicationController
   end
 
   def show_groups
-    account = MasterData::Account.find(params[:account_id])
     if account.groups.exists?(params[:group_id])
      @group = account.groups.find(params[:group_id])
       respond_to do |format|
@@ -98,7 +93,6 @@ class Api::V2::AccountsController < ApplicationController
   end
 
   def add_to_group
-    account = MasterData::Account.find(params[:account_id])
     group_id = params[:id]
     @group = MasterData::Group.find(group_id)
     @groups = account.groups
@@ -117,7 +111,6 @@ class Api::V2::AccountsController < ApplicationController
   end
 
   def remove_from_group
-    account = MasterData::Account.find(params[:account_id])
     group = account.groups.find(params[:group_id])
 
     respond_to do |format|
@@ -134,7 +127,6 @@ class Api::V2::AccountsController < ApplicationController
   #########################################################
 
   def index_roles
-    account = MasterData::Account.find(params[:account_id])
     @roles = account.roles
     respond_to do |format|
       format.json {render json: @roles}
@@ -143,7 +135,6 @@ class Api::V2::AccountsController < ApplicationController
   end
 
   def show_roles
-    account = MasterData::Account.find(params[:account_id])
     if account.roles.exists?(params[:role_id])
       @role = account.roles.find(params[:role_id])
       respond_to do |format|
@@ -156,7 +147,6 @@ class Api::V2::AccountsController < ApplicationController
   end
 
   def add_role
-    account = MasterData::Account.find(params[:account_id])
     role_id = params[:id]
     @role = MasterData::Role.find(role_id)
     @roles = account.roles
@@ -175,7 +165,6 @@ class Api::V2::AccountsController < ApplicationController
   end
 
   def revoke_role
-    account = MasterData::Account.find(params[:account_id])
     role = account.roles.find(params[:role_id])
 
     respond_to do |format|
