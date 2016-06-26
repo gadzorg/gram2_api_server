@@ -39,7 +39,7 @@ Things you may want to cover:
 
 Prepare test MasterData with : 
 ```
-RAILS_ENV=test rake master_data:db:migrate
+RAILS_ENV=test rake db:migrate
 ```
 
 Rspec : 
