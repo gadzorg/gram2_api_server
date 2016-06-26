@@ -21,16 +21,18 @@ RSpec.describe HruidService, type: :service do
 
     expect(account2.hruid).to eq(expected_hruid_homonym2)
     expect(HruidService::generate(account3)).to eq(expected_hruid_homonym3)
-
   end
 
   it "generate Hruid with soce for non gadz employee" do
-    account_gadz=FactoryGirl.build(:master_data_account, hruid: nil, gadz_proms_principale: proms, is_soce_employee: true)
     account_pecks=FactoryGirl.build(:master_data_account, hruid: nil, gadz_proms_principale: nil, is_soce_employee: true)
-    gadz_hruid_suffix = HruidService::generate(account_gadz).split(".").last
     pecks_hruid_suffix = HruidService::generate(account_pecks).split(".").last
-    expect(gadz_hruid_suffix).to eq(proms)
     expect(pecks_hruid_suffix).to eq("soce")
+  end
+  
+  it "generate Hruid with promo for gadz employee" do
+    account_gadz=FactoryGirl.build(:master_data_account, hruid: nil, gadz_proms_principale: proms, is_soce_employee: true)
+    gadz_hruid_suffix = HruidService::generate(account_gadz).split(".").last
+    expect(gadz_hruid_suffix).to eq(proms)
   end
 
   it "generate Hruid with ext for ext" do
