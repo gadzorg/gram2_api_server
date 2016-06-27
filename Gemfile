@@ -43,7 +43,10 @@ gem 'devise-encryptable'
 gem 'simple_token_authentication', '~> 1.0' # see semver.org
 
 # Authorization
-gem "pundit"
+gem 'pundit'
+
+# Roles
+gem 'rolify', '~> 5.1'
 
 group :development, :test do
   # Use sqlite3 as the database for Active Record
