@@ -7,13 +7,29 @@ class MasterData::GroupPolicy < BasePolicy
   end
 
   def update?
-    # client.admin? or not group.published?
-
+    scopes = [
+        [:admin],
+        [:admin, MasterData::Group]
+    ]
+    has_at_least_one_scope(client, scopes)
   end
 
   def index?
-    return false unless (client.has_role? :admin, MasterData::Group)
-    return true
+    scopes = [
+        [:admin],
+        [:read],
+        [:admin, MasterData::Group],
+        [:read, MasterData::Group]
+    ]
+    has_at_least_one_scope(client, scopes)
+  end
+
+  def destroy?
+    scopes = [
+        [:admin],
+        [:admin, MasterData::Group]
+    ]
+    has_at_least_one_scope(client, scopes)
   end
 
 end
