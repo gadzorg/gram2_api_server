@@ -37,6 +37,11 @@ gem 'active_model_serializers', '~> 0.10.0'
 
 gem 'gorg_message_sender'
 
+# Auth
+gem 'devise'
+gem 'devise-encryptable'
+gem 'simple_token_authentication', '~> 1.0' # see semver.org
+
 group :development, :test do
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'

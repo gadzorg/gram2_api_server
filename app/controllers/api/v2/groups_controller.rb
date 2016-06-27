@@ -1,6 +1,8 @@
 class Api::V2::GroupsController < Api::V2::BaseController
   before_action :set_group, only: [:show, :edit, :update, :destroy]
 
+  before_action :authenticate_client!
+
   # GET /groups
   # GET /groups.json
   def index
