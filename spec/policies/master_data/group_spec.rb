@@ -9,29 +9,49 @@ describe MasterData::GroupPolicy do
   context "for a not authenticated client" do
     let(:client) { nil }
 
-    it { should_not permit(:index)    }
-    it { should_not permit(:show)    }
-    it { should_not permit(:new)     }
+    it { should_not permit(:index)   }
     it { should_not permit(:edit)    }
     it { should_not permit(:create)  }
-    it { should_not permit(:update)  }
     it { should_not permit(:destroy) }
-    it { should_not permit(:index_account) }
-    it { should_not permit(:show_account) }
   end
 
-  context "for an admin client" do
+  context "for a group reader" do
+    let(:client) {FactoryGirl.create(:client)}
+    before {client.add_role :read, MasterData::Group}
+
+    it { should permit(:index)       }
+    it { should_not permit(:edit)    }
+    it { should_not permit(:create)  }
+    it { should_not permit(:destroy) }
+  end
+
+  context "for a global reader" do
+    let(:client) {FactoryGirl.create(:client)}
+    before {client.add_role :read}
+
+    it { should permit(:index)       }
+    it { should_not permit(:edit)    }
+    it { should_not permit(:create)  }
+    it { should_not permit(:destroy) }
+  end
+
+  context "for a group admin" do
     let(:client) {FactoryGirl.create(:client)}
     before {client.add_role :admin, MasterData::Group}
 
-    it { should permit(:index)    }
-    it { should permit(:show)    }
-    it { should permit(:new)     }
+    it { should permit(:index)   }
     it { should permit(:edit)    }
     it { should permit(:create)  }
-    it { should permit(:update)  }
     it { should permit(:destroy) }
-    it { should permit(:index_account) }
-    it { should permit(:show_account) }
+  end
+
+  context "for a global admin" do
+    let(:client) {FactoryGirl.create(:client)}
+    before {client.add_role :admin}
+
+    it { should permit(:index)   }
+    it { should permit(:edit)    }
+    it { should permit(:create)  }
+    it { should permit(:destroy) }
   end
 end
