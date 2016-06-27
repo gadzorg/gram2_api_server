@@ -6,4 +6,8 @@ class ApplicationController < ActionController::Base
 
   # Auth by token for simple_token_authentification
   acts_as_token_authentication_handler_for Client
+
+  # Authorizations
+  include Pundit
+
 end

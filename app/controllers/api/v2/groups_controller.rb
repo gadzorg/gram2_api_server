@@ -1,12 +1,14 @@
 class Api::V2::GroupsController < Api::V2::BaseController
   before_action :set_group, only: [:show, :edit, :update, :destroy]
 
-  before_action :authenticate_client!
+  #before_action :authenticate_client!
+  # before_action :current_user
 
   # GET /groups
   # GET /groups.json
   def index
     @groups = MasterData::Group.all
+    authorize @groups, :index?
     respond_to do |format|
       format.json {render json: @groups}
     end
