@@ -12,11 +12,8 @@ class MasterData::GroupPolicy < BasePolicy
   end
 
   def index?
-    true
+    return false unless (client.has_role? :admin, MasterData::Group)
+    return true
   end
 
-  def pundit_user
-    current_client
-    puts "hello"
-  end
 end

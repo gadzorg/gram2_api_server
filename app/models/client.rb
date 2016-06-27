@@ -1,4 +1,5 @@
 class Client < ActiveRecord::Base
+  rolify
   acts_as_token_authenticatable
 
   validates :email, :presence => false

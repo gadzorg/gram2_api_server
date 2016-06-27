@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160627093835) do
+ActiveRecord::Schema.define(version: 20160627170301) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,13 @@ ActiveRecord::Schema.define(version: 20160627093835) do
   add_index "clients", ["authentication_token"], name: "index_clients_on_authentication_token", unique: true, using: :btree
   add_index "clients", ["name"], name: "index_clients_on_name", unique: true, using: :btree
   add_index "clients", ["reset_password_token"], name: "index_clients_on_reset_password_token", unique: true, using: :btree
+
+  create_table "clients_roles", id: false, force: :cascade do |t|
+    t.integer "client_id"
+    t.integer "role_id"
+  end
+
+  add_index "clients_roles", ["client_id", "role_id"], name: "index_clients_roles_on_client_id_and_role_id", using: :btree
 
   create_table "gram_accounts", force: :cascade do |t|
     t.uuid     "uuid"
@@ -109,5 +116,16 @@ ActiveRecord::Schema.define(version: 20160627093835) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+
+  create_table "roles", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "resource_id"
+    t.string   "resource_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", using: :btree
+  add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
 
 end

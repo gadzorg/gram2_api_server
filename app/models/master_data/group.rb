@@ -11,6 +11,9 @@ class MasterData::Group < MasterData::Base
   validates :guid, uniqueness: true
   validates :short_name, uniqueness: true, presence: true
 
+  #roles
+  resourcify
+
 
   def generate_guid_if_empty
     self.guid ||= self.generate_guid
