@@ -10,4 +10,14 @@ class ApplicationController < ActionController::Base
   # Authorizations
   include Pundit
 
+  rescue_from Pundit::NotAuthorizedError, with: :client_not_authorized
+
+  private
+
+  def client_not_authorized(exception)
+    policy_name = exception.policy.class.to_s.underscore
+
+    # TODO : remove policy name in exception
+    render status: :forbidden, json: {message: "Forbidden. #{policy_name}.#{exception.query}"}
+  end
 end
