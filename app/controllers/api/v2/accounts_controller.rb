@@ -1,4 +1,4 @@
-class Api::V2::AccountsController < ApplicationController
+class Api::V2::AccountsController < Api::V2::BaseController
   before_action :set_api_v2_account, only: [:show, :edit, :update, :destroy, :index_groups, :show_groups, :add_to_group, :remove_from_group , :index_roles, :show_roles, :add_role, :revoke_role]
 
   # GET /api/v2/accounts

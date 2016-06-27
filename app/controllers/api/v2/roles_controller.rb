@@ -1,4 +1,4 @@
-class Api::V2::RolesController < ApplicationController
+class Api::V2::RolesController < Api::V2::BaseController
   before_action :set_api_v2_role, only: [:show, :edit, :update, :destroy]
 
   # GET /api/v2/roles
