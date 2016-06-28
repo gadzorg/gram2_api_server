@@ -6,6 +6,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
   def index
     @api_v2_accounts = MasterData::Account.all
     @accounts = @api_v2_accounts
+    authorize @accounts, :index?
     respond_to do |format|
       format.json {render json: @accounts}
     end
@@ -15,6 +16,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
   # GET /api/v2/accounts/1.json
   def show
     @account = @api_v2_account
+    authorize @account, :index?
     respond_to do |format|
       format.json {render json: @account}
     end
@@ -22,11 +24,13 @@ class Api::V2::AccountsController < Api::V2::BaseController
 
   # GET /api/v2/accounts/new
   def new
-    @api_v2_account = MasterData::Account.new
+    @account = MasterData::Account.new
+    authorize @account, :create?
   end
 
   # GET /api/v2/accounts/1/edit
   def edit
+    authorize @account, :edit?
   end
 
   # POST /api/v2/accounts
@@ -34,6 +38,8 @@ class Api::V2::AccountsController < Api::V2::BaseController
   def create
     @api_v2_account = MasterData::Account.new(api_v2_account_params)
     @account = @api_v2_account
+    authorize @account, :create?
+
 
     respond_to do |format|
       if @api_v2_account.save
@@ -50,6 +56,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
   # PATCH/PUT /api/v2/accounts/1.json
   def update
     @account = @api_v2_account
+    authorize @account, :edit?
     respond_to do |format|
       if @api_v2_account.update(api_v2_account_params)
         format.html { redirect_to @api_v2_account, notice: 'Account was successfully updated.' }
@@ -65,6 +72,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
   # DELETE /api/v2/accounts/1.json
   def destroy
     @api_v2_account.destroy
+    authorize @api_v2_account, :destroy?
     respond_to do |format|
       format.html { redirect_to api_v2_accounts_url, notice: 'Account was successfully destroyed.' }
       format.json { head :no_content }
@@ -76,6 +84,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
   #########################################################
   def index_groups
     @groups = account.groups
+    authorize @groups, :index?
     respond_to do |format|
       format.json {render json: @groups}
     end
@@ -84,7 +93,8 @@ class Api::V2::AccountsController < Api::V2::BaseController
   def show_groups
     if account.groups.exists?(params[:group_id])
      @group = account.groups.find(params[:group_id])
-      respond_to do |format|
+     authorize @groups, :index?
+     respond_to do |format|
         format.json {render json: @group}
       end
    else
@@ -96,6 +106,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
     group_id = params[:id]
     @group = MasterData::Group.find(group_id)
     @groups = account.groups
+    authorize @group, :edit?
 
 
     respond_to do |format|
@@ -112,7 +123,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
 
   def remove_from_group
     group = account.groups.find(params[:group_id])
-
+    authorize group, :edit?
     respond_to do |format|
       if account.remove_from_group group
         format.html { redirect_to api_v2_accounts_url, notice: 'Group was successfully revomed from this account.' }
@@ -128,19 +139,19 @@ class Api::V2::AccountsController < Api::V2::BaseController
 
   def index_roles
     @roles = account.roles
+    authorize @roles, :index?
     respond_to do |format|
       format.json {render json: @roles}
     end
-
   end
 
   def show_roles
+    authorize @roles, :index?
     if account.roles.exists?(params[:role_id])
       @role = account.roles.find(params[:role_id])
       respond_to do |format|
         format.json {render json: @role}
       end
-      
     else
       render json: { error: "Role not found" }, status: :not_found
     end
@@ -150,7 +161,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
     role_id = params[:id]
     @role = MasterData::Role.find(role_id)
     @roles = account.roles
-
+    authorize @role, :edit?
 
     respond_to do |format|
       if account.add_role @role
@@ -166,6 +177,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
 
   def revoke_role
     role = account.roles.find(params[:role_id])
+    authorize role, :edit?
 
     respond_to do |format|
       if account.revoke_role role

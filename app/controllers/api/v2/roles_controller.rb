@@ -6,6 +6,7 @@ class Api::V2::RolesController < Api::V2::BaseController
   def index
     @api_v2_roles = MasterData::Role.all
     @roles = @api_v2_roles
+    #authorize @roles, :index?
     respond_to do |format|
       format.json {render json: @roles}
     end
@@ -15,6 +16,7 @@ class Api::V2::RolesController < Api::V2::BaseController
   # GET /api/v2/roles/1.json
   def show
     @role = @api_v2_role
+    authorize @role, :index?
     respond_to do |format|
       format.json {render json: @role}
     end
@@ -22,11 +24,13 @@ class Api::V2::RolesController < Api::V2::BaseController
 
   # GET /api/v2/roles/new
   def new
-    @api_v2_role = MasterData::Role.new
+    @role = MasterData::Role.new
+    authorize @role, :create?
   end
 
   # GET /api/v2/roles/1/edit
   def edit
+    authorize @role, :update?
   end
 
   # POST /api/v2/roles
@@ -34,6 +38,7 @@ class Api::V2::RolesController < Api::V2::BaseController
   def create
     @api_v2_role = MasterData::Role.new(api_v2_role_params)
     @role = @api_v2_role
+    authorize @role, :create?
 
     respond_to do |format|
       if @api_v2_role.save
@@ -50,6 +55,7 @@ class Api::V2::RolesController < Api::V2::BaseController
   # PATCH/PUT /api/v2/roles/1.json
   def update
     @role = @api_v2_role
+    authorize @role, :edit?
     respond_to do |format|
       if @api_v2_role.update(api_v2_role_params)
         format.html { redirect_to @api_v2_role, notice: 'Role was successfully updated.' }
@@ -64,7 +70,8 @@ class Api::V2::RolesController < Api::V2::BaseController
   # DELETE /api/v2/roles/1
   # DELETE /api/v2/roles/1.json
   def destroy
-    @api_v2_role.destroy
+    @role.destroy
+    authorize @role, :destroy?
     respond_to do |format|
       format.html { redirect_to api_v2_roles_url, notice: 'Role was successfully destroyed.' }
       format.json { head :no_content }
