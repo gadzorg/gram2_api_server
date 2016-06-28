@@ -7,8 +7,9 @@ class Api::V2::AccountsController < Api::V2::BaseController
     @api_v2_accounts = MasterData::Account.all
     @accounts = @api_v2_accounts
     authorize @accounts, :index?
+    show_password_hash = params[:show_password_hash] == "true" ? true : false
     respond_to do |format|
-      format.json {render json: @accounts}
+      format.json {render json: @accounts, show_password_hash: show_password_hash}
     end
   end
 
@@ -17,8 +18,9 @@ class Api::V2::AccountsController < Api::V2::BaseController
   def show
     @account = @api_v2_account
     authorize @account, :index?
+    show_password_hash = params[:show_password_hash] == "true" ? true : false
     respond_to do |format|
-      format.json {render json: @account}
+      format.json {render json: @account, show_password_hash: show_password_hash}
     end
   end
 

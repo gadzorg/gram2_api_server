@@ -33,7 +33,7 @@ class Api::V2::GroupsController < Api::V2::BaseController
   def edit
     authorize @group, :edit?
   end
-
+  
   # POST /groups
   # POST /groups.json
   def create
