@@ -13,6 +13,7 @@ class BasePolicy
   end
 
   def has_at_least_one_scope (client, scopes)
+    return false if client.nil?
     scopes.each do |scope|
       return true if has_scope?(client, scope[0], scope[1])
     end

@@ -40,7 +40,7 @@ class MasterData::AccountPolicy < BasePolicy
     has_at_least_one_scope(client, scopes)
   end
 
-  def read_passord_hash?
+  def show_password_hash?
     scopes = [
         [:password_hash_reader, MasterData::Account]
     ]

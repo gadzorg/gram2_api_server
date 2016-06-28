@@ -37,7 +37,7 @@ describe MasterData::AccountPolicy do
     it { should_not permit(:destroy)              }
   end
 
-  context "for a account admin" do
+  context "for an account admin" do
     let(:client) {FactoryGirl.create(:client)}
     before {client.add_role :admin, MasterData::Account}
 
