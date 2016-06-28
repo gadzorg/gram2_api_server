@@ -6,7 +6,7 @@ class MasterData::GroupPolicy < BasePolicy
     @group = group
   end
 
-  def update?
+  def edit?
     scopes = [
         [:admin],
         [:admin, MasterData::Group]
@@ -25,6 +25,14 @@ class MasterData::GroupPolicy < BasePolicy
   end
 
   def destroy?
+    scopes = [
+        [:admin],
+        [:admin, MasterData::Group]
+    ]
+    has_at_least_one_scope(client, scopes)
+  end
+
+  def create?
     scopes = [
         [:admin],
         [:admin, MasterData::Group]

@@ -17,6 +17,7 @@ class Api::V2::GroupsController < Api::V2::BaseController
   # GET /groups/1
   # GET /groups/1.json
   def show
+    authorize @group, :index?
     respond_to do |format|
       format.json {render json: @group}
     end
@@ -24,17 +25,20 @@ class Api::V2::GroupsController < Api::V2::BaseController
 
   # GET /groups/new
   def new
+    authorize @group, :create?
     @group = MasterData::Group.new
   end
 
   # GET /groups/1/edit
   def edit
+    authorize @group, :edit?
   end
 
   # POST /groups
   # POST /groups.json
   def create
     @group = MasterData::Group.new(group_params)
+    authorize @group, :create?
 
     respond_to do |format|
       if @group.save
@@ -50,6 +54,7 @@ class Api::V2::GroupsController < Api::V2::BaseController
   # PATCH/PUT /groups/1
   # PATCH/PUT /groups/1.json
   def update
+    authorize @group, :edit?
     respond_to do |format|
       if @group.update(group_params)
         format.html { redirect_to @group, notice: 'MasterData::Group was successfully updated.' }
@@ -64,6 +69,7 @@ class Api::V2::GroupsController < Api::V2::BaseController
   # DELETE /groups/1
   # DELETE /groups/1.json
   def destroy
+    authorize @group, :destroy?
     @group.destroy
     respond_to do |format|
       format.html { redirect_to api_v2_groups_url, notice: 'MasterData::Group was successfully destroyed.' }
