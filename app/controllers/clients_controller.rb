@@ -5,27 +5,31 @@ class ClientsController < ApplicationController
   # GET /clients.json
   def index
     @clients = Client.all
+    authorize @clients, :index?
   end
 
   # GET /clients/1
   # GET /clients/1.json
   def show
+    authorize @client, :index?
   end
 
   # GET /clients/new
   def new
     @client = Client.new
+    authorize @client, :create?
   end
 
   # GET /clients/1/edit
   def edit
+    authorize @client, :edit?
   end
 
   # POST /clients
   # POST /clients.json
   def create
     @client = Client.new(client_params)
-
+    authorize @client, :create?
     respond_to do |format|
       if @client.save
         format.html { redirect_to @client, notice: 'Client was successfully created.' }
@@ -40,6 +44,7 @@ class ClientsController < ApplicationController
   # PATCH/PUT /clients/1
   # PATCH/PUT /clients/1.json
   def update
+    authorize @client, :edit?
     respond_to do |format|
       if @client.update(client_params)
         format.html { redirect_to @client, notice: 'Client was successfully updated.' }
@@ -54,6 +59,7 @@ class ClientsController < ApplicationController
   # DELETE /clients/1
   # DELETE /clients/1.json
   def destroy
+    authorize @client, :destroy?
     @client.destroy
     respond_to do |format|
       format.html { redirect_to clients_url, notice: 'Client was successfully destroyed.' }
