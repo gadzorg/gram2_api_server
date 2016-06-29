@@ -4,12 +4,8 @@
 #   Ensure the SQLite 3 gem is defined in your Gemfile
 #   gem 'sqlite3'
 #
-test: &default
+test:
   adapter: postgresql
   encoding: utf8
   pool: 5
-
-master_data_db:
-  test:
-    <<: *default
-    database: travis_ci_test
+  database: travis_ci_test

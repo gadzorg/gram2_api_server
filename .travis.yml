@@ -7,9 +7,9 @@ addons:
     code_climate:
         repo_token: c5095ac9e2e622f87a86d61df49761b82cd6f91ea4b966372e40898dfe800956
 before_script:
-  - psql -c 'create database travis_ci_test;' -U postgres
-  - cp config/database.travis.yml config/database.yml
-  - cp config/secrets.travis.yml config/secrets.yml
+  - psql -eac 'create database travis_ci_test;' -U postgres
+  - cp -v config/database.travis.yml config/database.yml
+  - cp -v config/secrets.travis.yml config/secrets.yml
 services:
   - postgresql
 script:  
