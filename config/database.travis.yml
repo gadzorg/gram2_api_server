@@ -5,12 +5,11 @@
 #   gem 'sqlite3'
 #
 test: &default
-  adapter: mysql2
-  database: myapp_test
-  username: travis
+  adapter: postgresql
   encoding: utf8
+  pool: 5
 
 master_data_db:
   test:
     <<: *default
-    database: myapp_master_data_test
+    database: travis_ci_test
