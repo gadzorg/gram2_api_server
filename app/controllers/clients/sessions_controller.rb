@@ -39,17 +39,19 @@ class Clients::SessionsController < Devise::SessionsController
   def create
     #build_resource
     # TODO : clean params and use permit
-    resource = Client.find_by(name: params[:name])
+    resource = Client.find_by(name: params[:client][:name])
     puts "======================="
     puts resource
+    puts params[:client][:name]
     return invalid_login_attempt unless resource
 
-    if resource.valid_password?(params[:password])
+    if resource.valid_password?(params[:client][:password])
       sign_in("client", resource)
       render :json=> {:success=>true, :auth_token=>resource.authentication_token, :login=>resource.name, :email=>resource.email}
-      return
+      puts "==o=o=o=o=o=o=o= Login + pwd ok"
+    else
+     invalid_login_attempt
     end
-
   end
 
   # def create
