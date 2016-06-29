@@ -26,7 +26,7 @@ describe ClientPolicy do
   end
 
   context "for all other connected clients" do
-
+    # TODO : move roles list in client controller
     roles = [
       [:admin],
       [:read],

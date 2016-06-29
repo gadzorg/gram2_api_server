@@ -5,6 +5,7 @@ class BasePolicy
 
   private
   def has_scope? (client, permission, scope = nil)
+    return false if client.nil?
     if scope.nil?
       return client.has_role? permission
     else
