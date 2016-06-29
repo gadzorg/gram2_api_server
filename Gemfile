@@ -37,6 +37,11 @@ gem 'active_model_serializers', '~> 0.10.0'
 
 gem 'gorg_message_sender'
 
+
+#HEROKU
+gem 'heroku_secrets', github: 'alexpeattie/heroku_secrets'
+
+
 group :development, :test do
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
@@ -47,7 +52,6 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'faker'
   gem 'bogus'
-
 end
 
 group :development do
