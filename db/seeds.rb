@@ -6,4 +6,11 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-Client.create( name: "admin", password: "password", email: "admin@gorgu.net")
+admin = Client.create( name: "admin", password: "password", email: "admin@gorgu.net", active: true)
+admin.add_role :gram_admin
+admin.add_role :admin
+admin.save
+
+client = Client.create( name: "client", password: "password", email: "client@gorgu.net", active: true)
+client.add_role :read
+client.save
