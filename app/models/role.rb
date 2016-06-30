@@ -9,4 +9,20 @@ class Role < ActiveRecord::Base
             :allow_nil => true
 
   scopify
+
+  # List all availables roles
+  def self.list_availables
+    [
+        [:gram_admin],
+        [:admin],
+        [:read],
+        [:admin, MasterData::Account],
+        [:read, MasterData::Account],
+        [:admin, MasterData::Group],
+        [:read, MasterData::Group],
+        [:admin, MasterData::Role],
+        [:read, MasterData::Role]
+    ]
+  end
+
 end

@@ -17,4 +17,14 @@ class Client < ActiveRecord::Base
   def active?
     self.active
   end
+
+  # Override some Rolify class ton restrict roles types
+  def add_role(role_name, resource = nil)
+    if resource == nil
+      super if Role.list_availables.include? [role_name]
+    else
+      super if Role.list_availables.include? [role_name, resource]
+    end
+  end
+
 end
