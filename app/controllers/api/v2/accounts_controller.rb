@@ -3,10 +3,10 @@ class Api::V2::AccountsController < Api::V2::BaseController
   # GET /api/v2/accounts
   # GET /api/v2/accounts.json
   def index
-    @api_v2_accounts = MasterData::Account.all
-    @accounts = @api_v2_accounts
+    @accounts = MasterData::Account.all
     authorize @accounts, :index?
     respond_to do |format|
+      format.html {render :index}
       format.json {render json: @accounts, show_password_hash: show_password_hash?}
     end
   end
@@ -14,9 +14,9 @@ class Api::V2::AccountsController < Api::V2::BaseController
   # GET /api/v2/accounts/1
   # GET /api/v2/accounts/1.json
   def show
-    @account = @api_v2_account
     authorize @account, :index?
     respond_to do |format|
+      format.html {render :show}
       format.json {render json: @account, show_password_hash: show_password_hash?}
     end
   end
@@ -25,7 +25,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
   def new
     @account = MasterData::Account.new
     authorize @account, :create?
-  endh
+  end
 
   # GET /api/v2/accounts/1/edit
   def edit
@@ -35,18 +35,17 @@ class Api::V2::AccountsController < Api::V2::BaseController
   # POST /api/v2/accounts
   # POST /api/v2/accounts.json
   def create
-    @api_v2_account = MasterData::Account.new(api_v2_account_params)
-    @account = @api_v2_account
+    @account = MasterData::Account.new(api_v2_account_params)
     authorize @account, :create?
 
 
     respond_to do |format|
-      if @api_v2_account.save
-        format.html { redirect_to @api_v2_account, notice: 'Account was successfully created.' }
+      if @account.save
+        format.html { render :show, notice: 'Account was successfully created.' }
         format.json { render json: @account, status: :created, location: :api_v2_accounts }
       else
         format.html { render :new }
-        format.json { render json: @api_v2_account.errors, status: :unprocessable_entity }
+        format.json { render json: @account.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -54,15 +53,14 @@ class Api::V2::AccountsController < Api::V2::BaseController
   # PATCH/PUT /api/v2/accounts/1
   # PATCH/PUT /api/v2/accounts/1.json
   def update
-    @account = @api_v2_account
     authorize @account, :edit?
     respond_to do |format|
-      if @api_v2_account.update(api_v2_account_params)
-        format.html { redirect_to @api_v2_account, notice: 'Account was successfully updated.' }
+      if @account.update(api_v2_account_params)
+        format.html { render :show, notice: 'Account was successfully updated.' }
         format.json { render json: @account, status: :ok, location: :api_v2_account }
       else
         format.html { render :edit }
-        format.json { render json: @api_v2_account.errors, status: :unprocessable_entity }
+        format.json { render json: @account.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -70,8 +68,8 @@ class Api::V2::AccountsController < Api::V2::BaseController
   # DELETE /api/v2/accounts/1
   # DELETE /api/v2/accounts/1.json
   def destroy
-    @api_v2_account.destroy
-    authorize @api_v2_account, :destroy?
+    @account.destroy
+    authorize @account, :destroy?
     respond_to do |format|
       format.html { redirect_to api_v2_accounts_url, notice: 'Account was successfully destroyed.' }
       format.json { head :no_content }
@@ -190,7 +188,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_api_v2_account
-      @api_v2_account = MasterData::Account.find(params[:id])
+      @account = MasterData::Account.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

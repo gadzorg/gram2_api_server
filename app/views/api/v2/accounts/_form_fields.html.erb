@@ -1,0 +1,156 @@
+<% if @account.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@account.errors.count, "error") %> prohibited this api_v2_account from being saved:</h2>
+
+      <ul>
+        <% @account.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+<% end %>
+
+<div class="field">
+  <%= f.label :uuid %><br>
+  <%= f.text_field :uuid, disabled: true %>
+</div>
+
+<div class="field">
+  <%= f.label :hruid %><br>
+  <%= f.text_field :hruid %>
+</div>
+
+<div class="field">
+  <%= f.label :id_soce %><br>
+  <%= f.text_field :id_soce %>
+</div>
+
+<div class="field">
+  <%= f.label :enabled %><br>
+  <%= f.check_box :enabled %>
+</div>
+
+<div class="field">
+  <%= f.label :password %><br>
+  <%= f.password_field :password %>
+</div>
+
+<div class="field">
+  <%= f.label :lastname %><br>
+  <%= f.text_field :lastname %>
+</div>
+
+<div class="field">
+  <%= f.label :firstname %><br>
+  <%= f.text_field :firstname %>
+</div>
+
+<div class="field">
+  <%= f.label :birthname %><br>
+  <%= f.text_field :birthname %>
+</div>
+
+<div class="field">
+  <%= f.label :birth_firstname %><br>
+  <%= f.text_field :birth_firstname %>
+</div>
+
+<div class="field">
+  <%= f.label :email %><br>
+  <%= f.text_field :email %>
+</div>
+
+<div class="field">
+  <%= f.label :gapps_email %><br>
+  <%= f.text_field :gapps_email %>
+</div>
+
+<div class="field">
+  <%= f.label :birthdate %><br>
+  <%= f.text_field :birthdate %>
+</div>
+
+<div class="field">
+  <%= f.label :deathdate %><br>
+  <%= f.text_field :deathdate %>
+</div>
+
+<div class="field">
+  <%= f.label :gender %><br>
+  <%= f.text_field :gender %>
+</div>
+
+<div class="field">
+  <%= f.label :is_gadz %><br>
+  <%= f.check_box :is_gadz %>
+</div>
+
+<div class="field">
+  <%= f.label :is_student %><br>
+  <%= f.check_box :is_student %>
+</div>
+
+<div class="field">
+  <%= f.label :school_id %><br>
+  <%= f.text_field :school_id %>
+</div>
+
+<div class="field">
+  <%= f.label :is_alumni %><br>
+  <%= f.check_box :is_alumni %>
+</div>
+
+<div class="field">
+  <%= f.label :date_entree_ecole %><br>
+  <%= f.text_field :date_entree_ecole %>
+</div>
+
+<div class="field">
+  <%= f.label :date_sortie_ecole %><br>
+  <%= f.text_field :date_sortie_ecole %>
+</div>
+
+<div class="field">
+  <%= f.label :ecole_entree %><br>
+  <%= f.text_field :ecole_entree %>
+</div>
+
+<div class="field">
+  <%= f.label :buque_texte %><br>
+  <%= f.text_field :buque_texte %>
+</div>
+
+<div class="field">
+  <%= f.label :buque_zaloeil %><br>
+  <%= f.text_field :buque_zaloeil %>
+</div>
+
+<div class="field">
+  <%= f.label :gadz_fams %><br>
+  <%= f.text_field :gadz_fams %>
+</div>
+
+<div class="field">
+  <%= f.label :gadz_fams_zaloeil %><br>
+  <%= f.text_field :gadz_fams_zaloeil %>
+</div>
+
+<div class="field">
+  <%= f.label :gadz_proms_principale %><br>
+  <%= f.text_field :gadz_proms_principale %>
+</div>
+
+<div class="field">
+  <%= f.label :gadz_proms_secondaire %><br>
+  <%= f.text_field :gadz_proms_secondaire %>
+</div>
+
+<div class="field">
+  <%= f.label :avatar_url %><br>
+  <%= f.text_field :avatar_url %>
+</div>
+
+<div class="field">
+  <%= f.label :description %><br>
+  <%= f.text_field :description %>
+</div>

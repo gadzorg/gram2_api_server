@@ -13,14 +13,14 @@
   </thead>
 
   <tbody>
-    <% @api_v2_roles.each do |api_v2_role| %>
+    <% @roles.each do |api_v2_role| %>
       <tr>
         <td><%= api_v2_role.name %></td>
         <td><%= api_v2_role.application %></td>
         <td><%= api_v2_role.description %></td>
-        <td><%= link_to 'Show', api_v2_role %></td>
+        <td><%= link_to 'Show', api_v2_role_path(api_v2_role) %></td>
         <td><%= link_to 'Edit', edit_api_v2_role_path(api_v2_role) %></td>
-        <td><%= link_to 'Destroy', api_v2_role, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Destroy', api_v2_role_path(api_v2_role), method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
