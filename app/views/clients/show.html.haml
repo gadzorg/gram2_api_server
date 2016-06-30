@@ -17,6 +17,21 @@
 %p
   %strong Authentication token:
   = @client.authentication_token
+%p
+  %strong Rôles:
+  %table
+    %thead
+      %tr
+        %th Role
+        %th Scope
+        %th Attribué ?
+    %tbody
+      - @roles.each do |role|
+        %tr
+          %td #{role[0]}
+          %td #{role[1].to_s.singularize.capitalize}
+          %td= role[1].nil? ? @client.has_role?(role[0]) : @client.has_role?(role[0], role[1])
+
 = link_to 'Edit', edit_client_path(@client)
 |
 = link_to 'Back', clients_path
