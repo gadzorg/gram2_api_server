@@ -1,0 +1,22 @@
+%p#notice= notice
+%p
+  %strong Name:
+  = @client.name
+%p
+  %strong Password:
+  = @client.password
+%p
+  %strong Description:
+  = @client.description
+%p
+  %strong Active:
+  = @client.active
+%p
+  %strong Email:
+  = @client.email
+%p
+  %strong Authentication token:
+  = @client.authentication_token
+= link_to 'Edit', edit_client_path(@client)
+|
+= link_to 'Back', clients_path

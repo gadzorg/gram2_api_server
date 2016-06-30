@@ -1,0 +1,4 @@
+= form_for @account, as: :account, url: url_for(controller: "accounts", action: "create") do |f|
+  = render 'form_fields', f: f
+  .actions
+    = f.submit

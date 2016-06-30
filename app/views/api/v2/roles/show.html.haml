@@ -1,0 +1,13 @@
+%p#notice= notice
+%p
+  %strong Name:
+  = @role.name
+%p
+  %strong Application:
+  = @role.application
+%p
+  %strong Description:
+  = @role.description
+= link_to 'Edit', edit_api_v2_role_path(@role)
+|
+= link_to 'Back', api_v2_roles_path

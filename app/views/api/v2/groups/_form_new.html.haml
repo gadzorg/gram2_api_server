@@ -1,0 +1,4 @@
+= form_for @group, as: :group, url: url_for(controller: "groups", action: "create") do |f|
+  = render 'form_fields', f: f
+  .actions
+    = f.submit

@@ -1,0 +1,124 @@
+- if @account.errors.any?
+  #error_explanation
+    %h2
+      = pluralize(@account.errors.count, "error")
+      prohibited this api_v2_account from being saved:
+    %ul
+      - @account.errors.full_messages.each do |message|
+        %li= message
+.field
+  = f.label :uuid
+  %br/
+  = f.text_field :uuid, disabled: true
+.field
+  = f.label :hruid
+  %br/
+  = f.text_field :hruid
+.field
+  = f.label :id_soce
+  %br/
+  = f.text_field :id_soce
+.field
+  = f.label :enabled
+  %br/
+  = f.check_box :enabled
+.field
+  = f.label :password
+  %br/
+  = f.password_field :password
+.field
+  = f.label :lastname
+  %br/
+  = f.text_field :lastname
+.field
+  = f.label :firstname
+  %br/
+  = f.text_field :firstname
+.field
+  = f.label :birthname
+  %br/
+  = f.text_field :birthname
+.field
+  = f.label :birth_firstname
+  %br/
+  = f.text_field :birth_firstname
+.field
+  = f.label :email
+  %br/
+  = f.text_field :email
+.field
+  = f.label :gapps_email
+  %br/
+  = f.text_field :gapps_email
+.field
+  = f.label :birthdate
+  %br/
+  = f.text_field :birthdate
+.field
+  = f.label :deathdate
+  %br/
+  = f.text_field :deathdate
+.field
+  = f.label :gender
+  %br/
+  = f.text_field :gender
+.field
+  = f.label :is_gadz
+  %br/
+  = f.check_box :is_gadz
+.field
+  = f.label :is_student
+  %br/
+  = f.check_box :is_student
+.field
+  = f.label :school_id
+  %br/
+  = f.text_field :school_id
+.field
+  = f.label :is_alumni
+  %br/
+  = f.check_box :is_alumni
+.field
+  = f.label :date_entree_ecole
+  %br/
+  = f.text_field :date_entree_ecole
+.field
+  = f.label :date_sortie_ecole
+  %br/
+  = f.text_field :date_sortie_ecole
+.field
+  = f.label :ecole_entree
+  %br/
+  = f.text_field :ecole_entree
+.field
+  = f.label :buque_texte
+  %br/
+  = f.text_field :buque_texte
+.field
+  = f.label :buque_zaloeil
+  %br/
+  = f.text_field :buque_zaloeil
+.field
+  = f.label :gadz_fams
+  %br/
+  = f.text_field :gadz_fams
+.field
+  = f.label :gadz_fams_zaloeil
+  %br/
+  = f.text_field :gadz_fams_zaloeil
+.field
+  = f.label :gadz_proms_principale
+  %br/
+  = f.text_field :gadz_proms_principale
+.field
+  = f.label :gadz_proms_secondaire
+  %br/
+  = f.text_field :gadz_proms_secondaire
+.field
+  = f.label :avatar_url
+  %br/
+  = f.text_field :avatar_url
+.field
+  = f.label :description
+  %br/
+  = f.text_field :description

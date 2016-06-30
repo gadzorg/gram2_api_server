@@ -1,0 +1,20 @@
+%p#notice= notice
+%h1 Listing Api V2 Roles
+%table
+  %thead
+    %tr
+      %th Name
+      %th Application
+      %th Description
+      %th{:colspan => "3"}
+  %tbody
+    - @roles.each do |api_v2_role|
+      %tr
+        %td= api_v2_role.name
+        %td= api_v2_role.application
+        %td= api_v2_role.description
+        %td= link_to 'Show', api_v2_role_path(api_v2_role)
+        %td= link_to 'Edit', edit_api_v2_role_path(api_v2_role)
+        %td= link_to 'Destroy', api_v2_role_path(api_v2_role), method: :delete, data: { confirm: 'Are you sure?' }
+%br/
+= link_to 'New Role', new_api_v2_role_path
