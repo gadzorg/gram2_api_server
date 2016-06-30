@@ -1,15 +1,13 @@
 class Api::V2::AccountsController < Api::V2::BaseController
   before_action :set_api_v2_account, only: [:show, :edit, :update, :destroy, :index_groups, :show_groups, :add_to_group, :remove_from_group , :index_roles, :show_roles, :add_role, :revoke_role]
-
   # GET /api/v2/accounts
   # GET /api/v2/accounts.json
   def index
     @api_v2_accounts = MasterData::Account.all
     @accounts = @api_v2_accounts
     authorize @accounts, :index?
-    show_password_hash = params[:show_password_hash] == "true" ? true : false
     respond_to do |format|
-      format.json {render json: @accounts, show_password_hash: show_password_hash}
+      format.json {render json: @accounts, show_password_hash: show_password_hash?}
     end
   end
 
@@ -18,9 +16,8 @@ class Api::V2::AccountsController < Api::V2::BaseController
   def show
     @account = @api_v2_account
     authorize @account, :index?
-    show_password_hash = params[:show_password_hash] == "true" ? true : false
     respond_to do |format|
-      format.json {render json: @account, show_password_hash: show_password_hash}
+      format.json {render json: @account, show_password_hash: show_password_hash?}
     end
   end
 
@@ -28,7 +25,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
   def new
     @account = MasterData::Account.new
     authorize @account, :create?
-  end
+  endh
 
   # GET /api/v2/accounts/1/edit
   def edit
@@ -199,5 +196,9 @@ class Api::V2::AccountsController < Api::V2::BaseController
     # Never trust parameters from the scary internet, only allow the white list through.
     def api_v2_account_params
       params.require(:account).permit(:uuid, :hruid, :id_soce, :enabled, :password, :lastname, :firstname, :birthname, :birth_firstname, :email, :gapps_email, :password, :birthdate, :deathdate, :gender, :is_gadz, :is_student, :school_id, :is_alumni, :date_entree_ecole, :date_sortie_ecole, :ecole_entree, :buque_texte, :buque_zaloeil, :gadz_fams, :gadz_fams_zaloeil, :gadz_proms_principale, :gadz_proms_secondaire, :avatar_url, :description)
+    end
+
+    def  show_password_hash?
+      params[:show_password_hash] == "true" ? true : false
     end
   end

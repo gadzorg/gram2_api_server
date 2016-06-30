@@ -6,7 +6,7 @@ class Api::V2::RolesController < Api::V2::BaseController
   def index
     @api_v2_roles = MasterData::Role.all
     @roles = @api_v2_roles
-    #authorize @roles, :index?
+    authorize @roles, :index?
     respond_to do |format|
       format.json {render json: @roles}
     end
