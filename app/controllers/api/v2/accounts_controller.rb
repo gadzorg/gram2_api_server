@@ -7,7 +7,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
     authorize @accounts, :index?
     respond_to do |format|
       format.html {render :index}
-      format.json {render json: @accounts, show_password_hash: show_password_hash?}
+      format.json {render json: @accounts}
     end
   end
 
