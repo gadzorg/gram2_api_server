@@ -18,7 +18,7 @@ class Api::V2::BaseController < ApplicationController
     puts "==============================================="
     puts current_client.name
     unless current_client
-      render status: :forbidden, json: {message: "401 Unauthorized"}
+      render status: :unauthorized, json: {message: "401 Unauthorized"}
     end
   end
 end
