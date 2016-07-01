@@ -1,6 +1,7 @@
 class MasterData::Account < MasterData::Base
 
 	require "hruid_service"
+	require "ldap_daemon"
 
   #relations
   has_and_belongs_to_many :groups
@@ -18,6 +19,7 @@ class MasterData::Account < MasterData::Base
   	# set hruid if empty
   	self.generate_hruid
   end
+  after_save :request_ldap_sync
   
   #model validations
   validates :firstname, presence: true
@@ -75,5 +77,10 @@ end
 def revoke_role role
 	self.roles.delete role
 end
+
+  def request_ldap_sync
+    message = LdapDaemon.new
+    message.request_account_update(self)
+  end
 
 end
