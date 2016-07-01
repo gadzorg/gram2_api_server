@@ -18,6 +18,7 @@ class Role < ActiveRecord::Base
         [:read],
         [:admin, MasterData::Account],
         [:read, MasterData::Account],
+        [:password_hash_reader, MasterData::Account],
         [:admin, MasterData::Group],
         [:read, MasterData::Group],
         [:admin, MasterData::Role],
