@@ -5,7 +5,9 @@ class Api::V2::GroupsController < Api::V2::BaseController
   # GET /groups.json
   def index
     @groups = MasterData::Group.all
+    authorize @groups, :index?
     respond_to do |format|
+      format.html {render :index}
       format.json {render json: @groups}
     end
   end
@@ -13,7 +15,9 @@ class Api::V2::GroupsController < Api::V2::BaseController
   # GET /groups/1
   # GET /groups/1.json
   def show
+    authorize @group, :index?
     respond_to do |format|
+      format.html {render :show}
       format.json {render json: @group}
     end
   end
@@ -21,20 +25,23 @@ class Api::V2::GroupsController < Api::V2::BaseController
   # GET /groups/new
   def new
     @group = MasterData::Group.new
+    authorize @group, :create?
   end
 
   # GET /groups/1/edit
   def edit
+    authorize @group, :edit?
   end
 
   # POST /groups
   # POST /groups.json
   def create
     @group = MasterData::Group.new(group_params)
+    authorize @group, :create?
 
     respond_to do |format|
       if @group.save
-        format.html { redirect_to @group, notice: 'MasterData::Group was successfully created.' }
+        format.html { render :show, notice: 'MasterData::Group was successfully created.' }
         format.json { render json: @group, status: :created}
       else
         format.html { render :new }
@@ -46,9 +53,10 @@ class Api::V2::GroupsController < Api::V2::BaseController
   # PATCH/PUT /groups/1
   # PATCH/PUT /groups/1.json
   def update
+    authorize @group, :edit?
     respond_to do |format|
       if @group.update(group_params)
-        format.html { redirect_to @group, notice: 'MasterData::Group was successfully updated.' }
+        format.html { render :show, notice: 'MasterData::Group was successfully updated.' }
         format.json { render json: @group, status: :ok }
       else
         format.html { render :edit }
@@ -60,6 +68,7 @@ class Api::V2::GroupsController < Api::V2::BaseController
   # DELETE /groups/1
   # DELETE /groups/1.json
   def destroy
+    authorize @group, :destroy?
     @group.destroy
     respond_to do |format|
       format.html { redirect_to api_v2_groups_url, notice: 'MasterData::Group was successfully destroyed.' }

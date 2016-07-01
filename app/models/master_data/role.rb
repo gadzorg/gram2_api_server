@@ -1,4 +1,7 @@
 class MasterData::Role < MasterData::Base
+
+  resourcify
+  
 	#relations
 	has_and_belongs_to_many :accounts
 

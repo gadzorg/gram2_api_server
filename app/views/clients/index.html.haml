@@ -1,0 +1,26 @@
+%p#notice= notice
+%h1 Listing Clients
+%table
+  %thead
+    %tr
+      %th Name
+      %th Password
+      %th Description
+      %th Active
+      %th Email
+      %th Authentication token
+      %th{:colspan => "3"}
+  %tbody
+    - @clients.each do |client|
+      %tr
+        %td= client.name
+        %td= client.password
+        %td= client.description
+        %td= client.active
+        %td= client.email
+        %td= client.authentication_token
+        %td= link_to 'Show', client
+        %td= link_to 'Edit', edit_client_path(client)
+        %td= link_to 'Destroy', client, method: :delete, data: { confirm: 'Are you sure?' }
+%br/
+= link_to 'New Client', new_client_path

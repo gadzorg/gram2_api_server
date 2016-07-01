@@ -1,0 +1,4 @@
+= form_for @role, as: :role, url: url_for(controller: "roles", action: "update") do |f|
+  = render 'form_fields', f: f
+  .actions
+    = f.submit

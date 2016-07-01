@@ -1,0 +1,94 @@
+%p#notice= notice
+%p
+  %strong Uuid:
+  = @account.uuid
+%p
+  %strong Hruid:
+  = @account.hruid
+%p
+  %strong Id soce:
+  = @account.id_soce
+%p
+  %strong Enabled:
+  = @account.enabled
+%p
+  %strong Password:
+  = @account.password
+%p
+  %strong Lastname:
+  = @account.lastname
+%p
+  %strong Firstname:
+  = @account.firstname
+%p
+  %strong Birthname:
+  = @account.birthname
+%p
+  %strong Birth firstname:
+  = @account.birth_firstname
+%p
+  %strong Email:
+  = @account.email
+%p
+  %strong Gapps email:
+  = @account.gapps_email
+%p
+  %strong Password:
+  = @account.password
+%p
+  %strong Birthdate:
+  = @account.birthdate
+%p
+  %strong Deathdate:
+  = @account.deathdate
+%p
+  %strong Gender:
+  = @account.gender
+%p
+  %strong Is gadz:
+  = @account.is_gadz
+%p
+  %strong Is student:
+  = @account.is_student
+%p
+  %strong School:
+  = @account.school_id
+%p
+  %strong Is alumni:
+  = @account.is_alumni
+%p
+  %strong Date entree ecole:
+  = @account.date_entree_ecole
+%p
+  %strong Date sortie ecole:
+  = @account.date_sortie_ecole
+%p
+  %strong Ecole entree:
+  = @account.ecole_entree
+%p
+  %strong Buque texte:
+  = @account.buque_texte
+%p
+  %strong Buque zaloeil:
+  = @account.buque_zaloeil
+%p
+  %strong Gadz fams:
+  = @account.gadz_fams
+%p
+  %strong Gadz fams zaloeil:
+  = @account.gadz_fams_zaloeil
+%p
+  %strong Gadz proms principale:
+  = @account.gadz_proms_principale
+%p
+  %strong Gadz proms secondaire:
+  = @account.gadz_proms_secondaire
+%p
+  %strong Avatar url:
+  = @account.avatar_url
+%p
+  %strong Description:
+  = @account.description
+= link_to 'Edit', edit_api_v2_account_path(@account)
+|
+= link_to 'Back', api_v2_accounts_path
