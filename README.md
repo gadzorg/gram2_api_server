@@ -2,30 +2,27 @@
 
 [![Build Status](https://travis-ci.org/gadzorg/gram2_api_server.svg?branch=master)](https://travis-ci.org/gadzorg/gram2_api_server) [![Code Climate](https://codeclimate.com/github/gadzorg/gram2_api_server/badges/gpa.svg)](https://codeclimate.com/github/gadzorg/gram2_api_server) [![Test Coverage](https://codeclimate.com/github/gadzorg/gram2_api_server/badges/coverage.svg)](https://codeclimate.com/github/gadzorg/gram2_api_server/coverage)
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Description
+TODO
+## Environment
+Ruby : > 2 (tested with 2.2.1p85)
+   
+###Dependencies
+Todo : rabbitMQ + config
 
-Things you may want to cover:
+## Configuration
+TODO : Create config template
+## Database initialization
+For development :
+```
+RAILS_ENV=development rake db:migrate
+```
+For production :
+```
+RAILS_ENV=production rake db:migrate
+```
 
- - Ruby version
-
- - System dependencies
-
- - Configuration
-
- - Database creation
-
- - Database initialization
-
- - How to run the test suite
-
- - Services (job queues, cache servers, search engines, etc.)
-
- - Deployment instructions
-
- - ...
-
- ## Environment variables :
+## Environment variables :
 
  * RABBITMQ_SENDER_ID : Sender id. "gram" if not defined
  * RABBITMQ_HOST
@@ -50,4 +47,7 @@ rspec --format doc
 Test from RAML :
 ```
 rake spec:vigia
+
 ```
+## Deployment instructions
+TODO
