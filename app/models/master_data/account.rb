@@ -63,24 +63,23 @@ class MasterData::Account < MasterData::Base
   def add_to_group group
     #check if account already in tihs group
     self.groups << group unless self.groups.exists?(group.id)
-end
+  end
 
-def remove_from_group group
-	self.groups.delete group
-end
+  def remove_from_group group
+    self.groups.delete group
+  end
 
-def add_role role
-    #check if account already in tihs group
-    self.roles << role unless self.roles.exists?(role.id)
-end
+  def add_role role
+      #check if account already in tihs group
+      self.roles << role unless self.roles.exists?(role.id)
+  end
 
-def revoke_role role
-	self.roles.delete role
-end
+  def revoke_role role
+    self.roles.delete role
+  end
 
   def request_ldap_sync
     message = LdapDaemon.new
     message.request_account_update(self)
   end
-
 end
