@@ -7,7 +7,17 @@ class LdapDaemon
   end
 
   def request_account_update(account)
-    msg={id_soce: account.id_soce.to_s}
+    msg={account: {uuid: account.uuid.to_s}}
+    @message_sender.send_message(msg, 'request.ldapd.update')
+  end
+
+  def request_group_update(group)
+    msg={group: {uuid: group.uuid.to_s}}
+    @message_sender.send_message(msg, 'request.ldapd.update')
+  end
+
+  def request_role_update(role)
+    msg={role: {uuid: role.uuid.to_s}}
     @message_sender.send_message(msg, 'request.ldapd.update')
   end
 

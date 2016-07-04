@@ -23,18 +23,21 @@ default: &default
 
 production:
   <<: *default
-  database: db/production.sqlite3
+  database: gram_api_prod
+  host: localhost
+  username: gram_api_prod
+  password: password
 
 development:
   <<: *default
   database: gram_api_dev
   host: localhost
-  username: gram_api_test
-  password: epifjofijezoipjceodfoije
+  username: gram_api_devel
+  password: password
 
 test:
   <<: *default
   database: gram_api_test
   host: localhost
   username: gram_api_test
-  password: epifjofijezoipjceodfoije
+  password: password

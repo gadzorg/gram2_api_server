@@ -2,30 +2,33 @@
 
 [![Build Status](https://travis-ci.org/gadzorg/gram2_api_server.svg?branch=master)](https://travis-ci.org/gadzorg/gram2_api_server) [![Code Climate](https://codeclimate.com/github/gadzorg/gram2_api_server/badges/gpa.svg)](https://codeclimate.com/github/gadzorg/gram2_api_server) [![Test Coverage](https://codeclimate.com/github/gadzorg/gram2_api_server/badges/coverage.svg)](https://codeclimate.com/github/gadzorg/gram2_api_server/coverage)
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Description
+TODO
+## Environment
+Ruby : > 2 (tested with 2.2.1p85)
+   
+###Dependencies
+#### RabbitMQ
+You can setup a local rabbitMQ instance with docker and default configuration
+```
+docker run  --name gram-rabbitmq -p 5672:5672 rabbitmq
+```
 
-Things you may want to cover:
-
- - Ruby version
-
- - System dependencies
-
- - Configuration
-
- - Database creation
-
- - Database initialization
-
- - How to run the test suite
-
- - Services (job queues, cache servers, search engines, etc.)
-
- - Deployment instructions
-
- - ...
-
- ## Environment variables :
+## Configuration
+Create `secrets.yml`, `database.yml` and optionally `rabbitmq.yml` from the templates files in `config` dir.
+The rabbitmq template contains the default configuration for a local rabbitMQ server setup with docker.
+## Database initialization
+For development :
+```
+RAILS_ENV=development rake db:migrate:reset
+RAILS_ENV=development rake db:seed
+```
+For production :
+```
+RAILS_ENV=production rake db:migrate:reset
+RAILS_ENV=production rake db:seed
+```
+## Environment variables :
 
  * RABBITMQ_SENDER_ID : Sender id. "gram" if not defined
  * RABBITMQ_HOST
@@ -34,6 +37,8 @@ Things you may want to cover:
  * RABBITMQ_USER
  * RABBITMQ_PASSWORD
  * RABBITMQ_EXCHANGE : "agoram_event_exchange" if not defined
+ 
+ Your can override these variables if you configure `confi/rabbitmq.yml`
 
 ## Test
 
@@ -50,4 +55,7 @@ rspec --format doc
 Test from RAML :
 ```
 rake spec:vigia
+
 ```
+## Deployment instructions
+TODO

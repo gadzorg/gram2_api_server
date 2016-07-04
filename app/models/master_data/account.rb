@@ -1,6 +1,7 @@
 class MasterData::Account < MasterData::Base
 
 	require "hruid_service"
+	require "ldap_daemon"
 
   resourcify
 
@@ -20,6 +21,7 @@ class MasterData::Account < MasterData::Base
   	# set hruid if empty
   	self.generate_hruid
   end
+  after_save :request_ldap_sync
   
   #model validations
   validates :firstname, presence: true
@@ -63,19 +65,23 @@ class MasterData::Account < MasterData::Base
   def add_to_group group
     #check if account already in tihs group
     self.groups << group unless self.groups.exists?(group.id)
-end
+  end
 
-def remove_from_group group
-	self.groups.delete group
-end
+  def remove_from_group group
+    self.groups.delete group
+  end
 
-def add_role role
-    #check if account already in tihs group
-    self.roles << role unless self.roles.exists?(role.id)
-end
+  def add_role role
+      #check if account already in tihs group
+      self.roles << role unless self.roles.exists?(role.id)
+  end
 
-def revoke_role role
-	self.roles.delete role
-end
+  def revoke_role role
+    self.roles.delete role
+  end
+
+  def request_ldap_sync ldap_daemon = LdapDaemon.new
+   ldap_daemon.request_account_update(self)
+  end
 
 end
