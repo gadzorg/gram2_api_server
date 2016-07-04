@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160627170301) do
+ActiveRecord::Schema.define(version: 20160704161746) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -101,13 +101,16 @@ ActiveRecord::Schema.define(version: 20160627170301) do
   end
 
   create_table "gram_groups", force: :cascade do |t|
-    t.string   "guid"
+    t.string   "uuid"
     t.string   "name"
     t.string   "short_name"
     t.string   "description"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "uuid_id"
   end
+
+  add_index "gram_groups", ["uuid_id"], name: "index_gram_groups_on_uuid_id", using: :btree
 
   create_table "gram_roles", force: :cascade do |t|
     t.string   "application"
@@ -115,6 +118,7 @@ ActiveRecord::Schema.define(version: 20160627170301) do
     t.string   "description"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.string   "uuid"
   end
 
   create_table "roles", force: :cascade do |t|

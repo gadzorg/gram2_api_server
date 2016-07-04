@@ -11,7 +11,7 @@ RSpec.describe MasterData::Group, type: :model do
     expect(MasterData::Group.count).to eq(0)
   end
 
-  it "contain guid"
+  it "validate presence of a uuid"
   it "contain name"
   it "contain short_name"
 
@@ -22,7 +22,7 @@ RSpec.describe MasterData::Group, type: :model do
       group=FactoryGirl.create(:master_data_group)
       ld = LdapDaemon.new(message_sender: message_sender)
       group.request_ldap_sync(ld)
-      expect(message_sender).to have_received.send_message({group: {short_name: group.short_name}}, 'request.ldapd.update')
+      expect(message_sender).to have_received.send_message({group: {uuid: group.uuid}}, 'request.ldapd.update')
     end
   end
 end
