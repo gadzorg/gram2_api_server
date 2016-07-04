@@ -26,8 +26,7 @@ class MasterData::Group < MasterData::Base
     end
   end
 
-  def request_ldap_sync
-    message = LdapDaemon.new
-    message.request_group_update(self)
+  def request_ldap_sync ldap_daemon = LdapDaemon.new
+    ldap_daemon.request_group_update(self)
   end
 end

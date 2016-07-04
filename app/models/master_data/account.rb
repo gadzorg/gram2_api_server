@@ -78,8 +78,8 @@ class MasterData::Account < MasterData::Base
     self.roles.delete role
   end
 
-  def request_ldap_sync
-    message = LdapDaemon.new
-    message.request_account_update(self)
+  def request_ldap_sync ldap_daemon = LdapDaemon.new
+   ldap_daemon.request_account_update(self)
   end
+
 end

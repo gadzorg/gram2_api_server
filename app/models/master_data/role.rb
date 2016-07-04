@@ -9,8 +9,7 @@ class MasterData::Role < MasterData::Base
 	validates :name, :application, :description, presence: true
 	validates :name, uniqueness: true
 
-	def request_ldap_sync
-		message = LdapDaemon.new
-		message.request_role_update(self)
+	def request_ldap_sync ldap_daemon = LdapDaemon.new
+		ldap_daemon.request_role_update(self)
 	end
 end
