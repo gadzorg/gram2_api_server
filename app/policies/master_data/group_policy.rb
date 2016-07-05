@@ -1,11 +1,4 @@
-class MasterData::GroupPolicy < BasePolicy
-  attr_reader :client, :group
-
-  def initialize(client, group)
-    @client = client
-    @group = group
-  end
-
+class MasterData::GroupPolicy < ApplicationPolicy
   def edit?
     scopes = [
         [:admin],

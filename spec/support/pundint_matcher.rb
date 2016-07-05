@@ -6,10 +6,10 @@ RSpec::Matchers.define :permit do |action|
   end
 
   failure_message_for_should do |policy|
-    "#{policy.class} does not permit #{action} on #{policy.record} for #{policy.user.inspect}."
+    "#{policy.class} does not permit #{action} on #{policy.record} for #{policy.client.inspect}."
   end
 
   failure_message_for_should_not do |policy|
-    "#{policy.class} does not forbid #{action} on #{policy.record} for #{policy.user.inspect}."
+    "#{policy.class} does not forbid #{action} on #{policy.record} for #{policy.client.inspect}."
   end
 end
