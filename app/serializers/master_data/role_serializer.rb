@@ -1,5 +1,5 @@
 class MasterData::RoleSerializer < BaseSerializer
-  attributes :id, :name, :application, :description
+  attributes :id, :uuid, :name, :application, :description
   attributes :url
 
   def url

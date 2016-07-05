@@ -1,5 +1,5 @@
 class MasterData::GroupSerializer < BaseSerializer
-  attributes :id, :guid, :short_name, :name, :description
+  attributes :id, :uuid, :short_name, :name, :description
   attributes :url
 
   def url
