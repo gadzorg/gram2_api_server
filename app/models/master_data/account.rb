@@ -21,7 +21,8 @@ class MasterData::Account < MasterData::Base
   	self.generate_hruid
   end
   after_save :request_account_ldap_sync
-  
+  after_create :account_completer
+
   #model validations
   validates :firstname, presence: true
   validates :lastname, presence: true
@@ -92,12 +93,21 @@ class MasterData::Account < MasterData::Base
 
   ################# Roles #################
   def add_role role
-      #check if account already in tihs group
-      self.roles << role unless self.roles.exists?(role.id)
+    #check if account already in tihs group
+    self.roles << role unless self.roles.exists?(role.id)
   end
 
   def revoke_role role
     self.roles.delete role
+  end
+
+  ############ Account completer #############
+  # generate all standard information when creating
+  # a new account
+  def account_completer
+    # generate alias
+    alias_list = AliasService.generate_list(self)
+    alias_list.each { |a| self.add_new_alias(a) }
   end
 
 end
