@@ -8,17 +8,29 @@ class LdapDaemon
 
   def request_account_update(account)
     msg={account: {uuid: account.uuid.to_s}}
-    @message_sender.send_message(msg, 'request.ldapd.update')
+    send_message(msg, 'request.ldapd.update')
   end
 
   def request_group_update(group)
     msg={group: {uuid: group.uuid.to_s}}
-    @message_sender.send_message(msg, 'request.ldapd.update')
+    send_message(msg, 'request.ldapd.update')
   end
 
   def request_role_update(role)
     msg={role: {uuid: role.uuid.to_s}}
-    @message_sender.send_message(msg, 'request.ldapd.update')
+    send_message(msg, 'request.ldapd.update')
+  end
+
+  private
+
+  def send_message(msg, routing_key)
+    begin
+      @message_sender.send_message(msg, routing_key)
+      return true
+    rescue Bunny::TCPConnectionFailedForAllHosts
+      Rails.logger.error "Unable to connect to RabbitMQ server"
+      return false
+    end
   end
 
 end
