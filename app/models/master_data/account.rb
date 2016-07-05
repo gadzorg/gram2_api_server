@@ -76,6 +76,10 @@ class MasterData::Account < MasterData::Base
     new_alias.save # alias validation ensures alias uniqness
   end
 
+  def remove_all_alias
+    self.alias.destroy_all
+  end
+
   ################# Groups #################
   def add_to_group group
     #check if account already in tihs group

@@ -1,5 +1,6 @@
 class Api::V2::AccountsController < Api::V2::BaseController
   before_action :set_api_v2_account, only: [:show, :edit, :update, :destroy, :index_groups, :show_groups, :add_to_group, :remove_from_group , :index_roles, :show_roles, :add_role, :revoke_role]
+  before_action :get_new_aliases, only: [:edit, :update, :create]
   # GET /api/v2/accounts
   # GET /api/v2/accounts.json
   def index
@@ -38,9 +39,9 @@ class Api::V2::AccountsController < Api::V2::BaseController
     @account = MasterData::Account.new(api_v2_account_params)
     authorize @account, :create?
 
-
     respond_to do |format|
-      if @account.save
+      # keep @account.save at the end of the condition bellow to ensure the right object is returned during rendering
+      if update_alias(@aliases) && @account.save
         format.html { render :show, notice: 'Account was successfully created.' }
         format.json { render json: @account, status: :created, location: :api_v2_accounts }
       else
@@ -55,7 +56,8 @@ class Api::V2::AccountsController < Api::V2::BaseController
   def update
     authorize @account, :edit?
     respond_to do |format|
-      if @account.update(api_v2_account_params)
+      # keep @account.save at the end of the condition bellow to ensure the right object is returned during rendering
+      if update_alias(@aliases) && @account.update(api_v2_account_params)
         format.html { render :show, notice: 'Account was successfully updated.' }
         format.json { render json: @account, status: :ok, location: :api_v2_account }
       else
@@ -198,5 +200,17 @@ class Api::V2::AccountsController < Api::V2::BaseController
 
     def  show_password_hash?
       params[:show_password_hash] == "true" ? true : false
+    end
+
+    def get_new_aliases
+      @aliases = params[:alias]
+    end
+
+    # remove all alias and updates with the new ones
+    def update_alias(aliases)
+      unless aliases.blank?
+        @account.remove_all_alias
+        aliases.each { |a| @account.add_new_alias(a[:name]) }
+      end
     end
   end
