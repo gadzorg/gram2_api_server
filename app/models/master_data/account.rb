@@ -6,6 +6,7 @@ class MasterData::Account < MasterData::Base
   #relations
   has_and_belongs_to_many :groups
   has_and_belongs_to_many :roles
+  has_many :alias
 
   #callbacks
   before_validation :generate_uuid_if_empty
@@ -19,7 +20,7 @@ class MasterData::Account < MasterData::Base
   	# set hruid if empty
   	self.generate_hruid
   end
-  after_save :request_ldap_sync
+  after_save :request_account_ldap_sync
   
   #model validations
   validates :firstname, presence: true
@@ -35,7 +36,7 @@ class MasterData::Account < MasterData::Base
   validates :buque_texte, format: { with: /\A[a-zA-Z0-9\'\-\s]\z/}, allow_nil: true
   validates :gadz_fams, format: { with: /\A[0-9\(\)\!\-\s]\z/}, allow_nil: true
 
-	
+  ################# Generators #################
   def generate_uuid_if_empty
   	self.uuid ||= self.generate_uuid
   end
@@ -60,6 +61,22 @@ class MasterData::Account < MasterData::Base
   	self.hruid ||= HruidService::generate(self)
   end
 
+  ################# Aliases #################
+  def add_alias connection_alias
+    self.alias << connection_alias unless self.alias.exists?(connection_alias.id)
+  end
+
+  def remove_alias connection_alias
+    self.groups.detete connection_alias
+  end
+
+  def add_new_alias alias_name
+    new_alias = MasterData::Alias.new(name: alias_name)
+    self.add_alias(new_alias)
+    new_alias.save # alias validation ensures alias uniqness
+  end
+
+  ################# Groups #################
   def add_to_group group
     #check if account already in tihs group
     self.groups << group unless self.groups.exists?(group.id)
@@ -69,6 +86,7 @@ class MasterData::Account < MasterData::Base
     self.groups.delete group
   end
 
+  ################# Roles #################
   def add_role role
       #check if account already in tihs group
       self.roles << role unless self.roles.exists?(role.id)
@@ -76,10 +94,6 @@ class MasterData::Account < MasterData::Base
 
   def revoke_role role
     self.roles.delete role
-  end
-
-  def request_ldap_sync ldap_daemon = LdapDaemon.new
-   ldap_daemon.request_account_update(self)
   end
 
 end
