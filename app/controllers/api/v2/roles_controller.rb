@@ -84,6 +84,6 @@ class Api::V2::RolesController < Api::V2::BaseController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def api_v2_role_params
-      params.require(:role).permit(:name, :application, :description)
+      ActiveModelSerializers::Deserialization.jsonapi_parse(params, only: [:name, :application, :description])
     end
 end
