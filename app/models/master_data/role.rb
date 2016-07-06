@@ -6,6 +6,7 @@ class MasterData::Role < MasterData::Base
 	has_and_belongs_to_many :accounts
 
 	#callbacks
+	before_validation :generate_uuid_if_empty
 	after_save :request_ldap_sync
 
 	#model validations

@@ -37,18 +37,7 @@ class MasterData::Account < MasterData::Base
   validates :buque_texte, format: { with: /\A[a-zA-Z0-9\'\-\s]\z/}, allow_nil: true
   validates :gadz_fams, format: { with: /\A[0-9\(\)\!\-\s]\z/}, allow_nil: true
 
-	
-  def generate_uuid_if_empty
-  	self.uuid ||= self.generate_uuid
-  end
 
-  def generate_uuid
-  	self.uuid = loop do
-  		random_uuid = SecureRandom.uuid
-  		break random_uuid unless MasterData::Account.exists?(uuid: random_uuid)
-  	end
-  end
-  
   def next_id_soce_seq_value
   	result = self.class.connection.execute("SELECT nextval('id_soce_seq')")
   	result[0]['nextval']
