@@ -8,8 +8,7 @@ RSpec.describe MasterData::Account, type: :model do
   it "has an empty database" do
     expect(MasterData::Account.count).to eq(0)
   end
-
-  describe "valid hruid" do 
+  describe "valid hruid" do
     it "generate uniq hurid"
     it "contain promo for gadz"
     it "contraint ext for ext"
@@ -17,15 +16,17 @@ RSpec.describe MasterData::Account, type: :model do
     it "manage homonyms w/ same promo"
   end
 
-  #email
-  it {is_expected.to validate_presence_of :email}
-  it {is_expected.to allow_value('prenom.nom@gadz.org').for(:email)}
-  it {is_expected.not_to allow_value('prenom.nom.gadz.org').for(:email)}
-  
-  it {is_expected.to validate_presence_of :password}
-  it {is_expected.to validate_inclusion_of(:gender).in_array(['male','female'])}
-  
-  #id soce
+ #email
+ it {is_expected.to validate_presence_of :email}
+ it {is_expected.to allow_value('prenom.nom@gadz.org').for(:email)}
+ it {is_expected.not_to allow_value('prenom.nom.gadz.org').for(:email)}
+
+ it {is_expected.to validate_presence_of :password}
+ it {is_expected.to validate_inclusion_of(:gender).in_array(['male','female'])}
+
+ it "validate presence of a uuid"
+
+ #id soce
   it "validate presence of :id_soce" do
     account=FactoryGirl.create(:master_data_account)
     account.id_soce=nil
@@ -74,8 +75,18 @@ RSpec.describe MasterData::Account, type: :model do
   end
 
   #info trads
-  it "valid buque without special char"
-  it "invalid buque with special char"
-  it "valid buque zaloeil with special char"
+ it "valid buque without special char"
+ it "invalid buque with special char"
+ it "valid buque zaloeil with special char"
 
+ describe "after_save" do
+   fake(:message_sender) { GorgMessageSender }
+   it { is_expected.to callback(:request_ldap_sync).after(:save) }
+   it "send ldap maj request" do
+     account=FactoryGirl.create(:master_data_account)
+     ld = LdapDaemon.new(message_sender: message_sender)
+     account.request_ldap_sync(ld)
+     expect(message_sender).to have_received.send_message({account: {uuid: account.uuid.to_s}}, 'request.ldapd.update')
+   end
+ end
 end

@@ -18,3 +18,8 @@
 !/log/.keep
 /tmp
 *.sublime-*
+
+# Ignore config files
+./config/database.yml
+./config/rabbitmq.yml
+./config/secrets.yml

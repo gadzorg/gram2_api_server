@@ -77,5 +77,6 @@ group :test do
   gem 'shoulda-matchers', '~>3.0'
   gem 'rspec-rails'
   gem 'vigia'
+  gem 'shoulda-callback-matchers', '~> 1.1', '>= 1.1.4'
 end
 
