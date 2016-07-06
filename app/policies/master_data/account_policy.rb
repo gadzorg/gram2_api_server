@@ -1,10 +1,4 @@
-class MasterData::AccountPolicy < BasePolicy
-  attr_reader :client, :account
-
-  def initialize(client, account)
-    @client = client
-    @account = account
-  end
+class MasterData::AccountPolicy < ApplicationPolicy
 
   def edit?
     scopes = [

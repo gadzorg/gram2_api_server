@@ -63,7 +63,7 @@ describe MasterData::AccountPolicy do
     let(:client) {FactoryGirl.create(:client)}
     before {client.add_role :password_hash_reader, MasterData::Account}
 
-    it { should permit(:index)                    }
+    it { should_not permit(:index)                    }
     it { should permit(:show_password_hash)   }
     it { should_not permit(:edit)                     }
     it { should_not permit(:create)                   }
