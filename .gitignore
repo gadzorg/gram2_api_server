@@ -20,6 +20,6 @@
 *.sublime-*
 
 # Ignore config files
-./config/database.yml
-./config/rabbitmq.yml
-./config/secrets.yml
+config/database.yml
+config/rabbitmq.yml
+config/secrets.yml

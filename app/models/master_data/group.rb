@@ -15,17 +15,6 @@ class MasterData::Group < MasterData::Base
   #roles
   resourcify
 
-  def generate_uuid_if_empty
-    self.uuid ||= self.generate_uuid
-  end
-
-  def generate_uuid
-    self.guid = loop do
-      random_uuid = SecureRandom.uuid
-      break random_uuid unless MasterData::Group.exists?(uuid: random_uuid)
-    end
-  end
-
   def request_ldap_sync ldap_daemon = LdapDaemon.new
     ldap_daemon.request_group_update(self)
   end
