@@ -1,4 +1,4 @@
-class MasterData::AccountPolicy < ApplicationPolicy
+class MasterData::AccountPolicy < BasePolicy
 
   def edit?
     scopes = [

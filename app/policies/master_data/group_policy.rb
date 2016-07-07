@@ -1,4 +1,4 @@
-class MasterData::GroupPolicy < ApplicationPolicy
+class MasterData::GroupPolicy < BasePolicy
   def edit?
     scopes = [
         [:admin],

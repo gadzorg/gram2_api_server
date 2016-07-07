@@ -13,13 +13,18 @@ class HruidService
     end
   end
 
+  # this method is used by alias_service and must stay public
+  def self.canonical_name(first_name, last_name)
+    first_name = "prenom" if first_name.blank?
+    last_name = "nom" if last_name.blank?
+    return "#{format_name(first_name)}.#{format_name(last_name.downcase)}"
+  end
+
 private
   # build hruid from user info
   def self.build(first_name, last_name, suffix)
-    first_name = "prenom" if first_name.blank?
-    last_name = "nom" if last_name.blank? 
-
-    hruid = "#{format_name(first_name)}.#{format_name(last_name.downcase)}.#{suffix}"
+    canonical_name = self.canonical_name(first_name, last_name)
+    hruid = "#{canonical_name}.#{suffix}"
   end
 
   # generate hruid from user type

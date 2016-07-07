@@ -1,4 +1,4 @@
-class MasterData::RolePolicy < ApplicationPolicy
+class MasterData::RolePolicy < BasePolicy
 
   def edit?
     scopes = [

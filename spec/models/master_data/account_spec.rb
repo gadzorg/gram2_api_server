@@ -81,12 +81,24 @@ RSpec.describe MasterData::Account, type: :model do
 
  describe "after_save" do
    fake(:message_sender) { GorgMessageSender }
-   it { is_expected.to callback(:request_ldap_sync).after(:save) }
+   it { is_expected.to callback(:request_account_ldap_sync).after(:save) }
    it "send ldap maj request" do
      account=FactoryGirl.create(:master_data_account)
      ld = LdapDaemon.new(message_sender: message_sender)
-     account.request_ldap_sync(ld)
+     account.request_account_ldap_sync(ld)
      expect(message_sender).to have_received.send_message({account: {uuid: account.uuid.to_s}}, 'request.ldapd.update')
    end
  end
+
+  describe "add/remove alias" do
+    account1 = FactoryGirl.create(:master_data_account)
+    it "add new alias" do
+      account1.add_new_alias("alias1")
+      expect(account1.alias.first.name).to eq("alias1")
+    end
+    it "refuse to add existing alias for this account" do
+      account1.add_new_alias("alias1")
+      expect(account1.alias.count).to eq(1)
+    end
+  end
 end
