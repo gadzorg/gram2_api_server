@@ -8,6 +8,7 @@ class MasterData::Account < MasterData::Base
   #relations
   has_and_belongs_to_many :groups
   has_and_belongs_to_many :roles
+  has_many :alias
 
   #callbacks
   before_validation :generate_uuid_if_empty
@@ -21,8 +22,9 @@ class MasterData::Account < MasterData::Base
   	# set hruid if empty
   	self.generate_hruid
   end
-  after_save :request_ldap_sync
-  
+  after_save :request_account_ldap_sync
+  after_create :account_completer
+
   #model validations
   validates :firstname, presence: true
   validates :lastname, presence: true
@@ -51,6 +53,26 @@ class MasterData::Account < MasterData::Base
   	self.hruid ||= HruidService::generate(self)
   end
 
+  ################# Aliases #################
+  def add_alias connection_alias
+    self.alias << connection_alias unless self.alias.exists?(connection_alias.id)
+  end
+
+  def remove_alias connection_alias
+    self.groups.detete connection_alias
+  end
+
+  def add_new_alias alias_name
+    new_alias = MasterData::Alias.new(name: alias_name)
+    self.add_alias(new_alias)
+    new_alias.save # alias validation ensures alias uniqness
+  end
+
+  def remove_all_alias
+    self.alias.destroy_all
+  end
+
+  ################# Groups #################
   def add_to_group group
     #check if account already in tihs group
     self.groups << group unless self.groups.exists?(group.id)
@@ -60,17 +82,23 @@ class MasterData::Account < MasterData::Base
     self.groups.delete group
   end
 
+  ################# Roles #################
   def add_role role
-      #check if account already in tihs group
-      self.roles << role unless self.roles.exists?(role.id)
+    #check if account already in tihs group
+    self.roles << role unless self.roles.exists?(role.id)
   end
 
   def revoke_role role
     self.roles.delete role
   end
 
-  def request_ldap_sync ldap_daemon = LdapDaemon.new
-   ldap_daemon.request_account_update(self)
+  ############ Account completer #############
+  # generate all standard information when creating
+  # a new account
+  def account_completer
+    # generate alias
+    alias_list = AliasService.generate_list(self)
+    alias_list.each { |a| self.add_new_alias(a) }
   end
 
 end
