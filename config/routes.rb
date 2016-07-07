@@ -54,7 +54,7 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-  namespace :api, constraints: { format: 'json' } do
+  namespace :api, defaults: {format: :json} do
     namespace :v2 do
       resources :groups do
         get 'accounts' => 'groups#index_accounts', as: :index_accounts
