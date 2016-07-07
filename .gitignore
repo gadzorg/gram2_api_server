@@ -18,6 +18,7 @@
 !/log/.keep
 /tmp
 *.sublime-*
+.byebug_history
 
 # Ignore config files
 config/database.yml

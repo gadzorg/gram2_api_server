@@ -49,8 +49,13 @@ gem 'pundit'
 # Roles
 gem 'rolify', '~> 5.1'
 
-#HEROKU
-gem 'heroku_secrets', github: 'alexpeattie/heroku_secrets'
+
+group :production do
+  #HEROKU
+  gem 'heroku_secrets', github: 'alexpeattie/heroku_secrets'
+  gem 'rails_12factor'
+
+end
 
 
 group :development, :test do
