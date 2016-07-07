@@ -3,6 +3,13 @@ class BasePolicy
   #   current_client
   # end
 
+  attr_reader :client, :record
+
+  def initialize(client, record)
+    @client = client
+    @record = record
+  end
+
   private
   def has_scope? (client, permission, scope = nil)
     return false if client.nil?
