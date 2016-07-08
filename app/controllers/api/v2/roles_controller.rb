@@ -1,10 +1,16 @@
 class Api::V2::RolesController < Api::V2::BaseController
   before_action :set_api_v2_role, only: [:show, :edit, :update, :destroy]
+  before_action :set_account_parent, only: [:index]
+
 
   # GET /api/v2/roles
   # GET /api/v2/roles.json
   def index
-    @roles = MasterData::Role.all
+    if @account
+      @roles = @account.roles
+    else
+      @roles = MasterData::Role.all
+    end
     authorize @roles, :index?
     respond_to do |format|
       format.html {render :index}

@@ -1,10 +1,15 @@
 class Api::V2::GroupsController < Api::V2::BaseController
   before_action :set_group, only: [:show, :edit, :update, :destroy]
+  before_action :set_account_parent, only: [:index]
 
   # GET /groups
   # GET /groups.json
   def index
-    @groups = MasterData::Group.all
+    if @account
+      @groups = @account.groups
+    else
+      @groups = MasterData::Group.all
+    end
     authorize @groups, :index?
     respond_to do |format|
       format.html {render :index}
@@ -73,31 +78,6 @@ class Api::V2::GroupsController < Api::V2::BaseController
     respond_to do |format|
       format.html { redirect_to api_v2_groups_url, notice: 'MasterData::Group was successfully destroyed.' }
       format.json { head :no_content }
-    end
-  end
-
-  #########################################################
-  #  Accounts management
-  #########################################################
-
-  def index_accounts
-    group = MasterData::Group.find(params[:group_id])
-    @accounts = group.accounts
-    respond_to do |format|
-      format.json {render json: @accounts}
-    end
-
-  end
-
-  def show_accounts
-    group = MasterData::Group.find(params[:group_id])
-    if group.accounts.exists?(params[:account_id])
-     @account = group.accounts.find(params[:account_id])
-      respond_to do |format|
-        format.json {render json: @account}
-      end
-   else
-    render json: { error: "Acount not found" }, status: :not_found
     end
   end
 

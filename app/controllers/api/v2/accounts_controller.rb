@@ -1,10 +1,16 @@
 class Api::V2::AccountsController < Api::V2::BaseController
   before_action :set_api_v2_account, only: [:show, :edit, :update, :destroy, :index_groups, :show_groups, :add_to_group, :remove_from_group , :index_roles, :show_roles, :add_role, :revoke_role]
   before_action :get_new_aliases, only: [:edit, :update, :create]
+  before_action :set_group_parent, only: [:index]
+
   # GET /api/v2/accounts
   # GET /api/v2/accounts.json
   def index
-    @accounts = MasterData::Account.all
+    if @group
+      @accounts = @group.accounts
+    else
+      @accounts = MasterData::Account.all
+    end
     authorize @accounts, :index?
     respond_to do |format|
       format.html {render :index}
@@ -81,27 +87,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
   #########################################################
   #  Groups management
   #########################################################
-  def index_groups
-    @groups = account.groups
-    authorize @groups, :index?
-    respond_to do |format|
-      format.json {render json: @groups}
-    end
-  end
-
-  def show_groups
-    if account.groups.exists?(params[:group_id])
-     @group = account.groups.find(params[:group_id])
-     authorize @groups, :index?
-     respond_to do |format|
-        format.json {render json: @group}
-      end
-   else
-    render json: { error: "Group not found" }, status: :not_found
-    end
-  end
-
-  def add_to_group
+    def add_to_group
     group_id = params[:id]
     @group = MasterData::Group.find(group_id)
     @groups = account.groups
@@ -135,27 +121,6 @@ class Api::V2::AccountsController < Api::V2::BaseController
   #########################################################
   #  Roles management
   #########################################################
-
-  def index_roles
-    @roles = account.roles
-    authorize @roles, :index?
-    respond_to do |format|
-      format.json {render json: @roles}
-    end
-  end
-
-  def show_roles
-    authorize @roles, :index?
-    if account.roles.exists?(params[:role_id])
-      @role = account.roles.find(params[:role_id])
-      respond_to do |format|
-        format.json {render json: @role}
-      end
-    else
-      render json: { error: "Role not found" }, status: :not_found
-    end
-  end
-
   def add_role
     role_id = params[:id]
     @role = MasterData::Role.find(role_id)
