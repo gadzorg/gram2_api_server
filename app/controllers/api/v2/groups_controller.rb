@@ -84,7 +84,7 @@ class Api::V2::GroupsController < Api::V2::BaseController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_group
-      @group = MasterData::Group.find(params[:id])
+      @group = MasterData::Group.where(id: params[:id]).first || MasterData::Group.where(uuid: params[:id]).first
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

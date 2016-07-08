@@ -56,11 +56,11 @@ Rails.application.routes.draw do
   #   end
   namespace :api, defaults: {format: :json} do
     namespace :v2 do
-      resources :groups do
+      resources :groups, param: :uuid do
         get 'accounts' => 'accounts#index'
       end
-      resources :roles
-      resources :accounts do
+      resources :roles, param: :uuid
+      resources :accounts, param: :uuid do
         #accounts/groups
         get 'groups' => 'groups#index'
         post 'groups' => 'accounts#add_to_group', as: :add_to_group

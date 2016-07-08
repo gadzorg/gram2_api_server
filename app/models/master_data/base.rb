@@ -3,6 +3,12 @@
 module MasterData
   class Base < ActiveRecord::Base
     self.abstract_class = true
+
+    # Use uuid in routing
+    def to_param
+      uuid
+    end
+
     def generate_uuid_if_empty
       self.uuid ||= self.generate_uuid
     end

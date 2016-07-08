@@ -39,7 +39,6 @@ class MasterData::Account < MasterData::Base
   validates :buque_texte, format: { with: /\A[a-zA-Z0-9\'\-\s]\z/}, allow_nil: true
   validates :gadz_fams, format: { with: /\A[0-9\(\)\!\-\s]\z/}, allow_nil: true
 
-
   def next_id_soce_seq_value
   	result = self.class.connection.execute("SELECT nextval('id_soce_seq')")
   	result[0]['nextval']
