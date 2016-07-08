@@ -156,7 +156,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
     # Use callbacks to share common setup or constraints between actions.
     def set_api_v2_account
       # @account = MasterData::Account.find(params[:id])
-      @account = MasterData::Account.where(id: params[:uuid]).first || MasterData::Account.where(uuid: params[:uuid]).first
+      @account = MasterData::Account.find_by(uuid: params[:uuid])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
