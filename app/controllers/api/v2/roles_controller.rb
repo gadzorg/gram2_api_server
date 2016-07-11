@@ -1,10 +1,16 @@
 class Api::V2::RolesController < Api::V2::BaseController
   before_action :set_api_v2_role, only: [:show, :edit, :update, :destroy]
+  before_action :set_account_parent, only: [:index]
+
 
   # GET /api/v2/roles
   # GET /api/v2/roles.json
   def index
-    @roles = MasterData::Role.all
+    if @account
+      @roles = @account.roles
+    else
+      @roles = MasterData::Role.all
+    end
     authorize @roles, :index?
     respond_to do |format|
       format.html {render :index}
@@ -79,11 +85,11 @@ class Api::V2::RolesController < Api::V2::BaseController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_api_v2_role
-      @role = MasterData::Role.find(params[:id])
+      @role = MasterData::Role.find_by(uuid: params[:uuid])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def api_v2_role_params
-      ActiveModelSerializers::Deserialization.jsonapi_parse(params, only: [:name, :application, :description])
+      params.require(:role).permit(:name, :application, :description)
     end
 end

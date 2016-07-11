@@ -13,6 +13,14 @@ class Api::V2::BaseController < ApplicationController
 
   private
 
+  def set_account_parent
+    @account = MasterData::Account.find_by(uuid: params[:account_id])
+  end
+
+  def set_group_parent
+    @group = MasterData::Group.find_by(uuid: params[:group_id])
+  end
+
   def require_login
     # TODO : remove lines bellow
     puts "==============================================="

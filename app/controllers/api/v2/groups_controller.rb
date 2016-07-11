@@ -1,10 +1,15 @@
 class Api::V2::GroupsController < Api::V2::BaseController
   before_action :set_group, only: [:show, :edit, :update, :destroy]
+  before_action :set_account_parent, only: [:index]
 
   # GET /groups
   # GET /groups.json
   def index
-    @groups = MasterData::Group.all
+    if @account
+      @groups = @account.groups
+    else
+      @groups = MasterData::Group.all
+    end
     authorize @groups, :index?
     respond_to do |format|
       format.html {render :index}
@@ -76,39 +81,14 @@ class Api::V2::GroupsController < Api::V2::BaseController
     end
   end
 
-  #########################################################
-  #  Accounts management
-  #########################################################
-
-  def index_accounts
-    group = MasterData::Group.find(params[:group_id])
-    @accounts = group.accounts
-    respond_to do |format|
-      format.json {render json: @accounts}
-    end
-
-  end
-
-  def show_accounts
-    group = MasterData::Group.find(params[:group_id])
-    if group.accounts.exists?(params[:account_id])
-     @account = group.accounts.find(params[:account_id])
-      respond_to do |format|
-        format.json {render json: @account}
-      end
-   else
-    render json: { error: "Acount not found" }, status: :not_found
-    end
-  end
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_group
-      @group = MasterData::Group.find(params[:id])
+      @group = MasterData::Group.find_by(uuid: params[:uuid])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def group_params
-      ActiveModelSerializers::Deserialization.jsonapi_parse(params, only: [:guid, :name, :short_name, :description])
+      params.require(:group).permit(:guid, :name, :short_name, :description)
     end
 end

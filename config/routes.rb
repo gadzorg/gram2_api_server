@@ -56,21 +56,18 @@ Rails.application.routes.draw do
   #   end
   namespace :api, defaults: {format: :json} do
     namespace :v2 do
-      resources :groups do
-        get 'accounts' => 'groups#index_accounts', as: :index_accounts
-        get 'accounts/:account_id' => 'groups#show_accounts', as: :show_accounts
+      resources :groups, param: :uuid do
+        get 'accounts' => 'accounts#index'
       end
-      resources :roles
-      resources :accounts do
+      resources :roles, param: :uuid
+      resources :accounts, param: :uuid do
         #accounts/groups
-        get 'groups' => 'accounts#index_groups', as: :index_groups
+        get 'groups' => 'groups#index'
         post 'groups' => 'accounts#add_to_group', as: :add_to_group
-        get 'groups/:group_id' => 'accounts#show_groups', as: :show_groups
         delete 'groups/:group_id' => 'accounts#remove_from_group', as: :remove_from_group
         #accounts/roles
-        get 'roles' => 'accounts#index_roles', as: :index_roles
+        get 'roles' => 'roles#index'
         post 'roles' => 'accounts#add_role', as: :add_role
-        get 'roles/:role_id' => 'accounts#show_roles', as: :show_roles
         delete 'roles/:role_id' => 'accounts#revoke_role', as: :revoke_roles
       end
     end

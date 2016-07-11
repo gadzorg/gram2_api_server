@@ -1,12 +1,16 @@
 class Api::V2::AccountsController < Api::V2::BaseController
-
-  require 'active_model_serializers'
   before_action :set_api_v2_account, only: [:show, :edit, :update, :destroy, :index_groups, :show_groups, :add_to_group, :remove_from_group , :index_roles, :show_roles, :add_role, :revoke_role]
   before_action :get_new_aliases, only: [:edit, :update, :create]
+  before_action :set_group_parent, only: [:index]
+
   # GET /api/v2/accounts
   # GET /api/v2/accounts.json
   def index
-    @accounts = MasterData::Account.all
+    if @group
+      @accounts = @group.accounts
+    else
+      @accounts = MasterData::Account.all
+    end
     authorize @accounts, :index?
     respond_to do |format|
       format.html {render :index}
@@ -83,27 +87,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
   #########################################################
   #  Groups management
   #########################################################
-  def index_groups
-    @groups = account.groups
-    authorize @groups, :index?
-    respond_to do |format|
-      format.json {render json: @groups}
-    end
-  end
-
-  def show_groups
-    if account.groups.exists?(params[:group_id])
-     @group = account.groups.find(params[:group_id])
-     authorize @groups, :index?
-     respond_to do |format|
-        format.json {render json: @group}
-      end
-   else
-    render json: { error: "Group not found" }, status: :not_found
-    end
-  end
-
-  def add_to_group
+    def add_to_group
     group_id = params[:id]
     @group = MasterData::Group.find(group_id)
     @groups = account.groups
@@ -137,27 +121,6 @@ class Api::V2::AccountsController < Api::V2::BaseController
   #########################################################
   #  Roles management
   #########################################################
-
-  def index_roles
-    @roles = account.roles
-    authorize @roles, :index?
-    respond_to do |format|
-      format.json {render json: @roles}
-    end
-  end
-
-  def show_roles
-    authorize @roles, :index?
-    if account.roles.exists?(params[:role_id])
-      @role = account.roles.find(params[:role_id])
-      respond_to do |format|
-        format.json {render json: @role}
-      end
-    else
-      render json: { error: "Role not found" }, status: :not_found
-    end
-  end
-
   def add_role
     role_id = params[:id]
     @role = MasterData::Role.find(role_id)
@@ -192,12 +155,13 @@ class Api::V2::AccountsController < Api::V2::BaseController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_api_v2_account
-      @account = MasterData::Account.find(params[:id])
+      # @account = MasterData::Account.find(params[:id])
+      @account = MasterData::Account.find_by(uuid: params[:uuid])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def api_v2_account_params
-       ActiveModelSerializers::Deserialization.jsonapi_parse(params, only: [:uuid, :hruid, :id_soce, :enabled, :password, :lastname, :firstname, :birthname, :birth_firstname, :email, :gapps_email, :password, :birthdate, :deathdate, :gender, :is_gadz, :is_student, :school_id, :is_alumni, :date_entree_ecole, :date_sortie_ecole, :ecole_entree, :buque_texte, :buque_zaloeil, :gadz_fams, :gadz_fams_zaloeil, :gadz_proms_principale, :gadz_proms_secondaire, :avatar_url, :description])
+      params.require(:account).permit(:uuid, :hruid, :id_soce, :enabled, :password, :lastname, :firstname, :birthname, :birth_firstname, :email, :gapps_email, :password, :birthdate, :deathdate, :gender, :is_gadz, :is_student, :school_id, :is_alumni, :date_entree_ecole, :date_sortie_ecole, :ecole_entree, :buque_texte, :buque_zaloeil, :gadz_fams, :gadz_fams_zaloeil, :gadz_proms_principale, :gadz_proms_secondaire, :avatar_url, :description, :alias)
     end
 
     def  show_password_hash?
@@ -205,7 +169,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
     end
 
     def get_new_aliases
-      @aliases = ActiveModelSerializers::Deserialization.jsonapi_parse(params, only: [:alias])[:alias]
+      @aliases = params[:alias]
     end
 
     # remove all alias and updates with the new ones
