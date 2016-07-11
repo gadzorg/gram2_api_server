@@ -64,11 +64,11 @@ Rails.application.routes.draw do
         #accounts/groups
         get 'groups' => 'groups#index'
         post 'groups' => 'accounts#add_to_group', as: :add_to_group
-        delete 'groups/:group_id' => 'accounts#remove_from_group', as: :remove_from_group
+        delete 'groups/:group_uuid' => 'accounts#remove_from_group', as: :remove_from_group
         #accounts/roles
         get 'roles' => 'roles#index'
         post 'roles' => 'accounts#add_role', as: :add_role
-        delete 'roles/:role_id' => 'accounts#revoke_role', as: :revoke_roles
+        delete 'roles/:role_uuid' => 'accounts#revoke_role', as: :revoke_roles
       end
     end
   end

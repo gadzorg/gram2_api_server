@@ -2,6 +2,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
   before_action :set_api_v2_account, only: [:show, :edit, :update, :destroy, :index_groups, :show_groups, :add_to_group, :remove_from_group , :index_roles, :show_roles, :add_role, :revoke_role]
   before_action :get_new_aliases, only: [:edit, :update, :create]
   before_action :set_group_parent, only: [:index]
+  before_action :set_account_parent, only: [:remove_from_group, :add_to_group, :add_role, :revoke_role]
 
   # GET /api/v2/accounts
   # GET /api/v2/accounts.json
@@ -88,29 +89,31 @@ class Api::V2::AccountsController < Api::V2::BaseController
   #  Groups management
   #########################################################
     def add_to_group
-    group_id = params[:id]
-    @group = MasterData::Group.find(group_id)
-    @groups = account.groups
+    group_uuid = params[:group_uuid]
+    @group = MasterData::Group.find_by(uuid: group_uuid)
+    @groups = @account.groups
     authorize @group, :edit?
 
-
     respond_to do |format|
-      if account.add_to_group @group
-        format.html { redirect_to api_v2_account_groups(account), notice: 'Group was successfully added to the Account.' }
+      if @account.add_to_group @group
+        format.html { redirect_to api_v2_account_groups(@account), notice: 'Group was successfully added to the Account.' }
         format.json { render json: @groups, status: :created }
       else
         format.html { render :new }
-        format.json { render json: account.errors, status: :unprocessable_entity }
+        format.json { render json: @account.errors, status: :unprocessable_entity }
       end
     end
 
   end
 
   def remove_from_group
-    group = account.groups.find(params[:group_id])
+    # @account = MasterData::Account.find_by(uuid: params[:account_uuid])
+    # puts "=========ef=ef=efe=f=efe=fe=fe=f"
+    # puts @account
+    group = @account.groups.find_by(uuid: params[:group_uuid])
     authorize group, :edit?
     respond_to do |format|
-      if account.remove_from_group group
+      if @account.remove_from_group group
         format.html { redirect_to api_v2_accounts_url, notice: 'Group was successfully revomed from this account.' }
         format.json { head :no_content }
       end
@@ -122,29 +125,29 @@ class Api::V2::AccountsController < Api::V2::BaseController
   #  Roles management
   #########################################################
   def add_role
-    role_id = params[:id]
-    @role = MasterData::Role.find(role_id)
-    @roles = account.roles
+    role_uuid = params[:role_uuid]
+    @role = MasterData::Role.find_by(uuid: role_uuid)
+    @roles = @account.roles
     authorize @role, :edit?
 
     respond_to do |format|
-      if account.add_role @role
-        format.html { redirect_to api_v2_account_roles(account), notice: 'Role was successfully added to the Account.' }
+      if @account.add_role @role
+        format.html { redirect_to api_v2_account_roles(@account), notice: 'Role was successfully added to the Account.' }
         format.json { render json: @roles, status: :created }
       else
         format.html { render :new }
-        format.json { render json: account.errors, status: :unprocessable_entity }
+        format.json { render json: @account.errors, status: :unprocessable_entity }
       end
     end
 
   end
 
   def revoke_role
-    role = account.roles.find(params[:role_id])
+    role = @account.roles.find_by(uuid: params[:role_uuid])
     authorize role, :edit?
 
     respond_to do |format|
-      if account.revoke_role role
+      if @account.revoke_role role
         format.html { redirect_to api_v2_roles_url, notice: 'Role was successfully revomed from this account.' }
         format.json { head :no_content }
       end
