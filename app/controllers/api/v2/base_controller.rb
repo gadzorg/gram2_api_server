@@ -19,10 +19,7 @@ class Api::V2::BaseController < ApplicationController
 
   def set_group_parent
     @group = MasterData::Group.find_by(uuid: params[:group_uuid])
-  end
 
-  def set_group_parent
-    @group = MasterData::Group.find_by(uuid: params[:group_id])
   end
 
   def require_login

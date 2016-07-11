@@ -100,4 +100,9 @@ class MasterData::Account < MasterData::Base
     alias_list.each { |a| self.add_new_alias(a) }
   end
 
+  ################# LDAP #################
+  def request_account_ldap_sync(ldap_daemon = LdapDaemon.new, account = self)
+    ldap_daemon.request_account_update(account)
+  end
+
 end
