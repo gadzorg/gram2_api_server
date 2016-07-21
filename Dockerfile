@@ -11,6 +11,14 @@ RUN gem install bundler -v 1.11.2 && \
 
 WORKDIR /appli
 
+RUN gem install puma
+
 EXPOSE 3000
 
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+env RABBITMQ_HOST=rabbitmq
+env RABBITMQ_PORT=5672
+env RABBITMQ_VHOST=/
+env RABBITMQ_USER=gram2_api_server
+env RABBITMQ_PASSWORD=gram2_api_server
+
+CMD ["puma", "-p", "3000", "--environment", "production"]
