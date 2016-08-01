@@ -49,6 +49,7 @@ gem 'pundit'
 # Roles
 gem 'rolify', '~> 5.1'
 
+gem 'faker'
 
 group :production do
   #HEROKU
@@ -66,7 +67,6 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'better_errors'
   gem 'factory_girl_rails'
-  gem 'faker'
   gem 'bogus'
 end
 
