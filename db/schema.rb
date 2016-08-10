@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160705065458) do
+ActiveRecord::Schema.define(version: 20160810123249) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 20160705065458) do
   create_table "gram_accounts", force: :cascade do |t|
     t.uuid     "uuid"
     t.string   "hruid"
-    t.integer  "id_soce",               default: "nextval('id_soce_seq'::regclass)"
+    t.integer  "id_soce",               default: 0
     t.boolean  "enabled",               default: true
     t.string   "password"
     t.string   "lastname"
@@ -58,7 +58,6 @@ ActiveRecord::Schema.define(version: 20160705065458) do
     t.string   "birthname"
     t.string   "birth_firstname"
     t.string   "email"
-    t.string   "gapps_email"
     t.string   "birthdate"
     t.string   "deathdate"
     t.string   "gender"
@@ -77,9 +76,10 @@ ActiveRecord::Schema.define(version: 20160705065458) do
     t.string   "gadz_proms_secondaire"
     t.string   "avatar_url"
     t.string   "description"
-    t.datetime "created_at",                                                         null: false
-    t.datetime "updated_at",                                                         null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.boolean  "is_soce_employee",      default: false
+    t.string   "gapps_id"
   end
 
   add_index "gram_accounts", ["hruid"], name: "index_gram_accounts_on_hruid", using: :btree
