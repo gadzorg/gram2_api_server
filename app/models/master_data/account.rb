@@ -33,6 +33,7 @@ class MasterData::Account < MasterData::Base
   validates :enabled, :inclusion => {:in => [true, false]}
   validates :password, presence: true
   validates :hruid,  uniqueness: true
+  validates :gapps_id,  uniqueness: true, allow_nil: true
   validates :email, presence: true, uniqueness: true, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i}
 	validates :gender, inclusion: {in: %w(male female)}, allow_nil: true
   validates :is_gadz, :inclusion => {:in => [true, false]}
