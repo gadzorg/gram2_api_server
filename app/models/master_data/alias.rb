@@ -9,7 +9,7 @@ class MasterData::Alias < MasterData::Base
   validates :name, presence: true, uniqueness: true
 
   def sync_attached_account_to_ldap
-    request_account_ldap_sync(LdapDaemon.new, self.account) if self.account.present?
+    self.account.request_account_ldap_sync(LdapDaemon.new, self.account) if self.account.present?
   end
 end
 

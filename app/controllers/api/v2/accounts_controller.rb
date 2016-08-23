@@ -10,7 +10,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
     if @group
       @accounts = @group.accounts
     else
-      @accounts = MasterData::Account.all
+      @accounts = MasterData::Account.all.includes(:groups, :alias, :roles)
     end
     authorize @accounts, :index?
     respond_to do |format|
