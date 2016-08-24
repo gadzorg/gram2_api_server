@@ -57,7 +57,7 @@ group :production do
   #HEROKU
   gem 'heroku_secrets', github: 'alexpeattie/heroku_secrets'
   gem 'rails_12factor'
-
+  gem 'puma'
 end
 
 
