@@ -37,6 +37,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'active_model_serializers', '~> 0.10.0'
 
 gem 'gorg_message_sender'
+gem 'gorg_service'
 
 # Auth
 gem 'devise'
