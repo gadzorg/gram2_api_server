@@ -48,6 +48,6 @@ GorgService.configure do |c|
   c.logger=Rails.logger
 
   c.message_handler_map={
-
+    "request.gramapi.group.update"=> UpdateGroupMessageHandler
   }
 end
