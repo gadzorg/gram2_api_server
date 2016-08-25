@@ -14,7 +14,7 @@
     },
     "RABBITMQ_PORT": {
       "required": true
-    }
+    },
     "RABBITMQ_PASSWORD": {
       "required": true
     },
