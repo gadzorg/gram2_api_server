@@ -1,14 +1,15 @@
 default: &default
-  rabbitmq:
-    sender: gramapi
-    host: localhost
-    port: 5672
-    vhost: "/"
-    queue_name: logs
-    deferred_time: 1800000
-    exchange_name: "agoram_event_exchange"
-    user: my_user
-    password: P4ssWord
+  sender: gramapi
+  host: localhost
+  port: 5672
+  vhost: /
+  queue_name: logs
+  deferred_time: 5000
+  max_attempts: 10
+  exchange_name: "agoram_event_exchange"
+  user: guest
+  password: 
+  logging_key: "log"
 
 
 development:
@@ -16,6 +17,8 @@ development:
 
 test:
   <<: *default
+  deferred_time: 10
+  max_attempts: 2
 
 production:
   <<: *default
