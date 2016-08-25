@@ -62,11 +62,11 @@ class UpdateGroupMessageHandler < ApplicationMessageHandler
 
     #Mise à jour des membres
     #calcul des membres à ajouter/supprimer
-    actual_members=group.accounts
+    current_members=group.accounts
     target_members=msg.data[:members].map{|uuid| MasterData::Account.find_by(uuid: uuid) || raise} #Je te laisse définir ce qui se passe si le membre n'existe pas
 
-    to_add_m = (target_members - actual_members)
-    to_del_m = (actual_members - target_members)
+    to_add_m = (target_members - current_members)
+    to_del_m = (current_members - target_members)
     Rails.logger.debug("Add members: #{to_add_m.map{|a| a.uuid}}")
     Rails.logger.debug("Del members: #{to_del_m.map{|a| a.uuid}}")
 
