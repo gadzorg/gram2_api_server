@@ -1,0 +1,68 @@
+{
+  "name": "gram2_api_server",
+  "description": "",
+  "scripts": {},
+  "env": {
+    "LANG": {
+      "required": true
+    },
+    "RABBITMQ_EXCHANGE_NAME": {
+      "required": true
+    },
+    "RABBITMQ_HOST": {
+      "required": true
+    },
+    "RABBITMQ_PORT": {
+      "required": true
+    }
+    "RABBITMQ_PASSWORD": {
+      "required": true
+    },
+    "RABBITMQ_SENDER": {
+      "required": true
+    },
+    "RABBITMQ_USER": {
+      "required": true
+    },
+    "RABBITMQ_VHOST": {
+      "required": true
+    },
+    "RABBITMQ_DEFERRED_TIME": {
+      "required": true
+    },
+    "RABBITMQ_MAX_ATTEMPTS": {
+      "required": true
+    },
+    "RABBITMQ_LOGGING_KEY": {
+      "required": false
+    },
+    "RACK_ENV": {
+      "required": true
+    },
+    "RAILS_ENV": {
+      "required": true
+    },
+    "RAILS_SERVE_STATIC_FILES": {
+      "required": true
+    },
+    "SECRET_KEY_BASE": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    },
+    "service_rabbitmq": {
+      "quantity": 1
+    }
+  },
+  "addons": [
+    "heroku-postgresql"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/ruby"
+    }
+  ]
+}
