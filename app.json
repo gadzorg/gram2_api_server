@@ -2,7 +2,7 @@
   "name": "gram2_api_server",
   "description": "",
   "scripts": {
-    "postdeploy": "bundle exec rake db:setup"
+    "postdeploy": "bundle exec rake db:migrate && bundle exec rake db:seed"
   },
   "env": {
     "LANG": {
@@ -56,7 +56,7 @@
       "quantity": 1
     },
     "service_rabbitmq": {
-      "quantity": 1
+      "quantity": 0
     }
   },
   "addons": [
