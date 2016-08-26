@@ -1,7 +1,9 @@
 {
   "name": "gram2_api_server",
   "description": "",
-  "scripts": {},
+  "scripts": {
+    "postdeploy": "bundle exec rake db:setup"
+  },
   "env": {
     "LANG": {
       "required": true
