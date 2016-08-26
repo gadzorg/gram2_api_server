@@ -2,7 +2,7 @@
   "name": "gram2_api_server",
   "description": "",
   "scripts": {
-    "postdeploy": "heroku pg:reset DATABASE_URL && bundle exec rake db:migrate && bundle exec rake db:seed"
+    "postdeploy": "echo \"$DATABASE_URL\" && bundle exec rake db:migrate && bundle exec rake db:seed"
   },
   "env": {
     "LANG": {
