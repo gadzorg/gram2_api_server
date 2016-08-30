@@ -22,7 +22,7 @@ RSpec.describe MasterData::Group, type: :model do
       group=FactoryGirl.create(:master_data_group)
       ld = LdapDaemon.new(message_sender: message_sender)
       group.request_ldap_sync(ld)
-      expect(message_sender).to have_received.send_message({group: {uuid: group.uuid}}, 'request.ldapd.update')
+      expect(message_sender).to have_received.send_message({group: {uuid: group.uuid}}, 'request.ldapd.group.update')
     end
   end
 end
