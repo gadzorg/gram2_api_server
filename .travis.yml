@@ -12,6 +12,7 @@ before_script:
   - cp -v config/secrets.travis.yml config/secrets.yml
 services:
   - postgresql
+  - rabbitmq
 script:  
   - RAILS_ENV=test bundle exec rake db:migrate
   - RAILS_ENV=test bundle exec rspec spec/
