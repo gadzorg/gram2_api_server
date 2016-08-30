@@ -86,7 +86,7 @@ RSpec.describe MasterData::Account, type: :model do
      account=FactoryGirl.create(:master_data_account)
      ld = LdapDaemon.new(message_sender: message_sender)
      account.request_account_ldap_sync(ld)
-     expect(message_sender).to have_received.send_message({account: {uuid: account.uuid.to_s}}, 'request.ldapd.update')
+     expect(message_sender).to have_received.send_message({account: {uuid: account.uuid.to_s}}, 'request.ldapd.account.update')
    end
  end
 
