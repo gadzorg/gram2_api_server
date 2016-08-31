@@ -54,6 +54,10 @@ class MasterData::Account < MasterData::Base
   end
 
   ################# Aliases #################
+  def aliases
+    self.alias
+  end
+
   def add_alias connection_alias
     self.alias << connection_alias unless self.alias.exists?(connection_alias.id)
   end
