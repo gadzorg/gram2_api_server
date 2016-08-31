@@ -24,10 +24,7 @@ class GorgRabbitmqNotifier
     queue.messages.each do |m|
       deliver m
     end
-    
-
   end
-
 
   def perform_delivery message
     Rails.logger.debug "Send #{message.routing_key}"
