@@ -1,14 +1,18 @@
 class MasterData::Account < MasterData::Base
 
+  include GorgRabbitmqNotifier::ActiveRecordExtension
+  rabbitmq_resource_type :account
+  rabbitmq_id :uuid
+
 	require "hruid_service"
 	require "ldap_daemon"
 
   resourcify
 
   #relations
-  has_and_belongs_to_many :groups
-  has_and_belongs_to_many :roles
-  has_many :alias
+  has_and_belongs_to_many :groups,  after_add: :capture_add_association,  after_remove: :capture_del_association
+  has_and_belongs_to_many :roles,  after_add: :capture_add_association,  after_remove: :capture_del_association
+  has_many :alias,  after_add: :capture_add_association,  after_remove: :capture_del_association
 
   #callbacks
   before_validation :generate_uuid_if_empty
@@ -22,7 +26,6 @@ class MasterData::Account < MasterData::Base
   	# set hruid if empty
   	self.generate_hruid
   end
-  after_save :request_account_ldap_sync
   after_create :account_completer
 
   #model validations
@@ -101,9 +104,5 @@ class MasterData::Account < MasterData::Base
     alias_list.each { |a| self.add_new_alias(a) }
   end
 
-  ################# LDAP #################
-  def request_account_ldap_sync(ldap_daemon = LdapDaemon.new, account = self)
-    ldap_daemon.request_account_update(account)
-  end
 
 end
