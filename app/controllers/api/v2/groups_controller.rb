@@ -5,10 +5,11 @@ class Api::V2::GroupsController < Api::V2::BaseController
   # GET /groups
   # GET /groups.json
   def index
+    search = params.permit( :name, :short_name, :description)
     if @account
       @groups = @account.groups
     else
-      @groups = MasterData::Group.all
+      @groups = MasterData::Group.where(search)
     end
     authorize @groups, :index?
     respond_to do |format|
