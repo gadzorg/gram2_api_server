@@ -30,7 +30,7 @@ class GorgRabbitmqNotifier
 
 
   def perform_delivery message
-    puts "Send #{message.routing_key}"
+    Rails.logger.debug "Send #{message.routing_key}"
     message_sender.send_message(message.data, message.routing_key)
   end
 

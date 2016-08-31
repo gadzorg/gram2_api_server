@@ -15,9 +15,4 @@ RSpec.describe MasterData::Alias, type: :model do
     expect(alias2.valid?).to eq(false)
   end
 
-  describe "after_save" do
-    fake(:message_sender) { GorgMessageSender }
-    it { is_expected.to callback(:sync_attached_account_to_ldap).after(:save) }
-  end
-
 end

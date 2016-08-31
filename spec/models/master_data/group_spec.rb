@@ -15,14 +15,4 @@ RSpec.describe MasterData::Group, type: :model do
   it "contain name"
   it "contain short_name"
 
-  describe "after_save" do
-    fake(:message_sender) { GorgMessageSender }
-    it { is_expected.to callback(:request_ldap_sync).after(:save) }
-    it "send ldap maj request" do
-      group=FactoryGirl.create(:master_data_group)
-      ld = LdapDaemon.new(message_sender: message_sender)
-      group.request_ldap_sync(ld)
-      expect(message_sender).to have_received.send_message({uuid: group.uuid}, 'request.ldapd.group.update')
-    end
-  end
 end
