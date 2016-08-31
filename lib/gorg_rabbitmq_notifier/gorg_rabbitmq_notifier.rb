@@ -13,6 +13,16 @@ class GorgRabbitmqNotifier
     @messages_queues ||= []
   end
 
+
+  # Store notification end send them at the end. Merge notification concerning the same object
+  #
+  ## Usage
+  #
+  # GorgRabbitmqNotifier.batch
+  #
+  #   #Do things that create notifications
+  #
+  # end
   def batch
     queue=GorgRabbitmqNotifier::MessagesQueue.new
     message_queues<<queue
