@@ -26,17 +26,24 @@ class MasterData::Account < MasterData::Base
   after_create :account_completer
 
   #model validations
-  validates :firstname, presence: true
-  validates :lastname, presence: true
+
+  
+
+  with_options unless: :is_from_legacy_gram1? do |not_legacy|
+    not_legacy.validates :firstname, presence: true
+    not_legacy.validates :lastname, presence: true
+    not_legacy.validates :email, presence: true, uniqueness: true, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i}
+  end
+
+
   validates :uuid, uniqueness: true
   validates :id_soce, uniqueness: true, presence: true, numericality: { only_integer: true }
   validates :enabled, :inclusion => {:in => [true, false]}
   validates :password, presence: true
   validates :hruid,  uniqueness: true
   validates :gapps_id,  uniqueness: true, allow_nil: true
-  validates :email, presence: true, uniqueness: true, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i}
 	validates :gender, inclusion: {in: %w(male female)}, allow_nil: true
-  validates :is_gadz, :inclusion => {:in => [true, false]}
+  validates :is_gadz, :inclusion => {:in => [true, false]}, allow_nil: true
   validates :buque_texte, format: { with: /\A[a-zA-Z0-9\'\-\s]\z/}, allow_nil: true
   validates :gadz_fams, format: { with: /\A[0-9\(\)\!\-\s]\z/}, allow_nil: true
 
