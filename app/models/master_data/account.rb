@@ -15,7 +15,8 @@ class MasterData::Account < MasterData::Base
   has_many :alias,  after_add: :capture_add_association,  after_remove: :capture_del_association
 
   #callbacks
-  before_validation :generate_uuid_if_empty
+  before_validation :generate_uuid_if_empty, unless: :uuid
+  before_validation :generate_hruid, unless: :hruid, :on => :create
   before_validation(:on => :create) do 
   	#set id_soce
   	if attribute_present?(:id_soce)
@@ -23,8 +24,6 @@ class MasterData::Account < MasterData::Base
   	else
   		self.id_soce = next_id_soce_seq_value
   	end
-  	# set hruid if empty
-  	self.generate_hruid
   end
   after_create :account_completer
 

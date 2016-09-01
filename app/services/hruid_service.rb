@@ -45,7 +45,7 @@ private
     #downcase
     name = name.downcase
     #convert special letters
-    name = name.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/n,'').to_s
+    name = name.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/u,'').to_s
     #remove special char
     name = name.gsub(/[^a-z\-]/, '')
   end
