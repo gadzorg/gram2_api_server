@@ -180,6 +180,8 @@ class Api::V2::AccountsController < Api::V2::BaseController
       unless aliases.blank?
         @account.remove_all_alias
         aliases.each { |a| @account.add_new_alias(a[:name]) }
+      else
+        return true
       end
     end
   end

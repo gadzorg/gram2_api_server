@@ -7,18 +7,29 @@ class LdapDaemon
   end
 
   def request_account_update(account)
-    msg={account: {uuid: account.uuid.to_s}}
-    send_message(msg, 'request.ldapd.update')
+    msg={uuid: account.uuid.to_s}
+    send_message(msg, 'request.ldapd.account.update')
+  end
+  
+  def request_account_delete(account)
+    msg={uuid: account.uuid.to_s}
+    send_message(msg, 'request.ldapd.account.delete')
   end
 
   def request_group_update(group)
-    msg={group: {uuid: group.uuid.to_s}}
-    send_message(msg, 'request.ldapd.update')
+    msg={uuid: group.uuid.to_s}
+    send_message(msg, 'request.ldapd.group.update')
+  end
+  
+  def request_group_delete(group)
+    msg={uuid: group.uuid.to_s}
+    send_message(msg, 'request.ldapd.group.delete')
   end
 
   def request_role_update(role)
-    msg={role: {uuid: role.uuid.to_s}}
-    send_message(msg, 'request.ldapd.update')
+  #   msg={role: {uuid: role.uuid.to_s}}
+  #   send_message(msg, 'request.ldapd.update')
+      Rails.logger.warn "DEPRECATED request_role_update : Roles are not regstered in LDAP anymore"
   end
 
   private

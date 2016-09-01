@@ -79,17 +79,6 @@ RSpec.describe MasterData::Account, type: :model do
  it "invalid buque with special char"
  it "valid buque zaloeil with special char"
 
- describe "after_save" do
-   fake(:message_sender) { GorgMessageSender }
-   it { is_expected.to callback(:request_account_ldap_sync).after(:save) }
-   it "send ldap maj request" do
-     account=FactoryGirl.create(:master_data_account)
-     ld = LdapDaemon.new(message_sender: message_sender)
-     account.request_account_ldap_sync(ld)
-     expect(message_sender).to have_received.send_message({account: {uuid: account.uuid.to_s}}, 'request.ldapd.update')
-   end
- end
-
   describe "add/remove alias" do
     account1 = FactoryGirl.create(:master_data_account)
     it "add new alias" do
