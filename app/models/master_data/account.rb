@@ -37,8 +37,8 @@ class MasterData::Account < MasterData::Base
   validates :email, presence: true, uniqueness: true, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i}
 	validates :gender, inclusion: {in: %w(male female)}, allow_nil: true
   validates :is_gadz, :inclusion => {:in => [true, false]}
-  validates :buque_texte, format: { with: /\A[a-zA-Z0-9\'\-\s]\z/}, allow_nil: true
-  validates :gadz_fams, format: { with: /\A[0-9\(\)\!\-\s]\z/}, allow_nil: true
+  validates :buque_texte, format: { with: /\A[a-zA-Z0-9\'\-\s]*\z/}, allow_nil: true
+  validates :gadz_fams, format: { with: /\A[0-9\(\)\!\-\s]*\z/}, allow_nil: true
 
   def next_id_soce_seq_value
   	result = self.class.connection.execute("SELECT nextval('id_soce_seq')")
