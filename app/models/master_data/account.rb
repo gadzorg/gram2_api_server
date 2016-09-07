@@ -25,7 +25,6 @@ class MasterData::Account < MasterData::Base
   		self.id_soce = next_id_soce_seq_value
   	end
   end
-  after_save :request_account_ldap_sync
   after_save :account_completer
 
   #model validations
