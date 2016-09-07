@@ -38,8 +38,8 @@ class MasterData::Account < MasterData::Base
   validates :gapps_id,  uniqueness: true, allow_nil: true
 	validates :gender, inclusion: {in: %w(male female)}, allow_nil: true
   validates :is_gadz, :inclusion => {:in => [true, false]}, allow_nil: true
-  validates :buque_texte, format: { with: /\A[a-zA-Z0-9\'\-\s]\z/}, allow_nil: true
-  validates :gadz_fams, format: { with: /\A[0-9\(\)\!\-\s]\z/}, allow_nil: true
+  validates :buque_texte, format: { with: /\A[a-zA-Z0-9\'\-\s]*\z/}, allow_nil: true
+  validates :gadz_fams, format: { with: /\A[0-9\(\)\!\-\s]*\z/}, allow_nil: true
 
   with_options unless: :is_from_legacy_gram1? do |not_legacy|
     not_legacy.validates :firstname, presence: true
