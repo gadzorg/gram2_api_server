@@ -1,19 +1,22 @@
 class MasterData::Role < MasterData::Base
 
   resourcify
+
+  def rabbitmq_id
+    {
+      :name => name,
+      :application => application,
+      :description => description
+    }
+  end
   
-	#relations
-	has_and_belongs_to_many :accounts
+  #relations
+  has_and_belongs_to_many :accounts
 
-	#callbacks
-	before_validation :generate_uuid_if_empty
-	after_save :request_ldap_sync
+  #callbacks
+  before_validation :generate_uuid_if_empty
 
-	#model validations
-	validates :name, :application, :description, presence: true
-	validates :name, uniqueness: true
-
-	def request_ldap_sync ldap_daemon = LdapDaemon.new
-		ldap_daemon.request_role_update(self)
-	end
+  #model validations
+  validates :name, :application, :description, presence: true
+  validates :name, uniqueness: true
 end
