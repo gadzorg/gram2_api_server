@@ -1,14 +1,18 @@
 class MasterData::Account < MasterData::Base
 
+  include GorgRabbitmqNotifier::ActiveRecordExtension
+  rabbitmq_resource_type :account
+  rabbitmq_id :uuid
+
 	require "hruid_service"
 	require "ldap_daemon"
 
   resourcify
 
   #relations
-  has_and_belongs_to_many :groups
-  has_and_belongs_to_many :roles
-  has_many :alias
+  has_and_belongs_to_many :groups,  after_add: :capture_add_association,  after_remove: :capture_del_association
+  has_and_belongs_to_many :roles,  after_add: :capture_add_association,  after_remove: :capture_del_association
+  has_many :alias,  after_add: :capture_add_association,  after_remove: :capture_del_association
 
   #callbacks
   before_validation :generate_uuid_if_empty
@@ -38,6 +42,18 @@ class MasterData::Account < MasterData::Base
   validates :is_gadz, :inclusion => {:in => [true, false]}
   validates :buque_texte, format: { with: /\A[a-zA-Z0-9\'\-\s]*\z/}, allow_nil: true
   validates :gadz_fams, format: { with: /\A[0-9\(\)\!\-\s]*\z/}, allow_nil: true
+
+  # This enum is persisted as an integer in database
+  # if you need to add new status, apend it at the end of the list or it will break mapping
+  #
+  # 0 : safe, there is no known problems on this account
+  # 1 : watched, account may have problem and you should checkaudit comments and Jira for known issues
+  # 2 : errors, account have problems but can still be used. You should check audit comments and Jira for known issues
+  # 3 : broken, account have problems and can't be used anymore. You should check audit comments and Jira for known issues
+  #
+  # Doc concerning enums : http://api.rubyonrails.org/v4.1/classes/ActiveRecord/Enum.html
+  enum audit_status: [:safe, :watched, :errors, :broken]
+  scope :not_safe, -> { where.not(audit_status: MasterData::Account.audit_statuses[:safe]) }
 
   def next_id_soce_seq_value
   	result = self.class.connection.execute("SELECT nextval('id_soce_seq')")
@@ -100,9 +116,5 @@ class MasterData::Account < MasterData::Base
     alias_list.each { |a| self.add_new_alias(a) }
   end
 
-  ################# LDAP #################
-  def request_account_ldap_sync(ldap_daemon = LdapDaemon.new, account = self)
-    ldap_daemon.request_account_update(account)
-  end
 
 end

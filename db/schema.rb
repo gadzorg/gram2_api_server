@@ -80,6 +80,10 @@ ActiveRecord::Schema.define(version: 20160907081343) do
     t.datetime "updated_at",                                                         null: false
     t.boolean  "is_soce_employee",      default: false
     t.string   "gapps_id"
+<<<<<<< HEAD
+=======
+    t.boolean  "is_from_legacy_gram1"
+>>>>>>> master
     t.integer  "audit_status",          default: 0
     t.string   "audit_comments"
   end
