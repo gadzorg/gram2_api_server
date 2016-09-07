@@ -14,9 +14,5 @@ RSpec.describe MasterData::Role, type: :model do
   it "contain application"
   it "contain description"
 
-  describe "after_save" do
-    fake(:message_sender) { GorgMessageSender }
-    it { is_expected.to callback(:request_ldap_sync).after(:save) }
-  end
 end
 
