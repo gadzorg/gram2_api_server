@@ -36,8 +36,11 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'active_model_serializers', '~> 0.10.0'
 
-gem 'gorg_message_sender'
+gem 'gorg_message_sender', path: "/home/alexandre/Programmation/gorg/gorg_message_sender"
 gem 'gorg_service'
+
+gem 'redis'
+gem "activerecord-import"
 
 # Auth
 gem 'devise'

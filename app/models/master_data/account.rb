@@ -12,7 +12,7 @@ class MasterData::Account < MasterData::Base
   #relations
   has_and_belongs_to_many :groups,  after_add: :capture_add_association,  after_remove: :capture_del_association
   has_and_belongs_to_many :roles,  after_add: :capture_add_association,  after_remove: :capture_del_association
-  has_many :alias,  after_add: :capture_add_association,  after_remove: :capture_del_association
+  has_many :alias, dependent: :destroy, after_add: :capture_add_association,  after_remove: :capture_del_association
 
   #callbacks
   before_validation :generate_uuid_if_empty, unless: :uuid
@@ -25,21 +25,13 @@ class MasterData::Account < MasterData::Base
   		self.id_soce = next_id_soce_seq_value
   	end
   end
-  after_create :account_completer
+  after_create :account_completer,unless: :is_from_legacy_gram1?
 
   #model validations
 
-  
-
-  with_options unless: :is_from_legacy_gram1? do |not_legacy|
-    not_legacy.validates :firstname, presence: true
-    not_legacy.validates :lastname, presence: true
-    not_legacy.validates :email, presence: true, uniqueness: true, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i}
-  end
-
-
+  validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i}
   validates :uuid, uniqueness: true
-  validates :id_soce, uniqueness: true, presence: true, numericality: { only_integer: true }
+  validates :id_soce, presence: true, numericality: { only_integer: true }
   validates :enabled, :inclusion => {:in => [true, false]}
   validates :password, presence: true
   validates :hruid,  uniqueness: true
@@ -48,6 +40,13 @@ class MasterData::Account < MasterData::Base
   validates :is_gadz, :inclusion => {:in => [true, false]}, allow_nil: true
   validates :buque_texte, format: { with: /\A[a-zA-Z0-9\'\-\s]\z/}, allow_nil: true
   validates :gadz_fams, format: { with: /\A[0-9\(\)\!\-\s]\z/}, allow_nil: true
+
+  with_options unless: :is_from_legacy_gram1? do |not_legacy|
+    not_legacy.validates :firstname, presence: true
+    not_legacy.validates :lastname, presence: true
+    not_legacy.validates :email, presence: true, uniqueness: true
+    not_legacy.validates :id_soce, uniqueness: true
+  end
 
   def next_id_soce_seq_value
   	result = self.class.connection.execute("SELECT nextval('id_soce_seq')")
@@ -72,9 +71,9 @@ class MasterData::Account < MasterData::Base
   end
 
   def add_new_alias alias_name
-    new_alias = MasterData::Alias.new(name: alias_name)
-    self.add_alias(new_alias)
-    new_alias.save # alias validation ensures alias uniqness
+    unless self.alias.where(name: alias_name).any?
+      new_alias = MasterData::Alias.create!(name: alias_name, account: self)
+    end
   end
 
   def remove_all_alias

@@ -34,9 +34,7 @@ class GorgRabbitmqNotifier
 
     message_queues.pop
   
-    queue.messages.each do |m|
-      deliver m
-    end
+    deliver queue.messages
   end
 
   def perform_delivery messages
