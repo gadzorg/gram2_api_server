@@ -25,7 +25,8 @@ class MasterData::Account < MasterData::Base
   		self.id_soce = next_id_soce_seq_value
   	end
   end
-  after_save :account_completer
+  after_create :account_completer
+  after_update :account_completer
 
   #model validations
   validates :firstname, presence: true
@@ -77,9 +78,9 @@ class MasterData::Account < MasterData::Base
   end
 
   def add_new_alias alias_name
-    new_alias = MasterData::Alias.new(name: alias_name)
-    self.add_alias(new_alias)
-    new_alias.save # alias validation ensures alias uniqness
+    unless self.alias.where(name: alias_name).any?
+      new_alias = MasterData::Alias.create(name: alias_name, account: self)
+    end
   end
 
   def remove_all_alias
