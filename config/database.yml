@@ -25,15 +25,15 @@ development:
   <<: *default
   database: gram_api_dev
   host: localhost
-  username: gram_api_dev
-  password: password
+  username: gram_api_test
+  password: gram_api_test
 
 test:
   <<: *default
   database: gram_api_test
   host: localhost
   username: gram_api_test
-  password: password
+  password: gram_api_test
 
 
 production:

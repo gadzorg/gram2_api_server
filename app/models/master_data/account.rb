@@ -12,6 +12,7 @@ class MasterData::Account < MasterData::Base
 
   #callbacks
   before_validation :generate_uuid_if_empty
+  before_validation :generate_hruid
   before_validation(:on => :create) do 
   	#set id_soce
   	if attribute_present?(:id_soce)
@@ -19,11 +20,9 @@ class MasterData::Account < MasterData::Base
   	else
   		self.id_soce = next_id_soce_seq_value
   	end
-  	# set hruid if empty
-  	self.generate_hruid
   end
   after_save :request_account_ldap_sync
-  after_create :account_completer
+  after_save :account_completer
 
   #model validations
   validates :firstname, presence: true
