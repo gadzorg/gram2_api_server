@@ -43,6 +43,18 @@ class MasterData::Account < MasterData::Base
   validates :buque_texte, format: { with: /\A[a-zA-Z0-9\'\-\s]*\z/}, allow_nil: true
   validates :gadz_fams, format: { with: /\A[0-9\(\)\!\-\s]*\z/}, allow_nil: true
 
+  # This enum is persisted as an integer in database
+  # if you need to add new status, apend it at the end of the list or it will break mapping
+  #
+  # 0 : safe, there is no known problems on this account
+  # 1 : watched, account may have problem and you should checkaudit comments and Jira for known issues
+  # 2 : errors, account have problems but can still be used. You should check audit comments and Jira for known issues
+  # 3 : broken, account have problems and can't be used anymore. You should check audit comments and Jira for known issues
+  #
+  # Doc concerning enums : http://api.rubyonrails.org/v4.1/classes/ActiveRecord/Enum.html
+  enum audit_status: [:safe, :watched, :errors, :broken]
+  scope :not_safe, -> { where.not(audit_status: MasterData::Account.audit_statuses[:safe]) }
+
   def next_id_soce_seq_value
   	result = self.class.connection.execute("SELECT nextval('id_soce_seq')")
   	result[0]['nextval']
