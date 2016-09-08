@@ -5,10 +5,15 @@ class Api::V2::GroupsController < Api::V2::BaseController
   # GET /groups
   # GET /groups.json
   def index
+    filter = params.permit( :name, :short_name, :description)
     if @account
       @groups = @account.groups
     else
-      @groups = MasterData::Group.all
+      if params[:exact_search] == "false"
+        @groups = MasterData::Group.like(filter)
+      else
+        @groups = MasterData::Group.where(filter)
+      end
     end
     authorize @groups, :index?
     respond_to do |format|
