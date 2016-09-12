@@ -93,7 +93,7 @@ class MasterData::Account < MasterData::Base
       aliases_to_add = new_aliases_list - current_aliases_list
       aliases_to_remove = current_aliases_list - new_aliases_list
 
-      GorgRabbitmqNotifier.batch
+      GorgRabbitmqNotifier.batch do
         aliases_to_add.each { |a| self.add_new_alias(a) }
         aliases_to_remove.each { |a| MasterData::Alias.find_by(name: a).destroy }
       end
