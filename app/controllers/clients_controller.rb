@@ -68,6 +68,26 @@ class ClientsController < ApplicationController
     end
   end
 
+  def add_role
+    client = Client.find(params[:client_id])
+    authorize client, :edit?
+    role_name = params[:role_name]
+    ressource = params[:ressource]
+    ressource = ressource.constantize unless ressource.nil?
+    client.add_role(role_name.to_sym, ressource)
+    redirect_to client_url(client), notice: "Role ajouté"
+  end
+
+  def remove_role
+    client = Client.find(params[:client_id])
+    authorize client, :edit?
+    role_name = params[:role_name]
+    ressource = params[:ressource]
+    ressource = ressource.constantize unless ressource.nil?
+    client.remove_role(role_name.to_sym, ressource)
+    redirect_to client_url(client), notice: "Role retiré"
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_client

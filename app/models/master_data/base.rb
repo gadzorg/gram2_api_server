@@ -20,5 +20,19 @@ module MasterData
       end
     end
 
+
+    # Matching with LIKE for searches
+    def self.like_condition_scope(col, query)
+      self.where(self.arel_table[col].matches("%#{query}%"))
+    end
+
+    def self.like(params_hash)
+      a = self.all
+      params_hash.each do |key, value|
+        a = a.like_condition_scope(key, value)
+      end
+      return a
+    end
+
   end
 end

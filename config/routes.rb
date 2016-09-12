@@ -73,5 +73,10 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :clients
+  resources :clients do
+    post 'add_role'
+    post 'remove_role'
+  end
+
+  root "clients#index"
 end

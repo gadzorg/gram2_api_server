@@ -1,5 +1,5 @@
 class MasterData::AccountSerializer < BaseSerializer
-  has_many :alias, serializer: MasterData::AliasSerializer
+  has_many :aliases, serializer: MasterData::AliasSerializer
   has_many :groups, serializer: MasterData::GroupSerializer
   has_many :roles, serializer: MasterData::RoleSerializer
 

@@ -19,18 +19,22 @@
   = @client.authentication_token
 %p
   %strong Rôles:
+  Attention, les rôles sans scopes sont préponderant sur les rôles avec scopes.
   %table
     %thead
       %tr
         %th Role
         %th Scope
         %th Attribué ?
+        %th
     %tbody
       - @roles.each do |role|
         %tr
           %td #{role[0]}
-          %td #{role[1].to_s.singularize.capitalize}
+          %td= role[1] ? role[1].to_s.singularize.capitalize : "all"
           %td= role[1].nil? ? @client.has_role?(role[0]) : @client.has_role?(role[0], role[1])
+          %td= link_to 'Ajouter', client_add_role_path(@client, role_name: role[0], ressource: role[1]), method: :post
+          %td= link_to 'Retirer', client_remove_role_path(@client, role_name: role[0], ressource: role[1]), method: :post
 
 = link_to 'Edit', edit_client_path(@client)
 |
