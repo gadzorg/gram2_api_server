@@ -8,7 +8,7 @@ class AliasService
     # email
     list << user.hruid
     list << user.id_soce
-    list << user.email
+    list << user.email if user.email
 
     # add canonical name if uniq
     canonical_name =  HruidService::canonical_name(user.firstname, user.lastname)

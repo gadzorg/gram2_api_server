@@ -12,11 +12,13 @@ class MasterData::Account < MasterData::Base
   #relations
   has_and_belongs_to_many :groups,  after_add: :capture_add_association,  after_remove: :capture_del_association
   has_and_belongs_to_many :roles,  after_add: :capture_add_association,  after_remove: :capture_del_association
-  has_many :alias,  after_add: :capture_add_association,  after_remove: :capture_del_association
+  has_many :alias, dependent: :destroy, after_add: :capture_add_association,  after_remove: :capture_del_association
 
   #callbacks
-  before_validation :generate_uuid_if_empty
-  before_validation :generate_hruid
+
+  before_validation :generate_uuid_if_empty, unless: :uuid
+  before_validation :generate_hruid, unless: :hruid, :on => :create
+
   before_validation(:on => :create) do 
   	#set id_soce
   	if attribute_present?(:id_soce)
@@ -25,23 +27,31 @@ class MasterData::Account < MasterData::Base
   		self.id_soce = next_id_soce_seq_value
   	end
   end
-  after_create :account_completer
+
+  after_create :account_completer,unless: :is_from_legacy_gram1?
   after_update :account_completer
 
+
   #model validations
-  validates :firstname, presence: true
-  validates :lastname, presence: true
+
+  validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i}
   validates :uuid, uniqueness: true
-  validates :id_soce, uniqueness: true, presence: true, numericality: { only_integer: true }
+  validates :id_soce, presence: true, numericality: { only_integer: true }
   validates :enabled, :inclusion => {:in => [true, false]}
   validates :password, presence: true
   validates :hruid,  uniqueness: true
   validates :gapps_id,  uniqueness: true, allow_nil: true
-  validates :email, presence: true, uniqueness: true, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i}
 	validates :gender, inclusion: {in: %w(male female)}, allow_nil: true
-  validates :is_gadz, :inclusion => {:in => [true, false]}
+  validates :is_gadz, :inclusion => {:in => [true, false]}, allow_nil: true
   validates :buque_texte, format: { with: /\A[a-zA-Z0-9\'\-\s]*\z/}, allow_nil: true
   validates :gadz_fams, format: { with: /\A[0-9\(\)\!\-\s]*\z/}, allow_nil: true
+
+  with_options unless: :is_from_legacy_gram1? do |not_legacy|
+    not_legacy.validates :firstname, presence: true
+    not_legacy.validates :lastname, presence: true
+    not_legacy.validates :email, presence: true, uniqueness: true
+    not_legacy.validates :id_soce, uniqueness: true
+  end
 
   # This enum is persisted as an integer in database
   # if you need to add new status, apend it at the end of the list or it will break mapping
