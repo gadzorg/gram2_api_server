@@ -86,6 +86,18 @@ class Api::V2::AccountsController < Api::V2::BaseController
   end
 
   #########################################################
+  #  ID_SOCE reservation
+  #########################################################
+  # POST /api/v2/accounts/reserve_next_id_soce.json
+  def reserve_next_id_soce
+    @account = MasterData::Account.new
+    authorize @account, :create?
+    @id_soce = MasterData::Account.next_id_soce_seq_value
+    respond_to do |format|
+      format.json { render json: {id_soce: @id_soce}, status: :created}
+    end
+  end
+  #########################################################
   #  Groups management
   #########################################################
     def add_to_group

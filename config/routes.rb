@@ -70,6 +70,7 @@ Rails.application.routes.draw do
         post 'roles' => 'accounts#add_role', as: :add_role
         delete 'roles/:role_uuid' => 'accounts#revoke_role', as: :revoke_roles
       end
+      post 'accounts/reserve_next_id_soce' => 'accounts#reserve_next_id_soce'
     end
   end
 
