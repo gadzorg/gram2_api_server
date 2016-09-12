@@ -15,13 +15,10 @@ class MasterData::Account < MasterData::Base
   has_many :alias, dependent: :destroy, after_add: :capture_add_association,  after_remove: :capture_del_association
 
   #callbacks
-<<<<<<< HEAD
+
   before_validation :generate_uuid_if_empty, unless: :uuid
   before_validation :generate_hruid, unless: :hruid, :on => :create
-=======
-  before_validation :generate_uuid_if_empty
-  before_validation :generate_hruid
->>>>>>> ef299e8c8a4038d7c1636b962afc023b219b0886
+
   before_validation(:on => :create) do 
   	#set id_soce
   	if attribute_present?(:id_soce)
@@ -30,12 +27,10 @@ class MasterData::Account < MasterData::Base
   		self.id_soce = next_id_soce_seq_value
   	end
   end
-<<<<<<< HEAD
+
   after_create :account_completer,unless: :is_from_legacy_gram1?
-=======
-  after_create :account_completer
   after_update :account_completer
->>>>>>> ef299e8c8a4038d7c1636b962afc023b219b0886
+
 
   #model validations
 
