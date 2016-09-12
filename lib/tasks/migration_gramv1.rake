@@ -31,8 +31,9 @@ namespace :migration_gramv1 do
       MasterData::Account.delete_all
       MasterData::Alias.delete_all
 
+      to_delete_keys=[]
       r.set "account_count",0
-
+      to_delete_keys<<"account_count"
 
       stop_import=0
       i=0
@@ -62,23 +63,48 @@ namespace :migration_gramv1 do
           account.is_from_legacy_gram1=true
           #account.run_callbacks(:save) { false }
 
-          duplicates_email << account.email if account.email.present? && (temp=r.get("accout_#{account.email}_validate"))  && temp != account.uuid
-          duplicates_hruid << account.hruid if (temp=r.get("accout_#{account.hruid}_validate")) && temp != account.uuid
-          duplicates_id_soce << account.id_soce if (temp=r.get("accout_#{account.id_soce}_validate")) && temp != account.uuid
-          duplicates_gapps_id << account.gapps_id if account.gapps_id.present? && (temp=r.get("accout_#{account.gapps_id}_validate")) && temp != account.uuid
+          if account.email.present? && (temp=r.get("accout_#{account.email}_validate"))  && temp != account.uuid
+            duplicates_email << account.email
+            account.audit_status="errors"
+            account.audit_comments||="Errors from legagy"
+            account.audit_comments+= " -- duplicate email from #{temp}"
+          end
+          if (temp=r.get("accout_#{account.id_soce}_validate")) && temp != account.uuid
+            duplicates_id_soce << account.id_soce
+            account.audit_status="errors"
+            account.audit_comments||="Errors from legagy"
+            account.audit_comments+= " -- duplicate id Soce from #{temp}"
+          end
+          if account.gapps_id.present? && (temp=r.get("accout_#{account.gapps_id}_validate")) && temp != account.uuid
+            duplicates_gapps_id << account.gapps_id
+            account.audit_status="errors"
+            account.audit_comments||="Errors from legagy"
+            account.audit_comments+= " -- duplicate Gapps_id from #{temp}"
+          end
 
           r.set "accout_#{account.email}_validate" , account.uuid
-          r.set "accout_#{account.hruid}_validate", account.uuid
+          to_delete_keys<<"accout_#{account.email}_validate"
           r.set "accout_#{account.id_soce}_validate", account.uuid
+          to_delete_keys<<"accout_#{account.id_soce}_validate"
           r.set "accout_#{account.gapps_id}_validate", account.uuid
+          to_delete_keys<<"accout_#{account.gapps_id}_validate"
 
-          r.set "account_#{id}", account.serializable_hash.select{|k,v| v!= nil}.to_json
 
+          to_add_aliases=[]
           aliases.each do |al|
-            duplicates_aliases << al if (temp=r.get("aliases_validate_#{al}")) && temp != account.uuid
-            r.set "aliases_validate_#{al}", account.uuid
+            if (temp=r.get("aliases_validate_#{al}")) && temp != account.uuid
+              duplicates_aliases << al
+              account.audit_status="errors"
+              account.audit_comments||="Errors from legagy"
+              account.audit_comments+= " -- was duplicating alias '#{al}' from #{temp} ; alias deleted"
+            else
+              r.set "aliases_validate_#{al}", account.uuid
+              to_delete_keys<<"aliases_validate_#{al}"
+              to_add_aliases<<al
+            end
           end
-          r.set "aliases_#{account.uuid}", aliases.to_json
+          r.set "account_#{id}", account.serializable_hash.select{|k,v| v!= nil}.to_json
+          r.set "aliases_#{account.uuid}", to_add_aliases.to_json
         end
 
 
@@ -92,10 +118,6 @@ namespace :migration_gramv1 do
           p "duplicates_id_soces"
           p duplicates_id_soce
         end
-        if duplicates_hruid.any?
-          p "duplicates_hruids"
-          p duplicates_hruid
-        end
         if duplicates_gapps_id.any?
           p "duplicates_gapps_ids"
           p duplicates_gapps_id
@@ -105,8 +127,6 @@ namespace :migration_gramv1 do
           p duplicates_aliases
         end
 
-        raise if duplicates_email.any?||duplicates_uuid.any?||duplicates_id_soce.any?||duplicates_hruid.any?||duplicates_gapps_id.any?||duplicates_aliases.any?
-
 
         p "Import Accounts"
         account_count= r.get("account_count").to_i
@@ -114,10 +134,11 @@ namespace :migration_gramv1 do
 
         (1..account_count).each_slice(5000) do |enum|
           p "Import from #{enum.first} to #{enum.last}"
-          p Benchmark.measure {
+          puts Benchmark.measure {
             accounts=[]
             enum.each do |id|
               acc=MasterData::Account.new(JSON.parse(r.get "account_#{id}"))
+              r.del "account_#{id}"
               accounts<<acc
             end
             GorgRabbitmqNotifier.batch do
@@ -127,22 +148,33 @@ namespace :migration_gramv1 do
               aliases_batch=[]
               accounts.each do |a|
                 aliases = JSON.parse(r.get "aliases_#{a.uuid}")
+                r.del "aliases_#{a.uuid}"
                 aliases.each do |al|
                   alo=MasterData::Alias.new(name: al, account_id:a.id)
                   aliases_batch<<alo
                 end
               end
+              p "Import Aliases"
               MasterData::Alias.import aliases_batch, :validate => false
             end
           }
         end
 
-
-
-
-
+        p "Cleanup redis DB"
+        r.del to_delete_keys
         
         p stop_import=Time.now
+        
+        # p "Sending Rabbitmq notifications ..."
+        # MasterData::Account.find_in_batches(batch_size: 5000)do |accounts|
+        #   GorgRabbitmqNotifier.batch do
+        #     p "New batch"
+        #     accounts.each do |a|
+        #       a.send_rabbitmq_notification('created', MasterData::AccountSerializer.new(a).attributes.map{|k,v| [k,[nil,v]]}.to_h)
+        #     end
+        #   end
+        # end
+
         p "Import #{(stop_import-start).to_f} sec"
         p "Nombre de comptes : #{i}"
         p "#{(stop_import-start).to_f/i} sec par entree"
@@ -156,9 +188,6 @@ namespace :migration_gramv1 do
     else
       puts "#{file_path} does not exist"
       puts "Abord ..."
-    end
-
-    
+    end   
   end
-
 end
