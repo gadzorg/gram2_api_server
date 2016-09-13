@@ -26,7 +26,7 @@ namespace :migration_gramv1 do
 
 
     if File.exists? file_path
-      r= ENV['REDIS_URL'] ? Redis.new(ENV['REDIS_URL']) : Redis.new()
+      r= ENV['REDIS_URL'] ? Redis.new(url: ENV['REDIS_URL']) : Redis.new()
       p start=Time.now
       MasterData::Account.delete_all
       MasterData::Alias.delete_all
