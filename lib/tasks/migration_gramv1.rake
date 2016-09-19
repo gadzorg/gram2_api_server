@@ -160,6 +160,9 @@ namespace :migration_gramv1 do
           }
         end
 
+        p "Update id soce_seq"
+        MasterData::Account.new.set_id_soce_seq_value_to_max
+
         p "Cleanup redis DB"
         r.del to_delete_keys
         
