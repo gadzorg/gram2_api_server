@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160907081343) do
+ActiveRecord::Schema.define(version: 20160914215644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,9 +80,9 @@ ActiveRecord::Schema.define(version: 20160907081343) do
     t.datetime "updated_at",                                                         null: false
     t.boolean  "is_soce_employee",      default: false
     t.string   "gapps_id"
-    t.boolean  "is_from_legacy_gram1"
     t.integer  "audit_status",          default: 0
     t.string   "audit_comments"
+    t.boolean  "is_from_legacy_gram1"
   end
 
   add_index "gram_accounts", ["audit_status"], name: "index_gram_accounts_on_audit_status", using: :btree
@@ -96,6 +96,9 @@ ActiveRecord::Schema.define(version: 20160907081343) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_index "gram_accounts_groups", ["account_id"], name: "index_gram_accounts_groups_on_account_id", using: :btree
+  add_index "gram_accounts_groups", ["group_id"], name: "index_gram_accounts_groups_on_group_id", using: :btree
 
   create_table "gram_accounts_roles", force: :cascade do |t|
     t.integer  "account_id"
@@ -111,6 +114,8 @@ ActiveRecord::Schema.define(version: 20160907081343) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "gram_aliases", ["account_id"], name: "index_gram_aliases_on_account_id", using: :btree
+
   create_table "gram_groups", force: :cascade do |t|
     t.string   "uuid"
     t.string   "name"
@@ -121,6 +126,8 @@ ActiveRecord::Schema.define(version: 20160907081343) do
     t.integer  "uuid_id"
   end
 
+  add_index "gram_groups", ["short_name"], name: "index_gram_groups_on_short_name", unique: true, using: :btree
+  add_index "gram_groups", ["uuid"], name: "index_gram_groups_on_uuid", unique: true, using: :btree
   add_index "gram_groups", ["uuid_id"], name: "index_gram_groups_on_uuid_id", using: :btree
 
   create_table "gram_roles", force: :cascade do |t|
@@ -131,6 +138,10 @@ ActiveRecord::Schema.define(version: 20160907081343) do
     t.datetime "updated_at",  null: false
     t.string   "uuid"
   end
+
+  add_index "gram_roles", ["application"], name: "index_gram_roles_on_application", using: :btree
+  add_index "gram_roles", ["name"], name: "index_gram_roles_on_name", using: :btree
+  add_index "gram_roles", ["uuid"], name: "index_gram_roles_on_uuid", unique: true, using: :btree
 
   create_table "roles", force: :cascade do |t|
     t.string   "name"
