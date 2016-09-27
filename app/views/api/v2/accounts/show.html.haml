@@ -11,9 +11,10 @@
 %p
   %strong Enabled:
   = @account.enabled
-%p
-  %strong Password:
-  = @account.password
+-if @show_password_hash_if_allowed
+  %p
+    %strong Password:
+    = @account.password
 %p
   %strong Lastname:
   = @account.lastname
@@ -32,9 +33,6 @@
 %p
   %strong Gapps id:
   = @account.gapps_id
-%p
-  %strong Password:
-  = @account.password
 %p
   %strong Birthdate:
   = @account.birthdate

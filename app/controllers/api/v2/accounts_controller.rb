@@ -29,9 +29,11 @@ class Api::V2::AccountsController < Api::V2::BaseController
   # GET /api/v2/accounts/1.json
   def show
     authorize @account, :index?
+    show_password_hash = show_password_hash?
+    @show_password_hash_if_allowed = show_password_hash && Pundit.policy(current_client, @account).show_password_hash? #for HTML view
     respond_to do |format|
       format.html {render :show}
-      format.json {render json: @account, show_password_hash: show_password_hash?}
+      format.json {render json: @account, show_password_hash: show_password_hash}
     end
   end
 
