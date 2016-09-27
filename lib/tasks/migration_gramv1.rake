@@ -26,7 +26,7 @@ namespace :migration_gramv1 do
 
 
     if File.exists? file_path
-      r= ENV['REDIS_URL'] ? Redis.new(ENV['REDIS_URL']) : Redis.new()
+      r= ENV['REDIS_URL'] ? Redis.new(url: ENV['REDIS_URL']) : Redis.new()
       p start=Time.now
       MasterData::Account.delete_all
       MasterData::Alias.delete_all
@@ -159,6 +159,9 @@ namespace :migration_gramv1 do
             end
           }
         end
+
+        p "Update id soce_seq"
+        MasterData::Account.new.set_id_soce_seq_value_to_max
 
         p "Cleanup redis DB"
         r.del to_delete_keys

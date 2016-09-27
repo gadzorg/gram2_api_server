@@ -24,7 +24,7 @@ class MasterData::Account < MasterData::Base
   	if attribute_present?(:id_soce)
   		set_id_soce_seq_value_to_max
   	else
-  		self.id_soce = next_id_soce_seq_value
+  		self.id_soce = self.class.next_id_soce_seq_value
   	end
   end
 
@@ -65,13 +65,14 @@ class MasterData::Account < MasterData::Base
   enum audit_status: [:safe, :watched, :errors, :broken]
   scope :not_safe, -> { where.not(audit_status: MasterData::Account.audit_statuses[:safe]) }
 
-  def next_id_soce_seq_value
-  	result = self.class.connection.execute("SELECT nextval('id_soce_seq')")
+  def self.next_id_soce_seq_value
+  	result = self.connection.execute("SELECT nextval('id_soce_seq')")
   	result[0]['nextval']
   end
 
+
   def set_id_soce_seq_value_to_max
-  	self.class.connection.execute(ActiveRecord::Base.send(:sanitize_sql_array, ["SELECT setval('id_soce_seq',(SELECT GREATEST((SELECT MAX(id_soce) FROM gram_accounts),?)))",self.id_soce]))
+  	self.class.connection.execute(ActiveRecord::Base.send(:sanitize_sql_array, ["SELECT setval('id_soce_seq',(SELECT GREATEST((SELECT MAX(id_soce) FROM gram_accounts),(SELECT last_value FROM id_soce_seq),?)))",self.id_soce]))
   end
 
   def generate_hruid
@@ -88,12 +89,31 @@ class MasterData::Account < MasterData::Base
   end
 
   def remove_alias connection_alias
-    self.groups.detete connection_alias
+    connection_alias.destroy
   end
 
   def add_new_alias alias_name
     unless self.alias.where(name: alias_name).any?
       new_alias = MasterData::Alias.create(name: alias_name, account: self)
+    end
+  end
+
+  def update_aliases(aliases)
+    if aliases.nil?
+      return true
+    else
+      new_aliases_list = aliases.map{|a| a[:name]}
+      current_aliases_list = self.alias.map(&:name)
+
+      aliases_to_add = new_aliases_list - current_aliases_list
+      aliases_to_remove = current_aliases_list - new_aliases_list
+
+      GorgRabbitmqNotifier.batch do
+        aliases_to_add.each { |a| self.add_new_alias(a) }
+        aliases_to_remove.each { |a| MasterData::Alias.find_by(name: a).destroy }
+      end
+
+      return self.alias
     end
   end
 
