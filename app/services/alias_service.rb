@@ -8,7 +8,7 @@ class AliasService
     # prenom.nom (hruid w/o suffix)
     # email
 
-    letters = ("a".."z").to_a
+    letters = ("A".."Z").to_a
     id_soce_with_letter = user.id_soce.to_s + letters[(user.id_soce % 23)]
 
 
