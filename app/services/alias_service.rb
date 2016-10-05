@@ -22,4 +22,4 @@ class AliasService
     list << canonical_name unless MasterData::Alias.exists?(name: canonical_name)
     return list
   end
-en
+end
