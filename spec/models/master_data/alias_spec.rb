@@ -15,4 +15,10 @@ RSpec.describe MasterData::Alias, type: :model do
     expect(alias2.valid?).to eq(false)
   end
 
+  it "invalidate duplicates names with deffent case" do
+    alias1=FactoryGirl.create(:master_data_alias, name: "test_alias2")
+    alias2=FactoryGirl.build(:master_data_alias, name: "TEST_alias2")
+    expect(alias2.valid?).to eq(false)
+  end
+
 end
