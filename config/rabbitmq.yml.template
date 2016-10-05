@@ -1,5 +1,5 @@
 default: &default
-  sender: gramapi
+  application_id: "soa-supervision"
   host: localhost
   port: 5672
   vhost: /
@@ -22,3 +22,16 @@ test:
 
 production:
   <<: *default
+
+  c.application_name="GoogleDirectoryDaemon-test"
+  c.application_id="g-servicedeux"
+  c.rabbitmq_host="rabbitmq.gorgu.net"
+  c.rabbitmq_port=5672
+  c.rabbitmq_queue_name="gapps4"
+  c.rabbitmq_exchange_name="agoram_event_exchange"
+  c.rabbitmq_deferred_time=1000
+  c.rabbitmq_max_attempts=10
+  c.message_handler_map={"request.gservicedeux.*"=>SoftfailMessageHandler}
+  c.rabbitmq_vhost="dev-rat"
+  c.rabbitmq_user= "rat-ldapd"
+  c.rabbitmq_password= "ldapdPasswd"

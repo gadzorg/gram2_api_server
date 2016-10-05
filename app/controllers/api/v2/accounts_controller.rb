@@ -29,9 +29,11 @@ class Api::V2::AccountsController < Api::V2::BaseController
   # GET /api/v2/accounts/1.json
   def show
     authorize @account, :index?
+    show_password_hash = show_password_hash?
+    @show_password_hash_if_allowed = show_password_hash && Pundit.policy(current_client, @account).show_password_hash? #for HTML view
     respond_to do |format|
       format.html {render :show}
-      format.json {render json: @account, show_password_hash: show_password_hash?}
+      format.json {render json: @account, show_password_hash: show_password_hash}
     end
   end
 
@@ -54,7 +56,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
 
     respond_to do |format|
       # keep @account.save at the end of the condition bellow to ensure the right object is returned during rendering
-      if update_alias(@aliases) && @account.save
+      if @account.update_aliases(@aliases) && @account.save
         format.html { render :show, notice: 'Account was successfully created.' }
         format.json { render json: @account, status: :created, location: :api_v2_accounts }
       else
@@ -70,8 +72,8 @@ class Api::V2::AccountsController < Api::V2::BaseController
     authorize @account, :edit?
     respond_to do |format|
       # keep @account.save at the end of the condition bellow to ensure the right object is returned during rendering
-      if update_alias(@aliases) && @account.update(api_v2_account_params)
-        format.html { render :show, notice: 'Account was successfully updated.' }
+      if @account.update_aliases(@aliases) && @account.update(api_v2_account_params)
+        format.html { render :show,@account, notice: 'Account was successfully updated.' }
         format.json { render json: @account, status: :ok, location: :api_v2_account }
       else
         format.html { render :edit }
@@ -91,6 +93,18 @@ class Api::V2::AccountsController < Api::V2::BaseController
     end
   end
 
+  #########################################################
+  #  ID_SOCE reservation
+  #########################################################
+  # POST /api/v2/accounts/reserve_next_id_soce.json
+  def reserve_next_id_soce
+    @account = MasterData::Account.new
+    authorize @account, :create?
+    @id_soce = MasterData::Account.next_id_soce_seq_value
+    respond_to do |format|
+      format.json { render json: {id_soce: @id_soce}, status: :created}
+    end
+  end
   #########################################################
   #  Groups management
   #########################################################
@@ -170,7 +184,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def api_v2_account_params
-      params.require(:account).permit(:uuid, :hruid, :id_soce, :enabled, :password, :lastname, :firstname, :birthname, :birth_firstname, :email, :gapps_id, :password, :birthdate, :deathdate, :gender, :is_gadz, :is_student, :school_id, :is_alumni, :date_entree_ecole, :date_sortie_ecole, :ecole_entree, :buque_texte, :buque_zaloeil, :gadz_fams, :gadz_fams_zaloeil, :gadz_proms_principale, :gadz_proms_secondaire, :avatar_url, :description, :alias)
+      params.require(:account).permit(:uuid, :hruid, :id_soce, :enabled, :password, :lastname, :firstname, :birthname, :birth_firstname, :email, :gapps_id, :password, :birthdate, :deathdate, :gender, :is_gadz, :is_student, :school_id, :is_alumni, :date_entree_ecole, :date_sortie_ecole, :ecole_entree, :buque_texte, :buque_zaloeil, :gadz_fams, :gadz_fams_zaloeil, :gadz_proms_principale, :gadz_proms_secondaire, :avatar_url, :description)
     end
 
     def  show_password_hash?
@@ -181,13 +195,4 @@ class Api::V2::AccountsController < Api::V2::BaseController
       @aliases = params[:alias]
     end
 
-    # remove all alias and updates with the new ones
-    def update_alias(aliases)
-      unless aliases.blank?
-        @account.remove_all_alias
-        aliases.each { |a| @account.add_new_alias(a[:name]) }
-      else
-        return true
-      end
-    end
   end

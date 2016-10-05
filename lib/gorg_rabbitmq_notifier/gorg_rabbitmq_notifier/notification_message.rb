@@ -44,6 +44,13 @@ class GorgRabbitmqNotifier::NotificationMessage
     }
   end
 
+  def to_rabbitmq_message
+    {
+      routing_key: routing_key,
+      content: GorgMessageSender.new.to_message(data, routing_key)
+    }
+  end
+
   def same_object? message
     message.resource_type == self.resource_type && message.resource_id_attribute == self.resource_id_attribute && message.resource_id_value == self.resource_id_value
   end

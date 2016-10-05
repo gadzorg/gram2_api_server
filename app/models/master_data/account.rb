@@ -12,36 +12,46 @@ class MasterData::Account < MasterData::Base
   #relations
   has_and_belongs_to_many :groups,  after_add: :capture_add_association,  after_remove: :capture_del_association
   has_and_belongs_to_many :roles,  after_add: :capture_add_association,  after_remove: :capture_del_association
-  has_many :alias,  after_add: :capture_add_association,  after_remove: :capture_del_association
+  has_many :alias, dependent: :destroy, after_add: :capture_add_association,  after_remove: :capture_del_association
 
   #callbacks
-  before_validation :generate_uuid_if_empty
-  before_validation :generate_hruid
+
+  before_validation :generate_uuid_if_empty, unless: :uuid
+  before_validation :generate_hruid, unless: :hruid, :on => :create
+
   before_validation(:on => :create) do 
   	#set id_soce
   	if attribute_present?(:id_soce)
   		set_id_soce_seq_value_to_max
   	else
-  		self.id_soce = next_id_soce_seq_value
+  		self.id_soce = self.class.next_id_soce_seq_value
   	end
   end
-  after_create :account_completer
+
+  after_create :account_completer,unless: :is_from_legacy_gram1?
   after_update :account_completer
 
+
   #model validations
-  validates :firstname, presence: true
-  validates :lastname, presence: true
+
+  validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i}
   validates :uuid, uniqueness: true
-  validates :id_soce, uniqueness: true, presence: true, numericality: { only_integer: true }
+  validates :id_soce, presence: true, numericality: { only_integer: true }
   validates :enabled, :inclusion => {:in => [true, false]}
   validates :password, presence: true
   validates :hruid,  uniqueness: true
   validates :gapps_id,  uniqueness: true, allow_nil: true
-  validates :email, presence: true, uniqueness: true, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i}
 	validates :gender, inclusion: {in: %w(male female)}, allow_nil: true
-  validates :is_gadz, :inclusion => {:in => [true, false]}
-  validates :buque_texte, format: { with: /\A[a-zA-Z0-9\'\-\s]*\z/}, allow_nil: true
+  validates :is_gadz, :inclusion => {:in => [true, false]}, allow_nil: true
+  validates :buque_texte, format: { with: /\A[[:alpha:]0-9\'\-\s]*\z/}, allow_nil: true
   validates :gadz_fams, format: { with: /\A[0-9\(\)\!\-\s]*\z/}, allow_nil: true
+
+  with_options unless: :is_from_legacy_gram1? do |not_legacy|
+    not_legacy.validates :firstname, presence: true
+    not_legacy.validates :lastname, presence: true
+    not_legacy.validates :email, presence: true, uniqueness: true
+    not_legacy.validates :id_soce, uniqueness: true
+  end
 
   # This enum is persisted as an integer in database
   # if you need to add new status, apend it at the end of the list or it will break mapping
@@ -55,13 +65,14 @@ class MasterData::Account < MasterData::Base
   enum audit_status: [:safe, :watched, :errors, :broken]
   scope :not_safe, -> { where.not(audit_status: MasterData::Account.audit_statuses[:safe]) }
 
-  def next_id_soce_seq_value
-  	result = self.class.connection.execute("SELECT nextval('id_soce_seq')")
+  def self.next_id_soce_seq_value
+  	result = self.connection.execute("SELECT nextval('id_soce_seq')")
   	result[0]['nextval']
   end
 
+
   def set_id_soce_seq_value_to_max
-  	self.class.connection.execute(ActiveRecord::Base.send(:sanitize_sql_array, ["SELECT setval('id_soce_seq',(SELECT GREATEST((SELECT MAX(id_soce) FROM gram_accounts),?)))",self.id_soce]))
+  	self.class.connection.execute(ActiveRecord::Base.send(:sanitize_sql_array, ["SELECT setval('id_soce_seq',(SELECT GREATEST((SELECT MAX(id_soce) FROM gram_accounts),(SELECT last_value FROM id_soce_seq),?)))",self.id_soce]))
   end
 
   def generate_hruid
@@ -78,12 +89,31 @@ class MasterData::Account < MasterData::Base
   end
 
   def remove_alias connection_alias
-    self.groups.detete connection_alias
+    connection_alias.destroy
   end
 
   def add_new_alias alias_name
     unless self.alias.where(name: alias_name).any?
       new_alias = MasterData::Alias.create(name: alias_name, account: self)
+    end
+  end
+
+  def update_aliases(aliases)
+    if aliases.nil?
+      return true
+    else
+      new_aliases_list = aliases.map{|a| a[:name]}
+      current_aliases_list = self.alias.map(&:name)
+
+      aliases_to_add = new_aliases_list - current_aliases_list
+      aliases_to_remove = current_aliases_list - new_aliases_list
+
+      GorgRabbitmqNotifier.batch do
+        aliases_to_add.each { |a| self.add_new_alias(a) }
+        aliases_to_remove.each { |a| MasterData::Alias.find_by(name: a).destroy }
+      end
+
+      return self.alias
     end
   end
 
