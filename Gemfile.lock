@@ -100,7 +100,7 @@ GEM
     ffi (1.9.14)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
-    gorg_message_sender (1.4.1)
+    gorg_message_sender (1.4.2)
       bunny (~> 2.2, >= 2.2.2)
       json-schema (~> 2.6)
     gorg_service (4.1.0)
