@@ -66,6 +66,14 @@ Rails.application.routes.draw do
     delete 'roles/:role_uuid' => 'accounts#revoke_role', as: :revoke_roles
   end
 
+  scope :admin do
+    resources :groups, param: :uuid, module: 'api/v2' do
+      get 'accounts' => 'accounts#index'
+    end
+    resources :roles, param: :uuid, module: 'api/v2'
+    resources :accounts, param: :uuid, module: 'api/v2', concerns: :groups_and_role_management
+  end
+
   namespace :api, defaults: {format: :json} do
     namespace :v2 do
       resources :groups, param: :uuid do
@@ -76,16 +84,6 @@ Rails.application.routes.draw do
       post 'accounts/reserve_next_id_soce' => 'accounts#reserve_next_id_soce'
     end
   end
-
-  scope :admin do
-    resources :groups, param: :uuid, module: 'api/v2' do
-      get 'accounts' => 'accounts#index'
-    end
-    resources :roles, param: :uuid, module: 'api/v2'
-    resources :accounts, param: :uuid, module: 'api/v2', concerns: :groups_and_role_management
-  end
-
-
 
   resources :clients do
     post 'add_role'

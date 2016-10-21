@@ -1,7 +1,7 @@
 %p#notice= notice
 %h1 Listing Api V2 Accounts
 =form_tag accounts_path(), :method => :get ,class: "mtm"do
-  =text_field_tag :hruid, params[:hruid], :placeholder => "Recherche par hruid", :class => "w100 login", :autofocus => true
+  =text_field_tag :hruid, params[:hruid], :placeholder => "Recherche par hruid", :class => "w100 login mbm", :autofocus => true
   =hidden_field_tag :exact_search, "false"
 %table.table-striped.table-auto
   %thead
@@ -48,4 +48,6 @@
         %td= link_to 'Edit', edit_account_path(api_v2_account)
         %td= link_to 'Destroy', account_path(api_v2_account) , method: :delete, data: { confirm: 'Are you sure?' }
 %br/
+
+=paginate @accounts, path: accounts_path
 = link_to 'New Account', new_account_path

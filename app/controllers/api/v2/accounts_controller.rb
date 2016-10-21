@@ -20,7 +20,10 @@ class Api::V2::AccountsController < Api::V2::BaseController
     end
     authorize @accounts, :index?
     respond_to do |format|
-      format.html {render :index}
+      format.html do
+        @accounts = @accounts.page(params[:page])
+        render :index
+      end
       format.json {render json: @accounts}
     end
   end

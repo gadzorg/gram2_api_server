@@ -53,6 +53,9 @@ class MasterData::Account < MasterData::Base
     not_legacy.validates :id_soce, uniqueness: true
   end
 
+  paginates_per 5
+
+
   # This enum is persisted as an integer in database
   # if you need to add new status, apend it at the end of the list or it will break mapping
   #
