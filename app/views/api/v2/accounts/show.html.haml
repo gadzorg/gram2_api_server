@@ -87,6 +87,19 @@
 %p
   %strong Description:
   = @account.description
-= link_to 'Edit', edit_api_v2_account_path(@account)
+
+%p
+  %b Groups
+  %ul
+    =@account.groups.each do |group|
+      %li= link_to group.name,  group_path(group.uuid)
+
+%p
+  %b Roles
+  %ul
+    =@account.roles.each do |role|
+      %li= link_to role.name,  role_path(role.uuid)
+
+= link_to 'Edit', edit_account_path(@account)
 |
-= link_to 'Back', api_v2_accounts_path
+= link_to 'Back', accounts_path

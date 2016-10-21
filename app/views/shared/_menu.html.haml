@@ -1,0 +1,18 @@
+-#=cache(action_suffix: "primary") do
+%aside.sidebar
+  .plm.prm.int
+    #navigation
+      #logo
+        =link_to root_path do
+          =image_tag "logo_alumni.png"
+      #menu-button
+        .menu-item>
+          =link_to "#" do
+            %i.zmdi.zmdi-menu
+      %nav
+        .menu-item>
+          =link_to "Comptes", accounts_path, class: "menu-a"
+        .menu-item>
+          =link_to "Groupes", groups_path, class: "menu-a"
+        .menu-item>
+          =link_to "Roles", roles_path, class: "menu-a"
