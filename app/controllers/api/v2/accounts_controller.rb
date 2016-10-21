@@ -46,6 +46,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
   # GET /api/v2/accounts/1/edit
   def edit
     authorize @account, :edit?
+    @show_password_hash_if_allowed = Pundit.policy(current_client, @account).show_password_hash? #for HTML view
   end
 
   # POST /api/v2/accounts
