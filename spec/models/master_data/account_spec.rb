@@ -17,7 +17,7 @@ RSpec.describe MasterData::Account, type: :model do
   end
 
  #email
- it {is_expected.to validate_presence_of :email}
+ it {is_expected.to validate_uniqueness_of :email}
  it {is_expected.to allow_value('prenom.nom@gadz.org').for(:email)}
  it {is_expected.not_to allow_value('prenom.nom.gadz.org').for(:email)}
 
