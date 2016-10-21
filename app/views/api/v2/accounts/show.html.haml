@@ -87,7 +87,23 @@
 %p
   %strong Description:
   = @account.description
+%p
+  %strong audit_status:
+  = @account.audit_status
+%p
+  %strong audit_comment
+  = @account.audit_comments
+%p
+  %strong Import hérité du GrAM 1:
+  = @account.is_from_legacy_gram1
 
+
+
+%p
+  %b Aliases
+  %ul
+    =@account.aliases.each do |a|
+      %li= a.name
 %p
   %b Groups
   %ul
