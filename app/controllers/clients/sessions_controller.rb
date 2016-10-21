@@ -47,8 +47,7 @@ class Clients::SessionsController < Devise::SessionsController
 
     if resource.valid_password?(params[:client][:password])
       sign_in("client", resource)
-      render :json=> {:success=>true, :auth_token=>resource.authentication_token, :login=>resource.name, :email=>resource.email}
-      puts "==o=o=o=o=o=o=o= Login + pwd ok"
+      redirect_to root_path
     else
      invalid_login_attempt
     end

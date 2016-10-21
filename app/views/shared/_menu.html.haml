@@ -10,11 +10,20 @@
           =link_to "#" do
             %i.zmdi.zmdi-menu
       %nav
-        .menu-item>
-          =link_to "Clients de l'API", clients_path, class: "menu-a"
-        .menu-item>
-          =link_to "Comptes", accounts_path, class: "menu-a"
-        .menu-item>
-          =link_to "Groupes", groups_path, class: "menu-a"
-        .menu-item>
-          =link_to "Roles", roles_path, class: "menu-a"
+        -if client_signed_in?
+          .menu-item>
+            =link_to "Clients de l'API", clients_path, class: "menu-a"
+          .menu-item>
+            =link_to "Comptes", accounts_path, class: "menu-a"
+          .menu-item>
+            =link_to "Groupes", groups_path, class: "menu-a"
+          .menu-item>
+            =link_to "Roles", roles_path, class: "menu-a"
+          .menu-item>
+            =link_to "Déconnexion", destroy_client_session_path	, class: "menu-a"
+        -else
+          .menu-item>
+            =link_to "Connexion", new_client_session_path	, class: "menu-a"
+
+
+
