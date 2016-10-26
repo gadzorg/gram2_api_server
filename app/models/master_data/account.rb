@@ -49,7 +49,7 @@ class MasterData::Account < MasterData::Base
   with_options unless: :is_from_legacy_gram1? do |not_legacy|
     not_legacy.validates :firstname, presence: true
     not_legacy.validates :lastname, presence: true
-    not_legacy.validates :email, presence: true, uniqueness: true
+    not_legacy.validates :email, uniqueness: true, allow_nil: true
     not_legacy.validates :id_soce, uniqueness: true
   end
 
