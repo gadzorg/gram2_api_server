@@ -20,7 +20,12 @@ RSpec.describe MasterData::Account, type: :model do
  describe "validations" do
   subject { FactoryGirl.build(:master_data_account) }
   
-  it {is_expected.to validate_uniqueness_of :email}
+  it "validate uniqueness of email" do
+    FactoryGirl.create(:master_data_account, email: "some_email@example.com")
+    expect(FactoryGirl.build(:master_data_account, email: "some_email@example.com")).not_to be_valid
+  end
+
+
   it {is_expected.to allow_value('prenom.nom@gadz.org').for(:email)}
   it {is_expected.not_to allow_value('prenom.nom.gadz.org').for(:email)}
 
