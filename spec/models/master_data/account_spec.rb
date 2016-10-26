@@ -17,35 +17,39 @@ RSpec.describe MasterData::Account, type: :model do
   end
 
  #email
- it {is_expected.to validate_uniqueness_of :email}
- it {is_expected.to allow_value('prenom.nom@gadz.org').for(:email)}
- it {is_expected.not_to allow_value('prenom.nom.gadz.org').for(:email)}
+ describe "validations" do
+  subject { FactoryGirl.build(:master_data_account) }
+  
+  it {is_expected.to validate_uniqueness_of :email}
+  it {is_expected.to allow_value('prenom.nom@gadz.org').for(:email)}
+  it {is_expected.not_to allow_value('prenom.nom.gadz.org').for(:email)}
 
- it {is_expected.to validate_presence_of :password}
- it {is_expected.to validate_inclusion_of(:gender).in_array(['male','female'])}
+  it {is_expected.to validate_presence_of :password}
+  it {is_expected.to validate_inclusion_of(:gender).in_array(['male','female'])}
 
- it "validate presence of a uuid"
+  it "validate presence of a uuid"
 
- #id soce
-  it "validate presence of :id_soce" do
-    account=FactoryGirl.create(:master_data_account)
-    account.id_soce=nil
-    expect(account.valid?).to eq(false)
-  end
+  #id soce
+   it "validate presence of :id_soce" do
+     account=FactoryGirl.create(:master_data_account)
+     account.id_soce=nil
+     expect(account.valid?).to eq(false)
+   end
 
-   describe "validate that :id_soce is an integer" do
-    it "invalidate strings in :id_soce" do
-      account=FactoryGirl.create(:master_data_account)
-      account.id_soce="string"
-      expect(account.valid?).to eq(false)
-    end
+    describe "validate that :id_soce is an integer" do
+     it "invalidate strings in :id_soce" do
+       account=FactoryGirl.create(:master_data_account)
+       account.id_soce="string"
+       expect(account.valid?).to eq(false)
+     end
 
-    it "invalidate non integer numbers in :id_soce" do
-      account=FactoryGirl.create(:master_data_account)
-      account.id_soce=157.211
-      expect(account.valid?).to eq(false)
-    end
-  end
+     it "invalidate non integer numbers in :id_soce" do
+       account=FactoryGirl.create(:master_data_account)
+       account.id_soce=157.211
+       expect(account.valid?).to eq(false)
+     end
+   end
+ end
 
   describe "id_soce auto_increment" do
 
