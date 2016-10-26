@@ -54,22 +54,33 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+
+  concern :groups_and_role_management do
+    #accounts/groups
+    get 'groups' => 'groups#index'
+    post 'groups' => 'accounts#add_to_group', as: :add_to_group
+    delete 'groups/:group_uuid' => 'accounts#remove_from_group', as: :remove_from_group
+    #accounts/roles
+    get 'roles' => 'roles#index'
+    post 'roles' => 'accounts#add_role', as: :add_role
+    delete 'roles/:role_uuid' => 'accounts#revoke_role', as: :revoke_roles
+  end
+
+  scope :admin do
+    resources :groups, param: :uuid, module: 'api/v2' do
+      get 'accounts' => 'accounts#index'
+    end
+    resources :roles, param: :uuid, module: 'api/v2'
+    resources :accounts, param: :uuid, module: 'api/v2', concerns: :groups_and_role_management
+  end
+
   namespace :api, defaults: {format: :json} do
     namespace :v2 do
       resources :groups, param: :uuid do
         get 'accounts' => 'accounts#index'
       end
       resources :roles, param: :uuid
-      resources :accounts, param: :uuid do
-        #accounts/groups
-        get 'groups' => 'groups#index'
-        post 'groups' => 'accounts#add_to_group', as: :add_to_group
-        delete 'groups/:group_uuid' => 'accounts#remove_from_group', as: :remove_from_group
-        #accounts/roles
-        get 'roles' => 'roles#index'
-        post 'roles' => 'accounts#add_role', as: :add_role
-        delete 'roles/:role_uuid' => 'accounts#revoke_role', as: :revoke_roles
-      end
+      resources :accounts, param: :uuid, concerns: :groups_and_role_management
       post 'accounts/reserve_next_id_soce' => 'accounts#reserve_next_id_soce'
     end
   end
