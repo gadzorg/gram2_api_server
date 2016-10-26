@@ -10,10 +10,10 @@ before_script:
   - psql -eac 'create database travis_ci_test;' -U postgres
   - cp -v config/database.travis.yml config/database.yml
   - cp -v config/secrets.travis.yml config/secrets.yml
+  - cp -v config/rabbitmq.travis.yml config/rabbitmq.yml
 services:
   - postgresql
   - rabbitmq
 script:  
   - RAILS_ENV=test bundle exec rake db:migrate
   - RAILS_ENV=test bundle exec rspec spec/
-  - RAILS_ENV=test bundle exec rake spec:vigia
