@@ -94,6 +94,6 @@ class Api::V2::GroupsController < Api::V2::BaseController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def group_params
-      params.require(:group).permit(:guid, :name, :short_name, :description)
+      params.require(:group).permit(:uuid, :name, :short_name, :description)
     end
 end
