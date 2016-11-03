@@ -1,13 +1,17 @@
 %p#notice= notice
 %p
-  %strong Guid:
-  = @group.guid
+  %b Guid:
+  = @group.uuid
 %p
-  %strong Name:
+  %b Name:
   = @group.name
 %p
-  %strong Description:
+  %b Short Name:
+  = @group.short_name
+%p
+  %b Description:
   = @group.description
-= link_to 'Edit', edit_api_v2_group_path(@group)
+
+= link_to 'Edit', edit_group_path(@group)
 |
-= link_to 'Back', api_v2_groups_path
+= link_to 'Back', groups_path

@@ -23,9 +23,12 @@
   %br/
   = f.check_box :enabled
 .field
-  = f.label :password
+  = f.label :password, "Password hash"
   %br/
-  = f.password_field :password
+  -if @show_password_hash_if_allowed
+    = f.text_field :password
+  -else
+    Nan mais il faut des droits plus élevés pour modifier le mot de passe, tu crois quoi ?
 .field
   = f.label :lastname
   %br/
@@ -61,7 +64,7 @@
 .field
   = f.label :gender
   %br/
-  = f.text_field :gender
+  = f.select :gender,  %w(male female)+[""]
 .field
   = f.label :is_gadz
   %br/

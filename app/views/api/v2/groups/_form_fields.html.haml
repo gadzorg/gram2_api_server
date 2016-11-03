@@ -7,6 +7,9 @@
       - @group.errors.full_messages.each do |message|
         %li= message
 .field
+  %b UUID
+  -@group.uuid
+  %br/
   = f.label :short_name
   %br/
   = f.text_field :short_name
