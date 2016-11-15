@@ -55,7 +55,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
   # POST /api/v2/accounts
   # POST /api/v2/accounts.json
   def create
-    @account = MasterData::Account.new(api_v2_account_params)
+    @account = MasterData::Account.new(account_params_with_author)
     authorize @account, :create?
 
     respond_to do |format|
@@ -76,7 +76,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
     authorize @account, :edit?
     respond_to do |format|
       # keep @account.save at the end of the condition bellow to ensure the right object is returned during rendering
-      if @account.update_aliases(@aliases) && @account.update(api_v2_account_params)
+      if @account.update_aliases(@aliases) && @account.update(account_params_with_author)
         format.html { render :show,@account, notice: 'Account was successfully updated.' }
         format.json { render json: @account, status: :ok, location: :api_v2_account }
       else
@@ -184,6 +184,10 @@ class Api::V2::AccountsController < Api::V2::BaseController
     def set_api_v2_account
       # @account = MasterData::Account.find(params[:id])
       @account = MasterData::Account.find_by(uuid: params[:uuid])
+    end
+
+    def account_params_with_author
+      api_v2_account_params.merge({current_update_author: current_user.name})
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

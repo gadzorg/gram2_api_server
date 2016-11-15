@@ -19,6 +19,10 @@ class MasterData::Account < MasterData::Base
   before_validation :generate_uuid_if_empty, unless: :uuid
   before_validation :generate_hruid, unless: :hruid, :on => :create
 
+  attr_accessor :current_update_author
+  before_validation :update_updated_by
+  before_save :track_password_changes, if: :password_changed?
+
   before_validation(:on => :create) do 
   	#set id_soce
   	if attribute_present?(:id_soce)
@@ -121,6 +125,15 @@ class MasterData::Account < MasterData::Base
 
   def remove_all_alias
     self.alias.destroy_all
+  end
+
+  def update_updated_by
+    self.updated_by=current_update_author
+  end
+
+  def track_password_changes
+    self.password_updated_at=DateTime.now
+    self.password_updated_by=current_update_author
   end
 
   ################# Groups #################
