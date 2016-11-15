@@ -12,5 +12,6 @@ FactoryGirl.define do
       enabled true
       password {Digest::SHA1.hexdigest uuid}
       email {Faker::Internet.safe_email("#{firstname} #{lastname} "+rand(1..99).to_s)}
+      current_update_author {Faker::App.name.downcase}
   end
 end
