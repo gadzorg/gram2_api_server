@@ -176,7 +176,6 @@ class Api::V2::AccountsController < Api::V2::BaseController
         format.json { head :no_content }
       end
     end
-
   end
 
   private
@@ -184,6 +183,13 @@ class Api::V2::AccountsController < Api::V2::BaseController
     def set_api_v2_account
       # @account = MasterData::Account.find(params[:id])
       @account = MasterData::Account.find_by(uuid: params[:uuid])
+      not_found unless @account
+    end
+
+    def not_found
+      respond_to do |format|
+        format.json { render :json => {error_code: 404, error: "Gram Account not found"}, status: :not_found }
+      end
     end
 
     def account_params_with_author
