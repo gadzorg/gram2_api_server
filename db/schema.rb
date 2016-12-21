@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161115135718) do
+ActiveRecord::Schema.define(version: 20161221134557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 20161115135718) do
     t.string   "updated_by",            default: ""
     t.string   "password_updated_by",   default: ""
     t.datetime "password_updated_at"
+    t.string   "emergency_email"
   end
 
   add_index "gram_accounts", ["audit_status"], name: "index_gram_accounts_on_audit_status", using: :btree
