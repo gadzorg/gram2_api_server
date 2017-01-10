@@ -88,7 +88,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
     @account.destroy
     authorize @account, :destroy?
     respond_to do |format|
-      format.html { redirect_to api_v2_accounts_url, notice: 'Account was successfully destroyed.' }
+      format.html { redirect_to accounts_url, notice: 'Account was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
