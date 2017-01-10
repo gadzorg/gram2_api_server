@@ -56,6 +56,12 @@ gem 'rolify', '~> 5.1'
 gem 'factory_girl_rails'
 gem 'faker'
 
+# pagination
+gem 'kaminari'
+
+# Performances
+gem 'scout_apm'
+
 group :production do
   #HEROKU
   gem 'heroku_secrets', github: 'alexpeattie/heroku_secrets'

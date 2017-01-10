@@ -19,6 +19,10 @@ class MasterData::Account < MasterData::Base
   before_validation :generate_uuid_if_empty, unless: :uuid
   before_validation :generate_hruid, unless: :hruid, :on => :create
 
+  attr_accessor :current_update_author
+  before_validation :update_updated_by
+  before_save :track_password_changes, if: :password_changed?
+
   before_validation(:on => :create) do 
   	#set id_soce
   	if attribute_present?(:id_soce)
@@ -40,8 +44,8 @@ class MasterData::Account < MasterData::Base
   validates :enabled, :inclusion => {:in => [true, false]}
   validates :password, presence: true
   validates :hruid,  uniqueness: true
-  validates :gapps_id,  uniqueness: true, allow_nil: true
-	validates :gender, inclusion: {in: %w(male female)}, allow_nil: true
+  validates :gapps_id,  uniqueness: true, allow_blank: true
+	validates :gender, inclusion: {in: %w(male female)}, allow_blank: true
   validates :is_gadz, :inclusion => {:in => [true, false]}, allow_nil: true
   validates :buque_texte, format: { with: /\A[[:alpha:]0-9\'\-\s]*\z/}, allow_nil: true
   validates :gadz_fams, format: { with: /\A[0-9\(\)\!\-\s]*\z/}, allow_nil: true
@@ -49,9 +53,11 @@ class MasterData::Account < MasterData::Base
   with_options unless: :is_from_legacy_gram1? do |not_legacy|
     not_legacy.validates :firstname, presence: true
     not_legacy.validates :lastname, presence: true
-    not_legacy.validates :email, presence: true, uniqueness: true
+    not_legacy.validates :email, uniqueness: true, allow_nil: true
     not_legacy.validates :id_soce, uniqueness: true
   end
+
+
 
   # This enum is persisted as an integer in database
   # if you need to add new status, apend it at the end of the list or it will break mapping
@@ -119,6 +125,15 @@ class MasterData::Account < MasterData::Base
 
   def remove_all_alias
     self.alias.destroy_all
+  end
+
+  def update_updated_by
+    self.updated_by=current_update_author
+  end
+
+  def track_password_changes
+    self.password_updated_at=DateTime.now
+    self.password_updated_by=current_update_author
   end
 
   ################# Groups #################

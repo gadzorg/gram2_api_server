@@ -87,6 +87,50 @@
 %p
   %strong Description:
   = @account.description
-= link_to 'Edit', edit_api_v2_account_path(@account)
+%p
+  %strong audit_status:
+  = @account.audit_status
+%p
+  %strong audit_comment:
+  = @account.audit_comments
+%p
+  %strong created_at:
+  = @account.created_at
+%p
+  %strong updated_at:
+  = @account.updated_at
+%p
+  %strong updated_by:
+  = @account.updated_by
+%p
+  %strong password_updated_at:
+  = @account.password_updated_at
+%p
+  %strong password_updated_by:
+  = @account.password_updated_by
+%p
+  %strong Import hérité du GrAM 1:
+  = @account.is_from_legacy_gram1
+
+
+
+%p
+  %b Aliases
+  %ul
+    =@account.aliases.each do |a|
+      %li= a.name
+%p
+  %b Groups
+  %ul
+    =@account.groups.each do |group|
+      %li= link_to group.name,  group_path(group.uuid)
+
+%p
+  %b Roles
+  %ul
+    =@account.roles.each do |role|
+      %li= link_to role.name,  role_path(role.uuid)
+
+= link_to 'Edit', edit_account_path(@account)
 |
-= link_to 'Back', api_v2_accounts_path
+= link_to 'Back', accounts_path
