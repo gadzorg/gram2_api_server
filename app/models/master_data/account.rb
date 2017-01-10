@@ -12,7 +12,7 @@ class MasterData::Account < MasterData::Base
   #relations
   has_and_belongs_to_many :groups,  after_add: :capture_add_association,  after_remove: :capture_del_association
   has_and_belongs_to_many :roles,  after_add: :capture_add_association,  after_remove: :capture_del_association
-  has_many :alias, dependent: :destroy, after_add: :capture_add_association,  after_remove: :capture_del_association
+  has_many :alias, dependent: :delete_all, after_add: :capture_add_association,  after_remove: :capture_del_association
 
   #callbacks
 
