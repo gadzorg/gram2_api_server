@@ -38,7 +38,7 @@ class MasterData::Account < MasterData::Base
 
   #model validations
 
-  validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i}
+  validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i}, allow_nil: true
   validates :uuid, uniqueness: true
   validates :id_soce, presence: true, numericality: { only_integer: true }
   validates :enabled, :inclusion => {:in => [true, false]}
