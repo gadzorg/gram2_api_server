@@ -77,7 +77,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
     respond_to do |format|
       # keep @account.save at the end of the condition bellow to ensure the right object is returned during rendering
       if @account.update_aliases(@aliases) && @account.update(account_params_with_author)
-        format.html { render :show,@account, notice: 'Account was successfully updated.' }
+        format.html { render :show, notice: 'Account was successfully updated.' }
         format.json { render json: @account, status: :ok, location: :api_v2_account }
       else
         format.html { render :edit }
