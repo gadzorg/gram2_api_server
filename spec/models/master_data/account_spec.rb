@@ -71,6 +71,15 @@ RSpec.describe MasterData::Account, type: :model do
     expect(FactoryGirl.build(:master_data_account, email: "some_email@example.com")).not_to be_valid
   end
 
+  it "allow Accounts without emails" do
+    expect(FactoryGirl.build(:master_data_account, email: nil)).to be_valid
+  end
+
+  it "allow multiple Accounts without emails" do
+    FactoryGirl.create(:master_data_account, email: nil)
+    expect(FactoryGirl.build(:master_data_account, email: nil)).to be_valid
+  end
+
 
   it {is_expected.to allow_value('prenom.nom@gadz.org').for(:email)}
   it {is_expected.not_to allow_value('prenom.nom.gadz.org').for(:email)}
