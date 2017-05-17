@@ -1,6 +1,9 @@
 class MasterData::Account < MasterData::Base
 
   include GorgRabbitmqNotifier::ActiveRecordExtension
+
+  NULL_ATTRS = %w(gapps_id email)
+
   rabbitmq_resource_type :account
   rabbitmq_id :uuid
 
@@ -22,6 +25,8 @@ class MasterData::Account < MasterData::Base
   attr_accessor :current_update_author
   before_validation :update_updated_by
   before_save :track_password_changes, if: :password_changed?
+
+  before_validation :nil_if_blank
 
   before_validation(:on => :create) do 
   	#set id_soce
@@ -165,5 +170,11 @@ class MasterData::Account < MasterData::Base
     alias_list.each { |a| self.add_new_alias(a) }
   end
 
+
+  protected
+
+  def nil_if_blank
+    NULL_ATTRS.each { |attr| self[attr] = nil if self[attr].blank? }
+  end
 
 end
