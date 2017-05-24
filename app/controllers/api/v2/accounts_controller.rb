@@ -24,7 +24,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
         @accounts = @accounts.page(params[:page])
         render :index
       end
-      format.json {render json: @accounts}
+      format.json {render json: @accounts.page(params[:page]).per(50)}
     end
   end
 
