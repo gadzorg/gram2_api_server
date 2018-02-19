@@ -85,7 +85,9 @@ ActiveRecord::Schema.define(version: 20161115135718) do
     t.string   "audit_comments"
     t.string   "updated_by",            default: ""
     t.string   "password_updated_by",   default: ""
-    t.datetime "password_updated_at"
+    t.datetime "password_updated_at",
+    t.string   "gadz_centre_principal",
+    t.string   "gadz_centre_secondaire"
   end
 
   add_index "gram_accounts", ["audit_status"], name: "index_gram_accounts_on_audit_status", using: :btree

@@ -227,6 +227,8 @@ class Api::V2::AccountsController < Api::V2::BaseController
         :gadz_fams_zaloeil,
         :gadz_proms_principale,
         :gadz_proms_secondaire,
+        :gadz_centre_principal,
+        :gadz_centre_secondaire,
         :avatar_url,
         :description
       )
