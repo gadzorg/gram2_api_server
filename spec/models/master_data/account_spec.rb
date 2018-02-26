@@ -154,4 +154,16 @@ RSpec.describe MasterData::Account, type: :model do
       expect(account1.alias.count).to eq(1)
     end
   end
+
+  describe "nil if blank" do
+    it "set gapps_id to nil" do
+      account=FactoryGirl.create(:master_data_account, gapps_id:'')
+      expect(account.gapps_id).to be_nil
+    end
+    it "set email to nil" do
+        account=FactoryGirl.build(:master_data_account, email:'')
+        account.save
+        expect(account.email).to be_nil
+    end
+  end
 end
