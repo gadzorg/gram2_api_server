@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.5.3'
+ruby '2.5.5'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~>4.2'
@@ -54,7 +54,7 @@ gem 'pundit'
 # Roles
 gem 'rolify', '~> 5.1'
 
-gem 'factory_girl_rails'
+gem 'factory_bot_rails'
 gem 'faker'
 
 # pagination
@@ -65,7 +65,7 @@ gem 'scout_apm'
 
 group :production do
   #HEROKU
-  gem 'heroku_secrets', github: 'alexpeattie/heroku_secrets'
+  gem 'heroku_secrets', :git => "https://github.com/gadzorg/heroku_secrets.git"
   gem 'rails_12factor'
   gem 'puma'
 end
