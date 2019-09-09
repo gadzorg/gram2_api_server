@@ -65,7 +65,7 @@ gem 'scout_apm'
 
 group :production do
   #HEROKU
-  gem 'heroku_secrets', github: 'alexpeattie/heroku_secrets'
+  gem 'heroku_secrets', git: 'https://github.com/alexpeattie/heroku_secrets'
   gem 'rails_12factor'
   gem 'puma'
 end
