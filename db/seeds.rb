@@ -6,6 +6,10 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+fail "Seeds can be run only in development" unless Rails.env.development?
+
+Client.destroy_all
+
 admin = Client.create( name: "admin", password: "password", email: "admin@gorgu.net", active: true)
 admin.add_role :gram_admin
 admin.add_role :admin
