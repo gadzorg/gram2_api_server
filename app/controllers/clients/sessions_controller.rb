@@ -2,12 +2,9 @@ class Clients::SessionsController < Devise::SessionsController
 # before_action :configure_sign_in_params, only: [:create]
 
   # GET /resource/sign_in
-  def new
-    super
-    puts "=============nes sess"
-    puts resource
-    puts resource.name
-  end
+  # def new
+  #   super
+  # end
 
   # POST /resource/sign_in
   # def create
@@ -40,9 +37,7 @@ class Clients::SessionsController < Devise::SessionsController
     #build_resource
     # TODO : clean params and use permit
     resource = Client.find_by(name: params[:client][:name])
-    puts "======================="
-    puts resource
-    puts params[:client][:name]
+
     return invalid_login_attempt unless resource
 
     if resource.valid_password?(params[:client][:password])

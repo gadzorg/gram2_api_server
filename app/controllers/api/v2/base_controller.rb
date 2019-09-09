@@ -19,15 +19,11 @@ class Api::V2::BaseController < ApplicationController
 
   def set_group_parent
     @group = MasterData::Group.find_by(uuid: params[:group_uuid])
-
   end
 
   def require_login
-    # TODO : remove lines bellow
-    puts "==============================================="
-    puts current_client.name
     unless current_client
-      render status: :unauthorized, json: {message: "401 Unauthorized"}
+      render status: :unauthorized, json: { message: "401 Unauthorized" }
     end
   end
 end

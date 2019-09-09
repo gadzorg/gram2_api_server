@@ -131,9 +131,6 @@ class Api::V2::AccountsController < Api::V2::BaseController
   end
 
   def remove_from_group
-    # @account = MasterData::Account.find_by(uuid: params[:account_uuid])
-    # puts "=========ef=ef=efe=f=efe=fe=fe=f"
-    # puts @account
     group = @account.groups.find_by(uuid: params[:group_uuid])
     authorize group, :edit?
     respond_to do |format|
