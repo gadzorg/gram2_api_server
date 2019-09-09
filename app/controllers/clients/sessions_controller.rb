@@ -1,5 +1,5 @@
 class Clients::SessionsController < Devise::SessionsController
-# before_action :configure_sign_in_params, only: [:create]
+  # before_action :configure_sign_in_params, only: [:create]
 
   # GET /resource/sign_in
   # def new
@@ -23,13 +23,12 @@ class Clients::SessionsController < Devise::SessionsController
   #   devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])
   # end
 
-  prepend_before_filter :require_no_authentication, :only => [:create ]
+  prepend_before_filter :require_no_authentication, only: %i[create]
   # include Devise::Controllers::InternalHelpers
 
   #before_filter :ensure_params_exist
 
   skip_before_action :verify_authenticity_token
-
 
   respond_to :json
 
@@ -44,7 +43,7 @@ class Clients::SessionsController < Devise::SessionsController
       sign_in("client", resource)
       redirect_to root_path
     else
-     invalid_login_attempt
+      invalid_login_attempt
     end
   end
 
@@ -65,14 +64,19 @@ class Clients::SessionsController < Devise::SessionsController
     sign_out(resource_name)
   end
   #
+
   protected
+
   # def ensure_params_exist
   #   return unless params[:client_login].blank?
   #   render :json=>{:success=>false, :message=>"missing user_login parameter"}, :status=>422
   # end
   #
   def invalid_login_attempt
-     warden.custom_failure!
-     render :json=> {:success=>false, :message=>"Error with your login or password"}, :status=>401
+    warden.custom_failure!
+    render json: {
+             success: false, message: "Error with your login or password"
+           },
+           status: 401
   end
 end

@@ -20,7 +20,8 @@ class HruidService
     return "#{format_name(first_name)}.#{format_name(last_name.downcase)}"
   end
 
-private
+  private
+
   # build hruid from user info
   def self.build(first_name, last_name, suffix)
     canonical_name = self.canonical_name(first_name, last_name)
@@ -31,23 +32,22 @@ private
   # suffix = {"soce", "ext", promo}
   def self.suffix_for(user)
     if user.gadz_proms_principale
-      suffix= user.gadz_proms_principale.to_s
+      suffix = user.gadz_proms_principale.to_s
     elsif user.is_soce_employee
-      suffix = "soce" 
+      suffix = "soce"
     else
-      suffix = "ext"     
+      suffix = "ext"
     end
   end
 
   def self.format_name(name)
     #replace space by "-"
-    name = name.gsub(' ', '-')
+    name = name.gsub(" ", "-")
     #downcase
     name = name.downcase
     #convert special letters
-    name = name.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/u,'').to_s
+    name = name.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/u, "").to_s
     #remove special char
-    name = name.gsub(/[^a-z\-]/, '')
+    name = name.gsub(/[^a-z\-]/, "")
   end
-
 end

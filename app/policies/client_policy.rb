@@ -21,5 +21,4 @@ class ClientPolicy < BasePolicy
   def destroy?
     has_scope?(client, :gram_admin)
   end
-
 end

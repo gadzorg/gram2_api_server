@@ -8,7 +8,7 @@ class Api::V2::BaseController < ApplicationController
   # check if authorize is called for every action
   after_action :verify_authorized
 
-  #To send context to serializer. Used to manage fields' filter with special ACL
+  # To send context to serializer. Used to manage fields' filter with special ACL
   serialization_scope :view_context
 
   private

@@ -1,11 +1,12 @@
 class Api::V2::GroupsController < Api::V2::BaseController
-  before_action :set_group, only: [:show, :edit, :update, :destroy]
-  before_action :set_account_parent, only: [:index]
+  before_action :set_group, only: %i[show edit update destroy]
+  before_action :set_account_parent, only: %i[index]
 
   # GET /groups
   # GET /groups.json
   def index
-    filter = params.permit( :name, :short_name, :description)
+    filter = params.permit(:name, :short_name, :description)
+
     if @account
       @groups = @account.groups
     else
@@ -17,8 +18,8 @@ class Api::V2::GroupsController < Api::V2::BaseController
     end
     authorize @groups, :index?
     respond_to do |format|
-      format.html {render :index}
-      format.json {render json: @groups}
+      format.html { render :index }
+      format.json { render json: @groups }
     end
   end
 
@@ -27,8 +28,8 @@ class Api::V2::GroupsController < Api::V2::BaseController
   def show
     authorize @group, :index?
     respond_to do |format|
-      format.html {render :show}
-      format.json {render json: @group}
+      format.html { render :show }
+      format.json { render json: @group }
     end
   end
 
@@ -51,11 +52,15 @@ class Api::V2::GroupsController < Api::V2::BaseController
 
     respond_to do |format|
       if @group.save
-        format.html { render :show, notice: 'MasterData::Group was successfully created.' }
-        format.json { render json: @group, status: :created}
+        format.html do
+          render :show, notice: "MasterData::Group was successfully created."
+        end
+        format.json { render json: @group, status: :created }
       else
         format.html { render :new }
-        format.json { render json: @group.errors, status: :unprocessable_entity }
+        format.json do
+          render json: @group.errors, status: :unprocessable_entity
+        end
       end
     end
   end
@@ -66,11 +71,15 @@ class Api::V2::GroupsController < Api::V2::BaseController
     authorize @group, :edit?
     respond_to do |format|
       if @group.update(group_params)
-        format.html { render :show, notice: 'MasterData::Group was successfully updated.' }
+        format.html do
+          render :show, notice: "MasterData::Group was successfully updated."
+        end
         format.json { render json: @group, status: :ok }
       else
         format.html { render :edit }
-        format.json { render json: @group.errors, status: :unprocessable_entity }
+        format.json do
+          render json: @group.errors, status: :unprocessable_entity
+        end
       end
     end
   end
@@ -81,19 +90,23 @@ class Api::V2::GroupsController < Api::V2::BaseController
     authorize @group, :destroy?
     @group.destroy
     respond_to do |format|
-      format.html { redirect_to api_v2_groups_url, notice: 'MasterData::Group was successfully destroyed.' }
+      format.html do
+        redirect_to api_v2_groups_url,
+                    notice: "MasterData::Group was successfully destroyed."
+      end
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_group
-      @group = MasterData::Group.find_by(uuid: params[:uuid])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def group_params
-      params.require(:group).permit(:uuid, :name, :short_name, :description)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_group
+    @group = MasterData::Group.find_by(uuid: params[:uuid])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def group_params
+    params.require(:group).permit(:uuid, :name, :short_name, :description)
+  end
 end
