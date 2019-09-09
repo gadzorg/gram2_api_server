@@ -1,19 +1,37 @@
-language: ruby
-rvm:
-  - 2.2.2
-before_install: gem install bundler -v 1.11.2
-install: bundle install --jobs=3 --retry=3 --deployment --without development
+language: ruby # version from .ruby-version
+
+cache:
+  - bundler
+
+sudo: required # required for starting rabbitmq
+
+services:
+  - postgresql
+  - rabbitmq
+
 addons:
-    code_climate:
-        repo_token: c5095ac9e2e622f87a86d61df49761b82cd6f91ea4b966372e40898dfe800956
-before_script:
+  apt:
+    packages:
+    - rabbitmq-server
+  code_climate:
+    repo_token: c5095ac9e2e622f87a86d61df49761b82cd6f91ea4b966372e40898dfe800956
+
+before_install:
+  # don't use bundler 2 yet https://docs.travis-ci.com/user/languages/ruby/#bundler-20
+  - gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
+  - gem install bundler -v '< 2'
+
   - psql -eac 'create database travis_ci_test;' -U postgres
   - cp -v config/database.travis.yml config/database.yml
   - cp -v config/secrets.travis.yml config/secrets.yml
   - cp -v config/rabbitmq.travis.yml config/rabbitmq.yml
-services:
-  - postgresql
-  - rabbitmq
-script:  
-  - RAILS_ENV=test bundle exec rake db:migrate
-  - RAILS_ENV=test bundle exec rspec spec/
+
+  - env | sort
+
+install:
+  - bundle install --jobs=3 --retry=3 --deployment --without development
+
+
+script:
+  - bundle exec rake db:migrate
+  - bundle exec rspec
