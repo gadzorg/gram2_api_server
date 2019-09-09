@@ -78,6 +78,9 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'better_errors'
   gem 'bogus'
+
+  gem "pry-byebug"
+  gem "pry-rails"
 end
 
 group :development do
@@ -94,4 +97,3 @@ group :test do
   gem 'vigia'
   gem 'shoulda-callback-matchers', '~> 1.1', '>= 1.1.4'
 end
-
