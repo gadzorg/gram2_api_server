@@ -6,8 +6,9 @@ FactoryGirl.define do
     active { true }
     email do
       Faker::Internet.safe_email(
-        "#{Faker::Name.first_name} #{Faker::Name.last_name} " +
-          rand(1..99).to_s,
+        name:
+          "#{Faker::Name.first_name} #{Faker::Name.last_name} " +
+            rand(1..99).to_s,
       )
     end
   end
