@@ -52,7 +52,7 @@ GEM
     addressable (2.3.8)
     amq-protocol (2.0.1)
     arel (6.0.4)
-    bcrypt (3.1.11)
+    bcrypt (3.1.13)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
