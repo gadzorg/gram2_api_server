@@ -17,7 +17,8 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
-require 'factory_girl_rails'
+require "factory_girl_rails"
+require "helpers/api_helper"
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
@@ -60,11 +61,11 @@ RSpec.configure do |config|
     DatabaseCleaner[:active_record,{model: MasterData::Account}].clean
   end
 
-
   config.include FactoryGirl::Syntax::Methods
+  config.include ApiHelper
 
-# The settings below are suggested to provide a good initial experience
-# with RSpec, but feel free to customize to your heart's content.
+  # The settings below are suggested to provide a good initial experience
+  # with RSpec, but feel free to customize to your heart's content.
 =begin
   # These two settings work together to allow you to limit a spec run
   # to individual examples or groups you care about by tagging them with

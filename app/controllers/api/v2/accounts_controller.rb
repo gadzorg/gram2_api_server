@@ -55,17 +55,15 @@ class Api::V2::AccountsController < Api::V2::BaseController
         :is_from_legacy_gram1,
       )
 
-    if @group
-      @accounts = @group.accounts
-    else
-      if params[:exact_search] == "false"
-        @accounts =
-          MasterData::Account.like(filter).includes(:groups, :alias, :roles)
+    @accounts =
+      if @group
+        @group.accounts
+      elsif params[:exact_search] == "false"
+        MasterData::Account.like(filter).includes(:groups, :alias, :roles)
       else
-        @accounts =
-          MasterData::Account.where(filter).includes(:groups, :alias, :roles)
+        MasterData::Account.where(filter).includes(:groups, :alias, :roles)
       end
-    end
+
     authorize @accounts, :index?
     respond_to do |format|
       format.html do
