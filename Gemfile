@@ -5,7 +5,7 @@ ruby File.read(".ruby-version").strip
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "~>4.2"
 # gem 'mysql2', '~> 0.3.20'
-gem "pg"
+gem "pg", "< 1" # 1.0 required postgresql > 9.2
 # gems for haml
 gem "haml-rails"
 # Use SCSS for stylesheets
