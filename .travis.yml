@@ -12,7 +12,7 @@ services:
 addons:
   apt:
     packages:
-    - rabbitmq-server
+      - rabbitmq-server
   code_climate:
     repo_token: c5095ac9e2e622f87a86d61df49761b82cd6f91ea4b966372e40898dfe800956
 
@@ -31,7 +31,6 @@ before_install:
 install:
   - bundle install --jobs=3 --retry=3 --deployment --without development
 
-
 script:
   - bundle exec rake db:migrate
-  - bundle exec rspec
+  - NO_COVERAGE=1 bundle exec rspec

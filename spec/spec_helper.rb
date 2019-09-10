@@ -16,6 +16,8 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require "simplecov"
+SimpleCov.start "rails" unless ENV["NO_COVERAGE"].nil?
 
 require "factory_girl_rails"
 require "helpers/api_helper"
@@ -32,7 +34,8 @@ RSpec.configure do |config|
     #     # => "be bigger than 2 and smaller than 4"
     # ...rather than:
     #     # => "be bigger than 2"
-    expectations.include_chain_clauses_in_custom_matcher_descriptions = true
+    expectations.include_chain_clauses_in_custom_matcher_descriptions =
+      true
   end
 
   # rspec-mocks config goes here. You can use an alternate test double
@@ -41,24 +44,28 @@ RSpec.configure do |config|
     # Prevents you from mocking or stubbing a method that does not exist on
     # a real object. This is generally recommended, and will default to
     # `true` in RSpec 4.
-    mocks.verify_partial_doubles = true
+    mocks.verify_partial_doubles =
+      true
   end
 
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner[:active_record,{model: MasterData::Account}].strategy = :transaction
+    DatabaseCleaner[:active_record, { model: MasterData::Account }].strategy =
+      :transaction
     DatabaseCleaner.clean_with(:truncation)
-    DatabaseCleaner[:active_record,{model: MasterData::Account}].clean_with(:truncation)
+    DatabaseCleaner[:active_record, { model: MasterData::Account }].clean_with(
+      :truncation,
+    )
   end
 
   config.before(:each) do
     DatabaseCleaner.start
-    DatabaseCleaner[:active_record,{model: MasterData::Account}].start
+    DatabaseCleaner[:active_record, { model: MasterData::Account }].start
   end
 
   config.after(:each) do
     DatabaseCleaner.clean
-    DatabaseCleaner[:active_record,{model: MasterData::Account}].clean
+    DatabaseCleaner[:active_record, { model: MasterData::Account }].clean
   end
 
   config.include FactoryGirl::Syntax::Methods

@@ -22,6 +22,9 @@
 *.sublime-*
 .byebug_history
 
+/coverage
+
+
 # Ignore config files
 config/database.yml
 config/rabbitmq.yml
