@@ -19,7 +19,7 @@
 require "simplecov"
 SimpleCov.start "rails" unless ENV["NO_COVERAGE"].nil?
 
-require "factory_girl_rails"
+require "factory_bot_rails"
 require "helpers/api_helper"
 
 RSpec.configure do |config|
@@ -68,7 +68,7 @@ RSpec.configure do |config|
     DatabaseCleaner[:active_record, { model: MasterData::Account }].clean
   end
 
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
   config.include ApiHelper
 
   # The settings below are suggested to provide a good initial experience

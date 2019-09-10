@@ -4,7 +4,7 @@ require 'rolify'
 describe ClientPolicy do
   subject { ClientPolicy.new(client, client) }
 
-  let(:client) { FactoryGirl.create(:master_data_client) }
+  let(:client) {  create(:master_data_client) }
 
   context "for a not authenticated client" do
     let(:client) { nil }
@@ -16,7 +16,7 @@ describe ClientPolicy do
   end
 
   context "for a gram_admin" do
-    let(:client) {FactoryGirl.create(:client)}
+    let(:client) { create(:client)}
     before {client.add_role :gram_admin }
 
     it { should permit(:index)       }
@@ -39,7 +39,7 @@ describe ClientPolicy do
     ]
 
     roles.each do |role|
-      let(:client) {FactoryGirl.create(:client)}
+      let(:client) { create(:client)}
       role[1].nil? ? before {client.add_role role[0]} : before {client.add_role role[0], role[1]}
 
       it { should_not permit(:index)                    }

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :master_data_group, class: "MasterData::Group" do
     uuid { SecureRandom.uuid }
     name { Faker::Team.creature + Faker::Name.first_name }

@@ -51,7 +51,7 @@ gem "pundit"
 # Roles
 gem "rolify"
 
-gem "factory_girl_rails"
+gem "factory_bot_rails"
 gem "faker"
 
 # pagination

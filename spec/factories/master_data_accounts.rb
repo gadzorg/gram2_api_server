@@ -1,7 +1,7 @@
 require "securerandom"
 require "digest/sha1"
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :master_data_account, class: "MasterData::Account" do
     uuid { SecureRandom.uuid }
     hruid do

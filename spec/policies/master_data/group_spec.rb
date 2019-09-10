@@ -4,7 +4,7 @@ require 'rolify'
 describe MasterData::GroupPolicy do
   subject { MasterData::GroupPolicy.new(client, group) }
 
-  let(:group) { FactoryGirl.create(:master_data_group) }
+  let(:group) { create(:master_data_group) }
 
   context "for a not authenticated client" do
     let(:client) { nil }
@@ -16,7 +16,7 @@ describe MasterData::GroupPolicy do
   end
 
   context "for a group reader" do
-    let(:client) {FactoryGirl.create(:client)}
+    let(:client) {create(:client)}
     before {client.add_role :read, MasterData::Group}
 
     it { should permit(:index)       }
@@ -26,7 +26,7 @@ describe MasterData::GroupPolicy do
   end
 
   context "for a global reader" do
-    let(:client) {FactoryGirl.create(:client)}
+    let(:client) {create(:client)}
     before {client.add_role :read}
 
     it { should permit(:index)       }
@@ -36,7 +36,7 @@ describe MasterData::GroupPolicy do
   end
 
   context "for a group admin" do
-    let(:client) {FactoryGirl.create(:client)}
+    let(:client) {create(:client)}
     before {client.add_role :admin, MasterData::Group}
 
     it { should permit(:index)   }
@@ -46,7 +46,7 @@ describe MasterData::GroupPolicy do
   end
 
   context "for a global admin" do
-    let(:client) {FactoryGirl.create(:client)}
+    let(:client) {create(:client)}
     before {client.add_role :admin}
 
     it { should permit(:index)   }

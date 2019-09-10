@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :client, class: "Client" do
     name { Faker::App.name.downcase }
     password { Digest::SHA1.hexdigest name }
