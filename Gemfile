@@ -35,7 +35,7 @@ gem "sdoc", group: :doc
 gem "active_model_serializers"
 
 gem "gorg_message_sender"
-gem "gorg_service"
+gem "gorg_service", "< 5" # v5 changes MessageHandler structure
 
 gem "redis"
 gem "activerecord-import"
