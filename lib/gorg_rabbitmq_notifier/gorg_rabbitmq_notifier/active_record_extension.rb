@@ -60,8 +60,8 @@ module GorgRabbitmqNotifier::ActiveRecordExtension
         from_serializer = ActiveModel::Serializer.serializer_for(from_object)
         to_serializer = ActiveModel::Serializer.serializer_for(to_object)
         association =
-          from_serializer._reflections.find do |s|
-            s.options[:serializer] == to_serializer
+          from_serializer._reflections.find do |name, params|
+            params.options[:serializer] == to_serializer
           end
         case association.class.to_s
         when "ActiveModel::Serializer::HasManyReflection"
