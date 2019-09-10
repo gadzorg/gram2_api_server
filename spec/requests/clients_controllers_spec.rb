@@ -168,4 +168,44 @@ RSpec.describe "ClientsControllers", type: :request do
       expect(Client.exists?(id: subject.id)).to be false
     end
   end
+
+  describe "Roles management" do
+    subject { create(:client) }
+
+    describe "Adding a role" do
+      it "without resource" do
+        post client_add_role_path(subject.id),
+             { role_name: "read" },
+             standard_html_headers
+
+        assert_redirected_to client_path(subject.id)
+      end
+
+      it "with resource" do
+        post client_add_role_path(subject.id),
+             { role_name: "admin", ressource: "MasterData::Account" },
+             standard_html_headers
+
+        assert_redirected_to client_path(subject.id)
+      end
+    end
+
+    describe "Removing a role" do
+      it "without resource" do
+        post client_remove_role_path(subject.id),
+             { role_name: "read" },
+             standard_html_headers
+
+        assert_redirected_to client_path(subject.id)
+      end
+
+      it "with resource" do
+        post client_remove_role_path(subject.id),
+             { role_name: "admin", ressource: "MasterData::Account" },
+             standard_html_headers
+
+        assert_redirected_to client_path(subject.id)
+      end
+    end
+  end
 end
