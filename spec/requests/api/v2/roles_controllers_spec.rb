@@ -29,6 +29,16 @@ RSpec.describe "Api::V2::RolesControllers", type: :request do
         expect(json_body.length).to eq(2)
         expect(json_body[0]["uuid"]).to eq(roles[0].uuid)
       end
+
+      it "with group parent" do
+        account = create(:master_data_account)
+        role = create(:master_data_role, accounts: [account])
+
+        get api_v2_roles_path(account_uuid: account.uuid), nil, standard_headers
+
+        expect(json_body.length).to eq(1)
+        expect(json_body[0]["uuid"]).to eq(role.uuid)
+      end
     end
 
     describe "accept html" do

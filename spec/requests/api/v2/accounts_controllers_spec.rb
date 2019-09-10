@@ -31,6 +31,36 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
         expect(json_body.length).to eq(2)
         expect(json_body[0]["uuid"]).to eq(accounts[0].uuid)
       end
+
+      it "filter" do
+        get api_v2_accounts_path(email: accounts[0].email),
+            nil,
+            standard_headers
+
+        expect(json_body.length).to eq(1)
+        expect(json_body[0]["uuid"]).to eq(accounts[0].uuid)
+      end
+
+      it "filter, exact search" do
+        get api_v2_accounts_path(
+              email: accounts[0].email[0..-2], exact_search: "false",
+            ),
+            nil,
+            standard_headers
+
+        expect(json_body.length).to eq(1)
+        expect(json_body[0]["uuid"]).to eq(accounts[0].uuid)
+      end
+
+      it "with group parent" do
+        group = create(:master_data_group)
+        account = create(:master_data_account, groups: [group])
+
+        get api_v2_accounts_path(group_uuid: group.uuid), nil, standard_headers
+
+        expect(json_body.length).to eq(1)
+        expect(json_body[0]["uuid"]).to eq(account.uuid)
+      end
     end
 
     describe "accept html" do
