@@ -144,14 +144,19 @@ RSpec.describe MasterData::Account, type: :model do
  it "valid buque zaloeil with special char"
 
   describe "add/remove alias" do
-    account1 = create(:master_data_account)
+    subject { create(:master_data_account) }
+
     it "add new alias" do
-      account1.add_new_alias("alias1")
-      expect(account1.alias.first.name).to eq("alias1")
+      subject.add_new_alias("alias1")
+      expect(subject.alias.last.name).to eq("alias1")
     end
+
     it "refuse to add existing alias for this account" do
-      account1.add_new_alias("alias1")
-      expect(account1.alias.count).to eq(1)
+      before_count = subject.alias.count
+
+      subject.add_new_alias(subject.alias.first.name)
+
+      expect(subject.alias.count).to eq(before_count)
     end
   end
 

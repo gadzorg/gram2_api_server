@@ -9,9 +9,9 @@ FactoryBot.define do
     end
     firstname { Faker::Name.first_name }
     lastname { Faker::Name.last_name }
-    is_gadz true
+    is_gadz { true }
     # id_soce {(2000..20000).to_a.sample}
-    enabled true
+    enabled { true }
     password { Digest::SHA1.hexdigest uuid }
     email do
       Faker::Internet.safe_email(

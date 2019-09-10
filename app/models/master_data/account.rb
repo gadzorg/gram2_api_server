@@ -123,7 +123,7 @@ class MasterData::Account < MasterData::Base
   end
 
   def add_new_alias(alias_name)
-    unless self.alias.where(name: alias_name).any?
+    unless self.alias.exists?(name: alias_name)
       new_alias = MasterData::Alias.create(name: alias_name, account: self)
     end
   end
