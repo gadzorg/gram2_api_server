@@ -181,8 +181,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
   #  Groups management
   #########################################################
   def add_to_group
-    group_uuid = params[:group_uuid]
-    @group = MasterData::Group.find_by(uuid: group_uuid)
+    @group = MasterData::Group.find_by(uuid: params[:group_uuid])
     @groups = @account.groups
     authorize @group, :edit?
 
@@ -221,8 +220,7 @@ class Api::V2::AccountsController < Api::V2::BaseController
   #  Roles management
   #########################################################
   def add_role
-    role_uuid = params[:role_uuid]
-    @role = MasterData::Role.find_by(uuid: role_uuid)
+    @role = MasterData::Role.find_by!(uuid: params[:role_uuid])
     @roles = @account.roles
     authorize @role, :edit?
 
@@ -243,14 +241,14 @@ class Api::V2::AccountsController < Api::V2::BaseController
   end
 
   def revoke_role
-    role = @account.roles.find_by(uuid: params[:role_uuid])
+    role = @account.roles.find_by!(uuid: params[:role_uuid])
     authorize role, :edit?
 
     respond_to do |format|
       if @account.revoke_role role
         format.html do
           redirect_to api_v2_roles_url,
-                      notice: "Role was successfully revomed from this account."
+                      notice: "Role was successfully removed from this account."
         end
         format.json { head :no_content }
       end

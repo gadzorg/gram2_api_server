@@ -221,6 +221,130 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
     end
   end
 
+  describe "Roles management" do
+    subject { create(:master_data_account) }
+    let(:role) { create(:master_data_role) }
+
+    let(:pending_because_params) do
+      pending "broken because controller expects :uuid & :account_uuid params ?"
+    end
+
+    describe "adding a role" do
+      it "as json" do
+        pending_because_params
+
+        post account_add_role_path(account_uuid: subject.uuid),
+             { role_uuid: role.uuid },
+             standard_headers
+
+        expect(response).to have_http_status(:created)
+      end
+
+      it "as html" do
+        pending_because_params
+
+        post account_add_role_path(account_uuid: subject.uuid, format: :html),
+             { role_uuid: role.uuid },
+             standard_html_headers
+
+        assert_redirected_to api_v2_account_roles_path(
+                               account_uuid: subject.uuid,
+                             )
+      end
+    end
+
+    describe "revoking a role" do
+      it "as json" do
+        pending_because_params
+
+        delete account_revoke_roles_path(
+                 account_uuid: subject.uuid, role_uuid: role.uuid,
+               ),
+               nil,
+               standard_headers
+
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "as html" do
+        pending_because_params
+
+        delete account_revoke_roles_path(
+                 account_uuid: subject.uuid,
+                 role_uuid: role.uuid,
+                 format: :html,
+               ),
+               nil,
+               standard_html_headers
+
+        assert_redirected_to api_v2_roles_path
+      end
+    end
+  end
+
+  describe "Groups management" do
+    subject { create(:master_data_account) }
+    let(:group) { create(:master_data_group) }
+
+    let(:pending_because_params) do
+      pending "broken because controller expects :uuid & :account_uuid params ?"
+    end
+
+    describe "adding a group" do
+      it "as json" do
+        pending_because_params
+
+        post account_add_to_group_path(account_uuid: subject.uuid),
+             { group_uuid: group.uuid },
+             standard_headers
+
+        expect(response).to have_http_status(:created)
+      end
+
+      it "as html" do
+        pending_because_params
+
+        post account_add_to_group_path(
+               account_uuid: subject.uuid, format: :html,
+             ),
+             { group_uuid: group.uuid },
+             standard_html_headers
+
+        assert_redirected_to api_v2_account_groups_path(
+                               account_uuid: subject.uuid,
+                             )
+      end
+    end
+
+    describe "removing a role" do
+      it "as json" do
+        pending_because_params
+
+        delete account_remove_from_group_path(
+                 account_uuid: subject.uuid, group_uuid: group.uuid,
+               ),
+               nil,
+               standard_headers
+
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "as html" do
+        pending_because_params
+
+        delete account_remove_from_group_path(
+                 account_uuid: subject.uuid,
+                 group_uuid: group.uuid,
+                 format: :html,
+               ),
+               nil,
+               standard_html_headers
+
+        assert_redirected_to api_v2_accounts_path
+      end
+    end
+  end
+
   describe "ID_SOCE reservation" do
     it "reserve_next_id_soce" do
       post api_v2_accounts_reserve_next_id_soce_path, nil, standard_headers
