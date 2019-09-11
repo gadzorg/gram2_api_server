@@ -14,7 +14,7 @@ RSpec.describe "Api::V2::GroupsControllers", type: :request do
     let!(:groups) { create_list(:master_data_group, 2) }
 
     describe "accept json" do
-      let(:perform) { get api_v2_groups_path, nil, standard_headers }
+      let(:perform) { get api_v2_groups_path, headers: standard_headers }
 
       it "returns expected headers" do
         perform
@@ -32,7 +32,7 @@ RSpec.describe "Api::V2::GroupsControllers", type: :request do
       end
 
       it "filter" do
-        get api_v2_groups_path(name: groups[0].name), nil, standard_headers
+        get api_v2_groups_path(name: groups[0].name), headers: standard_headers
 
         expect(json_body.length).to eq(1)
         expect(json_body[0]["uuid"]).to eq(groups[0].uuid)
@@ -42,8 +42,7 @@ RSpec.describe "Api::V2::GroupsControllers", type: :request do
         get api_v2_groups_path(
               name: groups[0].name[0..-2], exact_search: "false",
             ),
-            nil,
-            standard_headers
+            headers: standard_headers
 
         expect(json_body.length).to eq(1)
         expect(json_body[0]["uuid"]).to eq(groups[0].uuid)
@@ -54,8 +53,7 @@ RSpec.describe "Api::V2::GroupsControllers", type: :request do
         group = create(:master_data_group, accounts: [account])
 
         get api_v2_groups_path(account_uuid: account.uuid),
-            nil,
-            standard_headers
+            headers: standard_headers
 
         expect(json_body.length).to eq(1)
         expect(json_body[0]["uuid"]).to eq(group.uuid)
@@ -64,7 +62,7 @@ RSpec.describe "Api::V2::GroupsControllers", type: :request do
 
     describe "accept html" do
       let(:perform) do
-        get api_v2_groups_path(format: :html), nil, standard_html_headers
+        get api_v2_groups_path(format: :html), headers: standard_html_headers
       end
 
       it "returns expected headers" do
@@ -91,7 +89,7 @@ RSpec.describe "Api::V2::GroupsControllers", type: :request do
 
     describe "accept json" do
       it "shows the group" do
-        get api_v2_group_path(uuid: subject.uuid), nil, standard_headers
+        get api_v2_group_path(uuid: subject.uuid), headers: standard_headers
 
         expect(response).to have_http_status(200)
         expect(json_body["uuid"]).to eq(subject.uuid)
@@ -99,7 +97,7 @@ RSpec.describe "Api::V2::GroupsControllers", type: :request do
       end
 
       it "returns a 404 for an group not found" do
-        get api_v2_group_path(uuid: "notfound"), nil, standard_headers
+        get api_v2_group_path(uuid: "notfound"), headers: standard_headers
 
         expect(response).to have_http_status(404)
       end
@@ -108,8 +106,7 @@ RSpec.describe "Api::V2::GroupsControllers", type: :request do
     describe "accept html" do
       it "shows the group" do
         get api_v2_group_path(uuid: subject.uuid, format: :html),
-            nil,
-            standard_html_headers
+            headers: standard_html_headers
 
         expect(response).to have_http_status(200)
         expect(response.body).to include(subject.uuid)
@@ -123,7 +120,8 @@ RSpec.describe "Api::V2::GroupsControllers", type: :request do
 
     describe "accept json" do
       it "create an group" do
-        post api_v2_groups_path, { group: subject }, standard_headers
+        post api_v2_groups_path,
+             params: { group: subject }, headers: standard_headers
 
         expect(response).to have_http_status(:created)
         expect(json_body["name"]).to eq(subject[:name])
@@ -133,8 +131,7 @@ RSpec.describe "Api::V2::GroupsControllers", type: :request do
 
       it "reject invalid group" do
         post api_v2_groups_path,
-             { group: subject.except(:name) },
-             standard_headers
+             params: { group: subject.except(:name) }, headers: standard_headers
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -143,16 +140,14 @@ RSpec.describe "Api::V2::GroupsControllers", type: :request do
     describe "accept html" do
       it "create an group" do
         post api_v2_groups_path(format: :html),
-             { group: subject },
-             standard_headers
+             params: { group: subject }, headers: standard_headers
 
         expect(response.body).to include(subject[:name])
       end
 
       it "reject invalid group" do
         post api_v2_groups_path(format: :html),
-             { group: subject.except(:name) },
-             standard_headers
+             params: { group: subject.except(:name) }, headers: standard_headers
 
         expect(response.body).to include("1 error")
         expect(response.body).to include("<form")
@@ -165,8 +160,8 @@ RSpec.describe "Api::V2::GroupsControllers", type: :request do
 
     it "update the group" do
       patch api_v2_group_path(subject.uuid),
-            { group: subject.attributes.merge(name: "new-name") },
-            standard_headers
+            params: { group: subject.attributes.merge(name: "new-name") },
+            headers: standard_headers
 
       expect(response).to have_http_status(:ok)
       expect(json_body["name"]).to eq("new-name")
@@ -177,8 +172,8 @@ RSpec.describe "Api::V2::GroupsControllers", type: :request do
 
     it "reject invalid data" do
       patch api_v2_group_path(subject.uuid),
-            { group: subject.attributes.merge(name: nil) },
-            standard_headers
+            params: { group: subject.attributes.merge(name: nil) },
+            headers: standard_headers
 
       expect(response).to have_http_status(:unprocessable_entity)
     end
@@ -189,7 +184,7 @@ RSpec.describe "Api::V2::GroupsControllers", type: :request do
 
     it "delete the group" do
       pending "As of 2019-09: deletion does not work (same for roles)"
-      delete api_v2_group_path(subject.uuid), nil, standard_headers
+      delete api_v2_group_path(subject.uuid), headers: standard_headers
 
       expect(response).to have_http_status(:no_content)
       expect(MasterData::Group.exists?(uuid: subject.uuid)).to be false

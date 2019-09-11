@@ -16,7 +16,7 @@ RSpec.describe "ClientsControllers", type: :request do
     let!(:clients) { create_list(:client, 2) }
 
     describe "accept json" do
-      let(:perform) { get clients_path, nil, standard_headers }
+      let(:perform) { get clients_path, headers: standard_headers }
 
       it "returns expected headers" do
         perform
@@ -36,7 +36,7 @@ RSpec.describe "ClientsControllers", type: :request do
 
     describe "accept html" do
       let(:perform) do
-        get clients_path(format: :html), nil, standard_html_headers
+        get clients_path(format: :html), headers: standard_html_headers
       end
 
       it "returns expected headers" do
@@ -63,7 +63,7 @@ RSpec.describe "ClientsControllers", type: :request do
 
     describe "accept json" do
       it "shows the client" do
-        get client_path(id: subject.id), nil, standard_headers
+        get client_path(id: subject.id), headers: standard_headers
 
         expect(response).to have_http_status(200)
         expect(json_body["id"]).to eq(subject.id)
@@ -71,7 +71,7 @@ RSpec.describe "ClientsControllers", type: :request do
       end
 
       it "returns a 404 for an client not found" do
-        get client_path(id: "notfound"), nil, standard_headers
+        get client_path(id: "notfound"), headers: standard_headers
 
         expect(response).to have_http_status(404)
       end
@@ -80,8 +80,7 @@ RSpec.describe "ClientsControllers", type: :request do
     describe "accept html" do
       it "shows the client" do
         get client_path(id: subject.id, format: :html),
-            nil,
-            standard_html_headers
+            headers: standard_html_headers
 
         expect(response).to have_http_status(200)
         expect(response.body).to include(subject.name)
@@ -95,7 +94,8 @@ RSpec.describe "ClientsControllers", type: :request do
 
     describe "accept json" do
       it "create an client" do
-        post clients_path, { client: subject }, standard_headers
+        post clients_path,
+             params: { client: subject }, headers: standard_headers
 
         expect(response).to have_http_status(:created)
         expect(json_body["email"]).to eq(subject[:email])
@@ -106,7 +106,9 @@ RSpec.describe "ClientsControllers", type: :request do
       it "reject invalid client" do
         pending "no validation for Client model"
 
-        post clients_path, { client: subject.except(:email) }, standard_headers
+        post clients_path,
+             params: { client: subject.except(:email) },
+             headers: standard_headers
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -114,7 +116,8 @@ RSpec.describe "ClientsControllers", type: :request do
 
     describe "accept html" do
       it "create an client" do
-        post clients_path(format: :html), { client: subject }, standard_headers
+        post clients_path(format: :html),
+             params: { client: subject }, headers: standard_headers
 
         assert_redirected_to client_path(Client.last.id)
       end
@@ -123,8 +126,8 @@ RSpec.describe "ClientsControllers", type: :request do
         pending "no validation for Client model"
 
         post clients_path(format: :html),
-             { client: subject.except(:email) },
-             standard_headers
+             params: { client: subject.except(:email) },
+             headers: standard_headers
 
         expect(response.body).to include("1 error")
         expect(response.body).to include("<form")
@@ -137,8 +140,8 @@ RSpec.describe "ClientsControllers", type: :request do
 
     it "update the client" do
       patch client_path(subject.id),
-            { client: subject.attributes.merge(name: "new-name") },
-            standard_headers
+            params: { client: subject.attributes.merge(name: "new-name") },
+            headers: standard_headers
 
       expect(response).to have_http_status(:ok)
       expect(json_body["name"]).to eq "new-name"
@@ -151,8 +154,8 @@ RSpec.describe "ClientsControllers", type: :request do
       pending "no validation for Client model"
 
       patch client_path(subject.id),
-            { client: subject.attributes.merge(email: nil) },
-            standard_headers
+            params: { client: subject.attributes.merge(email: nil) },
+            headers: standard_headers
 
       expect(response).to have_http_status(:unprocessable_entity)
     end
@@ -162,7 +165,7 @@ RSpec.describe "ClientsControllers", type: :request do
     subject { create(:client) }
 
     it "delete the client" do
-      delete client_path(subject.id), nil, standard_headers
+      delete client_path(subject.id), headers: standard_headers
 
       expect(response).to have_http_status(:no_content)
       expect(Client.exists?(id: subject.id)).to be false
@@ -175,16 +178,15 @@ RSpec.describe "ClientsControllers", type: :request do
     describe "Adding a role" do
       it "without resource" do
         post client_add_role_path(subject.id),
-             { role_name: "read" },
-             standard_html_headers
+             params: { role_name: "read" }, headers: standard_html_headers
 
         assert_redirected_to client_path(subject.id)
       end
 
       it "with resource" do
         post client_add_role_path(subject.id),
-             { role_name: "admin", ressource: "MasterData::Account" },
-             standard_html_headers
+             params: { role_name: "admin", ressource: "MasterData::Account" },
+             headers: standard_html_headers
 
         assert_redirected_to client_path(subject.id)
       end
@@ -193,16 +195,15 @@ RSpec.describe "ClientsControllers", type: :request do
     describe "Removing a role" do
       it "without resource" do
         post client_remove_role_path(subject.id),
-             { role_name: "read" },
-             standard_html_headers
+             params: { role_name: "read" }, headers: standard_html_headers
 
         assert_redirected_to client_path(subject.id)
       end
 
       it "with resource" do
         post client_remove_role_path(subject.id),
-             { role_name: "admin", ressource: "MasterData::Account" },
-             standard_html_headers
+             params: { role_name: "admin", ressource: "MasterData::Account" },
+             headers: standard_html_headers
 
         assert_redirected_to client_path(subject.id)
       end

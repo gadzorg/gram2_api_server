@@ -4,8 +4,12 @@ module ApiHelper
   end
   alias standard_html_headers auth_headers
 
+  def json_headers
+    { "Accept" => "application/json" }
+  end
+
   def standard_headers
-    auth_headers.merge("Accept" => "application/json")
+    auth_headers.merge(json_headers)
   end
 
   def json_body

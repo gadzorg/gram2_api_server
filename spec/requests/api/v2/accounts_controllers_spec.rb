@@ -16,7 +16,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
     let!(:accounts) { create_list(:master_data_account, 2) }
 
     describe "accept json" do
-      let(:perform) { get api_v2_accounts_path, nil, standard_headers }
+      let(:perform) { get api_v2_accounts_path, headers: standard_headers }
 
       it "returns expected headers" do
         perform
@@ -34,8 +34,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
 
       it "filter" do
         get api_v2_accounts_path(email: accounts[0].email),
-            nil,
-            standard_headers
+            headers: standard_headers
 
         expect(json_body.length).to eq(1)
         expect(json_body[0]["uuid"]).to eq(accounts[0].uuid)
@@ -45,8 +44,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
         get api_v2_accounts_path(
               email: accounts[0].email[0..-2], exact_search: "false",
             ),
-            nil,
-            standard_headers
+            headers: standard_headers
 
         expect(json_body.length).to eq(1)
         expect(json_body[0]["uuid"]).to eq(accounts[0].uuid)
@@ -56,7 +54,8 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
         group = create(:master_data_group)
         account = create(:master_data_account, groups: [group])
 
-        get api_v2_accounts_path(group_uuid: group.uuid), nil, standard_headers
+        get api_v2_accounts_path(group_uuid: group.uuid),
+            headers: standard_headers
 
         expect(json_body.length).to eq(1)
         expect(json_body[0]["uuid"]).to eq(account.uuid)
@@ -65,7 +64,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
 
     describe "accept html" do
       let(:perform) do
-        get api_v2_accounts_path(format: :html), nil, standard_html_headers
+        get api_v2_accounts_path(format: :html), headers: standard_html_headers
       end
 
       it "returns expected headers" do
@@ -92,7 +91,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
 
     describe "accept json" do
       it "shows the account" do
-        get api_v2_account_path(uuid: subject.uuid), nil, standard_headers
+        get api_v2_account_path(uuid: subject.uuid), headers: standard_headers
 
         expect(response).to have_http_status(200)
         expect(json_body["uuid"]).to eq(subject.uuid)
@@ -100,7 +99,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
       end
 
       it "returns a 404 for an account not found" do
-        get api_v2_account_path(uuid: "notfound"), nil, standard_headers
+        get api_v2_account_path(uuid: "notfound"), headers: standard_headers
 
         expect(response).to have_http_status(404)
       end
@@ -109,8 +108,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
     describe "accept html" do
       it "shows the account" do
         get api_v2_account_path(uuid: subject.uuid, format: :html),
-            nil,
-            standard_html_headers
+            headers: standard_html_headers
 
         expect(response).to have_http_status(200)
         expect(response.body).to include(subject.uuid)
@@ -121,7 +119,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
 
   describe "GET /api/v2/accounts/new" do
     it "shows the form account" do
-      get new_api_v2_account_path(format: :html), nil, standard_html_headers
+      get new_api_v2_account_path(format: :html), headers: standard_html_headers
 
       expect(response).to have_http_status(200)
       expect(response.body).to include("<form")
@@ -133,8 +131,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
 
     it "shows the form account" do
       get edit_api_v2_account_path(uuid: subject.uuid, format: :html),
-          nil,
-          standard_html_headers
+          headers: standard_html_headers
 
       expect(response).to have_http_status(200)
       expect(response.body).to include("<form")
@@ -148,7 +145,8 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
 
     describe "accept json" do
       it "create an account" do
-        post api_v2_accounts_path, { account: subject }, standard_headers
+        post api_v2_accounts_path,
+             params: { account: subject }, headers: standard_headers
 
         expect(response).to have_http_status(:created)
         expect(json_body["email"]).to eq(subject[:email])
@@ -158,8 +156,8 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
 
       it "reject invalid account" do
         post api_v2_accounts_path,
-             { account: subject.except(:password) },
-             standard_headers
+             params: { account: subject.except(:password) },
+             headers: standard_headers
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -168,16 +166,15 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
     describe "accept html" do
       it "create an account" do
         post api_v2_accounts_path(format: :html),
-             { account: subject },
-             standard_headers
+             params: { account: subject }, headers: standard_headers
 
         expect(response.body).to include(subject[:email])
       end
 
       it "reject invalid account" do
         post api_v2_accounts_path(format: :html),
-             { account: subject.except(:password) },
-             standard_headers
+             params: { account: subject.except(:password) },
+             headers: standard_headers
 
         expect(response.body).to include("1 error")
         expect(response.body).to include("<form")
@@ -190,8 +187,8 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
 
     it "update the account" do
       patch api_v2_account_path(subject.uuid),
-            { account: subject.attributes.merge(enabled: false) },
-            standard_headers
+            params: { account: subject.attributes.merge(enabled: false) },
+            headers: standard_headers
 
       expect(response).to have_http_status(:ok)
       expect(json_body["enabled"]).to be false
@@ -203,8 +200,8 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
 
     it "reject invalid data" do
       patch api_v2_account_path(subject.uuid),
-            { account: subject.attributes.merge(gender: "invalid") },
-            standard_headers
+            params: { account: subject.attributes.merge(gender: "invalid") },
+            headers: standard_headers
 
       expect(response).to have_http_status(:unprocessable_entity)
     end
@@ -214,7 +211,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
     subject { create(:master_data_account) }
 
     it "delete the account" do
-      delete api_v2_account_path(subject.uuid), nil, standard_headers
+      delete api_v2_account_path(subject.uuid), headers: standard_headers
 
       expect(response).to have_http_status(:no_content)
       expect(MasterData::Account.exists?(uuid: subject.uuid)).to be false
@@ -234,8 +231,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
         pending_because_params
 
         post account_add_role_path(account_uuid: subject.uuid),
-             { role_uuid: role.uuid },
-             standard_headers
+             params: { role_uuid: role.uuid }, headers: standard_headers
 
         expect(response).to have_http_status(:created)
       end
@@ -244,8 +240,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
         pending_because_params
 
         post account_add_role_path(account_uuid: subject.uuid, format: :html),
-             { role_uuid: role.uuid },
-             standard_html_headers
+             params: { role_uuid: role.uuid }, headers: standard_html_headers
 
         assert_redirected_to api_v2_account_roles_path(
                                account_uuid: subject.uuid,
@@ -260,8 +255,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
         delete account_revoke_roles_path(
                  account_uuid: subject.uuid, role_uuid: role.uuid,
                ),
-               nil,
-               standard_headers
+               headers: standard_headers
 
         expect(response).to have_http_status(:ok)
       end
@@ -274,8 +268,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
                  role_uuid: role.uuid,
                  format: :html,
                ),
-               nil,
-               standard_html_headers
+               headers: standard_html_headers
 
         assert_redirected_to api_v2_roles_path
       end
@@ -295,8 +288,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
         pending_because_params
 
         post account_add_to_group_path(account_uuid: subject.uuid),
-             { group_uuid: group.uuid },
-             standard_headers
+             params: { group_uuid: group.uuid }, headers: standard_headers
 
         expect(response).to have_http_status(:created)
       end
@@ -307,8 +299,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
         post account_add_to_group_path(
                account_uuid: subject.uuid, format: :html,
              ),
-             { group_uuid: group.uuid },
-             standard_html_headers
+             params: { group_uuid: group.uuid }, headers: standard_html_headers
 
         assert_redirected_to api_v2_account_groups_path(
                                account_uuid: subject.uuid,
@@ -323,8 +314,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
         delete account_remove_from_group_path(
                  account_uuid: subject.uuid, group_uuid: group.uuid,
                ),
-               nil,
-               standard_headers
+               headers: standard_headers
 
         expect(response).to have_http_status(:ok)
       end
@@ -337,8 +327,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
                  group_uuid: group.uuid,
                  format: :html,
                ),
-               nil,
-               standard_html_headers
+               headers: standard_html_headers
 
         assert_redirected_to api_v2_accounts_path
       end
@@ -347,7 +336,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
 
   describe "ID_SOCE reservation" do
     it "reserve_next_id_soce" do
-      post api_v2_accounts_reserve_next_id_soce_path, nil, standard_headers
+      post api_v2_accounts_reserve_next_id_soce_path, headers: standard_headers
 
       expect(response).to have_http_status(:created)
       expect(json_body["id_soce"]).to be_a Integer
