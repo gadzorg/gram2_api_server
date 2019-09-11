@@ -1,30 +1,38 @@
 class Clients::SessionsController < Devise::SessionsController
-  prepend_before_action :require_no_authentication, only: %i[create]
-
   skip_before_action :verify_authenticity_token
 
   respond_to :json
 
+  def after_sign_out_path_for(resource)
+    new_client_session_path
+  end
+
+  # TODO: get rid of this custom behavior :
+  # API clients should use token instead
   def create
-    #build_resource
-    # TODO : clean params and use permit
-    resource = Client.find_by(name: params[:client][:name])
+    # default behavior for html requests
+    return super if request.format.html?
+
+    # handle json authentications
+    resource = Client.find_by(name: client_params[:name])
 
     return invalid_login_attempt unless resource
 
-    if resource.valid_password?(params[:client][:password])
+    if resource.valid_password?(client_params[:password])
       sign_in("client", resource)
-      redirect_to root_path
+
+      @client = resource
+      render "clients/show", status: :created
     else
       invalid_login_attempt
     end
   end
 
-  def destroy
-    sign_out(resource_name)
-  end
-
   protected
+
+  def client_params
+    params.require(:client).permit(:name, :password)
+  end
 
   def invalid_login_attempt
     warden.custom_failure!

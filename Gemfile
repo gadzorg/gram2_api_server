@@ -3,7 +3,9 @@ source "https://rubygems.org"
 ruby File.read(".ruby-version").strip
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", "5.1.7"
+gem "rails", "5.2.3"
+gem "bootsnap", require: false
+
 # gem 'mysql2', '~> 0.3.20'
 gem "pg", "< 1" # 1.0 required postgresql > 9.2
 # gems for haml
@@ -76,6 +78,8 @@ group :development, :test do
 end
 
 group :development do
+  gem "listen", require: false
+
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem "web-console"
   gem "binding_of_caller"

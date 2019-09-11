@@ -18,7 +18,7 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 require "simplecov"
-SimpleCov.start "rails" unless ENV["NO_COVERAGE"].nil?
+SimpleCov.start "rails" if ENV["NO_COVERAGE"].nil?
 
 require "factory_bot_rails"
 require "helpers/api_helper"
