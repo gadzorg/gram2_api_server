@@ -1,4 +1,4 @@
-class Addmissingindex < ActiveRecord::Migration
+class Addmissingindex < ActiveRecord::Migration[4.2]
   def change
     add_index :gram_accounts_groups, :account_id
     add_index :gram_accounts_groups, :group_id

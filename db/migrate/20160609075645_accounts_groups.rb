@@ -1,4 +1,4 @@
-class AccountsGroups < ActiveRecord::Migration
+class AccountsGroups < ActiveRecord::Migration[4.2]
   def change
   	create_table :gram_accounts_groups do |t|
       t.integer :account_id
