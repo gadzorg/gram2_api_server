@@ -15,10 +15,3 @@ module GorgGramApiServer2
     config.autoload_paths << Rails.root.join('lib/gorg_rabbitmq_notifier')
   end
 end
-
-#Manager multiple databases
-db_conf = YAML::load(File.open(File.join(Rails.root,'config','database.yml')))
-
-require File.expand_path('config/extra_config.rb',Rails.root)
-
-RABBITMQ_CONFIG=ExtraConfig.new(File.expand_path("config/rabbitmq.yml",Rails.root),"RABBITMQ")
