@@ -20,10 +20,7 @@
           .menu-item>
             =link_to "Roles", roles_path, class: "menu-a"
           .menu-item>
-            =link_to "Déconnexion", destroy_client_session_path	, class: "menu-a"
+            =link_to "Déconnexion", destroy_client_session_path	, class: "menu-a", method: :delete
         -else
           .menu-item>
             =link_to "Connexion", new_client_session_path	, class: "menu-a"
-
-
-
