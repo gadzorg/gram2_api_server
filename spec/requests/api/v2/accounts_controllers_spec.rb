@@ -350,7 +350,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
       post api_v2_accounts_reserve_next_id_soce_path, nil, standard_headers
 
       expect(response).to have_http_status(:created)
-      expect(json_body["id_soce"]).to match(/^\d+/)
+      expect(json_body["id_soce"]).to be_a Integer
     end
   end
 end
