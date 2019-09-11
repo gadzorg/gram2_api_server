@@ -1,4 +1,4 @@
-class Client < ActiveRecord::Base
+class Client < ApplicationRecord
   rolify
   acts_as_token_authenticatable
 

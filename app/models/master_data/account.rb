@@ -93,7 +93,7 @@ class MasterData::Account < MasterData::Base
 
   def set_id_soce_seq_value_to_max
     self.class.connection.execute(
-      ActiveRecord::Base.send(
+      ApplicationRecord.send(
         :sanitize_sql_array,
         [
           "SELECT setval('id_soce_seq',(SELECT GREATEST((SELECT MAX(id_soce) FROM gram_accounts),(SELECT last_value FROM id_soce_seq),?)))",
