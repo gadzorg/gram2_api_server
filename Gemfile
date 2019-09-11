@@ -78,6 +78,8 @@ group :development, :test do
 end
 
 group :development do
+  gem "listen", require: false
+
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem "web-console"
   gem "binding_of_caller"
