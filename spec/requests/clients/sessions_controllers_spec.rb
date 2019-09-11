@@ -13,8 +13,7 @@ RSpec.describe "Clients::SessionsControllers", type: :request do
       it "create a new session" do
         post client_session_path, params: client_params, headers: json_headers
 
-        # TODO why a redirection for a json request ??
-        assert_redirected_to root_path
+        expect(response).to have_http_status(:created)
         assert_in_delta subject.last_sign_in_at, Time.zone.now, 1.second
       end
 
@@ -50,11 +49,21 @@ RSpec.describe "Clients::SessionsControllers", type: :request do
       describe "as html" do
         it "client not found" do
           post client_session_path(format: :html),
-               params: { client: { name: "notfound", password: "" } },
-               headers: json_headers
+               params: { client: { name: "notfound", password: "" } }
 
-          expect(response).to have_http_status(401)
+          expect(response.body).to include("Invalid")
+          expect(response.body).to include("Log in")
         end
+      end
+    end
+  end
+
+  describe "DELETE /clients/sign_out" do
+    describe "as html" do
+      it "client not found" do
+        delete client_session_path(format: :html)
+
+        assert_redirected_to new_client_session_path
       end
     end
   end
