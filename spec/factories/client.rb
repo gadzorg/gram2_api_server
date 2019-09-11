@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :client, class: "Client" do
-    name { Faker::App.name.downcase }
+    sequence(:name) { |n| "#{Faker::App.name.downcase}-#{n}" }
     password { Digest::SHA1.hexdigest name }
     authentication_token { nil }
     active { true }
