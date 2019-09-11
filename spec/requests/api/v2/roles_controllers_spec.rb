@@ -14,7 +14,7 @@ RSpec.describe "Api::V2::RolesControllers", type: :request do
     let!(:roles) { create_list(:master_data_role, 2) }
 
     describe "accept json" do
-      let(:perform) { get api_v2_roles_path, headers: standard_headers }
+      let(:perform) { get api_v2_roles_path, headers: json_auth_headers }
 
       it "returns expected headers" do
         perform
@@ -35,7 +35,7 @@ RSpec.describe "Api::V2::RolesControllers", type: :request do
         role = create(:master_data_role, accounts: [account])
 
         get api_v2_roles_path(account_uuid: account.uuid),
-            headers: standard_headers
+            headers: json_auth_headers
 
         expect(json_body.length).to eq(1)
         expect(json_body[0]["uuid"]).to eq(role.uuid)
@@ -44,7 +44,7 @@ RSpec.describe "Api::V2::RolesControllers", type: :request do
 
     describe "accept html" do
       let(:perform) do
-        get api_v2_roles_path(format: :html), headers: standard_html_headers
+        get api_v2_roles_path(format: :html), headers: html_auth_headers
       end
 
       it "returns expected headers" do
@@ -71,7 +71,7 @@ RSpec.describe "Api::V2::RolesControllers", type: :request do
 
     describe "accept json" do
       it "shows the role" do
-        get api_v2_role_path(uuid: subject.uuid), headers: standard_headers
+        get api_v2_role_path(uuid: subject.uuid), headers: json_auth_headers
 
         expect(response).to have_http_status(200)
         expect(json_body["uuid"]).to eq(subject.uuid)
@@ -79,7 +79,7 @@ RSpec.describe "Api::V2::RolesControllers", type: :request do
       end
 
       it "returns a 404 for an role not found" do
-        get api_v2_role_path(uuid: "notfound"), headers: standard_headers
+        get api_v2_role_path(uuid: "notfound"), headers: json_auth_headers
 
         expect(response).to have_http_status(404)
       end
@@ -88,7 +88,7 @@ RSpec.describe "Api::V2::RolesControllers", type: :request do
     describe "accept html" do
       it "shows the role" do
         get api_v2_role_path(uuid: subject.uuid, format: :html),
-            headers: standard_html_headers
+            headers: html_auth_headers
 
         expect(response).to have_http_status(200)
         expect(response.body).to include(subject.uuid)
@@ -103,7 +103,7 @@ RSpec.describe "Api::V2::RolesControllers", type: :request do
     describe "accept json" do
       it "create an role" do
         post api_v2_roles_path,
-             params: { role: subject }, headers: standard_headers
+             params: { role: subject }, headers: json_auth_headers
 
         expect(response).to have_http_status(:created)
         expect(json_body["name"]).to eq(subject[:name])
@@ -113,7 +113,7 @@ RSpec.describe "Api::V2::RolesControllers", type: :request do
 
       it "reject invalid role" do
         post api_v2_roles_path,
-             params: { role: subject.except(:name) }, headers: standard_headers
+             params: { role: subject.except(:name) }, headers: json_auth_headers
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -122,14 +122,14 @@ RSpec.describe "Api::V2::RolesControllers", type: :request do
     describe "accept html" do
       it "create an role" do
         post api_v2_roles_path(format: :html),
-             params: { role: subject }, headers: standard_headers
+             params: { role: subject }, headers: json_auth_headers
 
         expect(response.body).to include(subject[:name])
       end
 
       it "reject invalid role" do
         post api_v2_roles_path(format: :html),
-             params: { role: subject.except(:name) }, headers: standard_headers
+             params: { role: subject.except(:name) }, headers: json_auth_headers
 
         expect(response.body).to include("1 error")
         expect(response.body).to include("<form")
@@ -143,7 +143,7 @@ RSpec.describe "Api::V2::RolesControllers", type: :request do
     it "update the role" do
       patch api_v2_role_path(subject.uuid),
             params: { role: subject.attributes.merge(name: "new-name") },
-            headers: standard_headers
+            headers: json_auth_headers
 
       expect(response).to have_http_status(:ok)
       expect(json_body["name"]).to eq("new-name")
@@ -155,7 +155,7 @@ RSpec.describe "Api::V2::RolesControllers", type: :request do
     it "reject invalid data" do
       patch api_v2_role_path(subject.uuid),
             params: { role: subject.attributes.merge(name: nil) },
-            headers: standard_headers
+            headers: json_auth_headers
 
       expect(response).to have_http_status(:unprocessable_entity)
     end
@@ -166,7 +166,7 @@ RSpec.describe "Api::V2::RolesControllers", type: :request do
 
     it "delete the role" do
       pending "As of 2019-09: deletion does not work (same for groups)"
-      delete api_v2_role_path(subject.uuid), headers: standard_headers
+      delete api_v2_role_path(subject.uuid), headers: json_auth_headers
 
       expect(response).to have_http_status(:no_content)
       expect(MasterData::Role.exists?(uuid: subject.uuid)).to be false
