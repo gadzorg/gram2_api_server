@@ -1,7 +1,5 @@
 class Clients::SessionsController < Devise::SessionsController
-  prepend_before_filter :require_no_authentication, only: %i[create]
-
-  #before_filter :ensure_params_exist
+  prepend_before_action :require_no_authentication, only: %i[create]
 
   skip_before_action :verify_authenticity_token
 

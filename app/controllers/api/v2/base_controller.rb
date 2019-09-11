@@ -3,7 +3,7 @@ class Api::V2::BaseController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   before_action :authenticate_client!
-  before_filter :require_login
+  before_action :require_login
 
   # check if authorize is called for every action
   after_action :verify_authorized
