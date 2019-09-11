@@ -4,6 +4,8 @@ ruby File.read(".ruby-version").strip
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "5.2.3"
+gem "bootsnap", require: false
+
 # gem 'mysql2', '~> 0.3.20'
 gem "pg", "< 1" # 1.0 required postgresql > 9.2
 # gems for haml
