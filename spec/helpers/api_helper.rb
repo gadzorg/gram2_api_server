@@ -12,7 +12,8 @@ module ApiHelper
     auth_headers.merge(json_headers)
   end
 
-  def json_body
-    @json_body ||= JSON.parse(response.body)
-  end
+  # def response.parsed_body
+  #   binding.pry
+  #   @response.parsed_body ||= JSON.parse(response.body)
+  # end
 end

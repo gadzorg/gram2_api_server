@@ -26,8 +26,8 @@ RSpec.describe "Api::V2::RolesControllers", type: :request do
       it "list roles" do
         perform
 
-        expect(json_body.length).to eq(2)
-        expect(json_body[0]["uuid"]).to eq(roles[0].uuid)
+        expect(response.parsed_body.length).to eq(2)
+        expect(response.parsed_body[0]["uuid"]).to eq(roles[0].uuid)
       end
 
       it "with group parent" do
@@ -37,8 +37,8 @@ RSpec.describe "Api::V2::RolesControllers", type: :request do
         get api_v2_roles_path(account_uuid: account.uuid),
             headers: json_auth_headers
 
-        expect(json_body.length).to eq(1)
-        expect(json_body[0]["uuid"]).to eq(role.uuid)
+        expect(response.parsed_body.length).to eq(1)
+        expect(response.parsed_body[0]["uuid"]).to eq(role.uuid)
       end
     end
 
@@ -74,8 +74,8 @@ RSpec.describe "Api::V2::RolesControllers", type: :request do
         get api_v2_role_path(uuid: subject.uuid), headers: json_auth_headers
 
         expect(response).to have_http_status(200)
-        expect(json_body["uuid"]).to eq(subject.uuid)
-        expect(json_body["name"]).to eq(subject.name)
+        expect(response.parsed_body["uuid"]).to eq(subject.uuid)
+        expect(response.parsed_body["name"]).to eq(subject.name)
       end
 
       it "returns a 404 for an role not found" do
@@ -106,9 +106,11 @@ RSpec.describe "Api::V2::RolesControllers", type: :request do
              params: { role: subject }, headers: json_auth_headers
 
         expect(response).to have_http_status(:created)
-        expect(json_body["name"]).to eq(subject[:name])
+        expect(response.parsed_body["name"]).to eq(subject[:name])
 
-        expect(MasterData::Role.exists?(uuid: json_body["uuid"])).to be true
+        expect(
+          MasterData::Role.exists?(uuid: response.parsed_body["uuid"]),
+        ).to be true
       end
 
       it "reject invalid role" do
@@ -146,7 +148,7 @@ RSpec.describe "Api::V2::RolesControllers", type: :request do
             headers: json_auth_headers
 
       expect(response).to have_http_status(:ok)
-      expect(json_body["name"]).to eq("new-name")
+      expect(response.parsed_body["name"]).to eq("new-name")
 
       subject.reload
       expect(subject.name).to eq("new-name")

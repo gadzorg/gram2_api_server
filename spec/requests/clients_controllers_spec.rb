@@ -29,8 +29,8 @@ RSpec.describe "ClientsControllers", type: :request do
         perform
 
         # 3 clients because it's include API client created during setup
-        expect(json_body.length).to eq(3)
-        expect(json_body[2]["id"]).to eq(clients.last.id)
+        expect(response.parsed_body.length).to eq(3)
+        expect(response.parsed_body[2]["id"]).to eq(clients.last.id)
       end
     end
 
@@ -66,8 +66,8 @@ RSpec.describe "ClientsControllers", type: :request do
         get client_path(id: subject.id), headers: json_auth_headers
 
         expect(response).to have_http_status(200)
-        expect(json_body["id"]).to eq(subject.id)
-        expect(json_body["email"]).to eq(subject.email)
+        expect(response.parsed_body["id"]).to eq(subject.id)
+        expect(response.parsed_body["email"]).to eq(subject.email)
       end
 
       it "returns a 404 for an client not found" do
@@ -98,9 +98,9 @@ RSpec.describe "ClientsControllers", type: :request do
              params: { client: subject }, headers: json_auth_headers
 
         expect(response).to have_http_status(:created)
-        expect(json_body["email"]).to eq(subject[:email])
+        expect(response.parsed_body["email"]).to eq(subject[:email])
 
-        expect(Client.exists?(id: json_body["id"])).to be true
+        expect(Client.exists?(id: response.parsed_body["id"])).to be true
       end
 
       it "reject invalid client" do
@@ -144,7 +144,7 @@ RSpec.describe "ClientsControllers", type: :request do
             headers: json_auth_headers
 
       expect(response).to have_http_status(:ok)
-      expect(json_body["name"]).to eq "new-name"
+      expect(response.parsed_body["name"]).to eq "new-name"
 
       subject.reload
       expect(subject.name).to eq "new-name"

@@ -34,7 +34,7 @@ RSpec.describe "Clients::SessionsControllers", type: :request do
                headers: json_headers
 
           expect(response).to have_http_status(401)
-          expect(json_body["success"]).to be false
+          expect(response.parsed_body["success"]).to be false
         end
 
         it "wrong password" do
@@ -43,7 +43,7 @@ RSpec.describe "Clients::SessionsControllers", type: :request do
                headers: json_headers
 
           expect(response).to have_http_status(401)
-          expect(json_body["success"]).to be false
+          expect(response.parsed_body["success"]).to be false
         end
       end
 

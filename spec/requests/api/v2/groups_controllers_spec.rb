@@ -26,16 +26,16 @@ RSpec.describe "Api::V2::GroupsControllers", type: :request do
       it "list groups" do
         perform
 
-        expect(json_body.length).to eq(2)
-        expect(json_body[0]["uuid"]).to eq(groups[0].uuid)
-        expect(json_body[0]["name"]).to eq(groups[0].name)
+        expect(response.parsed_body.length).to eq(2)
+        expect(response.parsed_body[0]["uuid"]).to eq(groups[0].uuid)
+        expect(response.parsed_body[0]["name"]).to eq(groups[0].name)
       end
 
       it "filter" do
         get api_v2_groups_path(name: groups[0].name), headers: json_auth_headers
 
-        expect(json_body.length).to eq(1)
-        expect(json_body[0]["uuid"]).to eq(groups[0].uuid)
+        expect(response.parsed_body.length).to eq(1)
+        expect(response.parsed_body[0]["uuid"]).to eq(groups[0].uuid)
       end
 
       it "filter, exact search" do
@@ -44,8 +44,8 @@ RSpec.describe "Api::V2::GroupsControllers", type: :request do
             ),
             headers: json_auth_headers
 
-        expect(json_body.length).to eq(1)
-        expect(json_body[0]["uuid"]).to eq(groups[0].uuid)
+        expect(response.parsed_body.length).to eq(1)
+        expect(response.parsed_body[0]["uuid"]).to eq(groups[0].uuid)
       end
 
       it "with account parent" do
@@ -55,8 +55,8 @@ RSpec.describe "Api::V2::GroupsControllers", type: :request do
         get api_v2_groups_path(account_uuid: account.uuid),
             headers: json_auth_headers
 
-        expect(json_body.length).to eq(1)
-        expect(json_body[0]["uuid"]).to eq(group.uuid)
+        expect(response.parsed_body.length).to eq(1)
+        expect(response.parsed_body[0]["uuid"]).to eq(group.uuid)
       end
     end
 
@@ -92,8 +92,8 @@ RSpec.describe "Api::V2::GroupsControllers", type: :request do
         get api_v2_group_path(uuid: subject.uuid), headers: json_auth_headers
 
         expect(response).to have_http_status(200)
-        expect(json_body["uuid"]).to eq(subject.uuid)
-        expect(json_body["name"]).to eq(subject.name)
+        expect(response.parsed_body["uuid"]).to eq(subject.uuid)
+        expect(response.parsed_body["name"]).to eq(subject.name)
       end
 
       it "returns a 404 for an group not found" do
@@ -124,9 +124,11 @@ RSpec.describe "Api::V2::GroupsControllers", type: :request do
              params: { group: subject }, headers: json_auth_headers
 
         expect(response).to have_http_status(:created)
-        expect(json_body["name"]).to eq(subject[:name])
+        expect(response.parsed_body["name"]).to eq(subject[:name])
 
-        expect(MasterData::Group.exists?(uuid: json_body["uuid"])).to be true
+        expect(
+          MasterData::Group.exists?(uuid: response.parsed_body["uuid"]),
+        ).to be true
       end
 
       it "reject invalid group" do
@@ -166,7 +168,7 @@ RSpec.describe "Api::V2::GroupsControllers", type: :request do
             headers: json_auth_headers
 
       expect(response).to have_http_status(:ok)
-      expect(json_body["name"]).to eq("new-name")
+      expect(response.parsed_body["name"]).to eq("new-name")
 
       subject.reload
       expect(subject.name).to eq("new-name")

@@ -28,16 +28,16 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
       it "list accounts" do
         perform
 
-        expect(json_body.length).to eq(2)
-        expect(json_body[0]["uuid"]).to eq(accounts[0].uuid)
+        expect(response.parsed_body.length).to eq(2)
+        expect(response.parsed_body[0]["uuid"]).to eq(accounts[0].uuid)
       end
 
       it "filter" do
         get api_v2_accounts_path(email: accounts[0].email),
             headers: json_auth_headers
 
-        expect(json_body.length).to eq(1)
-        expect(json_body[0]["uuid"]).to eq(accounts[0].uuid)
+        expect(response.parsed_body.length).to eq(1)
+        expect(response.parsed_body[0]["uuid"]).to eq(accounts[0].uuid)
       end
 
       it "filter, exact search" do
@@ -46,8 +46,8 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
             ),
             headers: json_auth_headers
 
-        expect(json_body.length).to eq(1)
-        expect(json_body[0]["uuid"]).to eq(accounts[0].uuid)
+        expect(response.parsed_body.length).to eq(1)
+        expect(response.parsed_body[0]["uuid"]).to eq(accounts[0].uuid)
       end
 
       it "with group parent" do
@@ -57,8 +57,8 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
         get api_v2_accounts_path(group_uuid: group.uuid),
             headers: json_auth_headers
 
-        expect(json_body.length).to eq(1)
-        expect(json_body[0]["uuid"]).to eq(account.uuid)
+        expect(response.parsed_body.length).to eq(1)
+        expect(response.parsed_body[0]["uuid"]).to eq(account.uuid)
       end
     end
 
@@ -94,8 +94,8 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
         get api_v2_account_path(uuid: subject.uuid), headers: json_auth_headers
 
         expect(response).to have_http_status(200)
-        expect(json_body["uuid"]).to eq(subject.uuid)
-        expect(json_body["email"]).to eq(subject.email)
+        expect(response.parsed_body["uuid"]).to eq(subject.uuid)
+        expect(response.parsed_body["email"]).to eq(subject.email)
       end
 
       it "returns a 404 for an account not found" do
@@ -149,9 +149,11 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
              params: { account: subject }, headers: json_auth_headers
 
         expect(response).to have_http_status(:created)
-        expect(json_body["email"]).to eq(subject[:email])
+        expect(response.parsed_body["email"]).to eq(subject[:email])
 
-        expect(MasterData::Account.exists?(uuid: json_body["uuid"])).to be true
+        expect(
+          MasterData::Account.exists?(uuid: response.parsed_body["uuid"]),
+        ).to be true
       end
 
       it "reject invalid account" do
@@ -191,7 +193,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
             headers: json_auth_headers
 
       expect(response).to have_http_status(:ok)
-      expect(json_body["enabled"]).to be false
+      expect(response.parsed_body["enabled"]).to be false
 
       subject.reload
       expect(subject.enabled?).to be false
@@ -339,7 +341,7 @@ RSpec.describe "Api::V2::AccountsControllers", type: :request do
       post api_v2_accounts_reserve_next_id_soce_path, headers: json_auth_headers
 
       expect(response).to have_http_status(:created)
-      expect(json_body["id_soce"]).to be_a Integer
+      expect(response.parsed_body["id_soce"]).to be_a Integer
     end
   end
 end
