@@ -59,6 +59,7 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     amq-protocol (2.3.0)
     arel (9.0.0)
+    ast (2.4.0)
     bcrypt (3.1.13)
     better_errors (2.5.1)
       coderay (>= 1.0.0)
@@ -169,6 +170,8 @@ GEM
     nokogiri (1.10.4)
       mini_portile2 (~> 2.4.0)
     orm_adapter (0.5.0)
+    parser (2.6.4.1)
+      ast (~> 2.4.0)
     pg (0.21.0)
     pry (0.12.2)
       coderay (~> 1.1.0)
@@ -256,6 +259,8 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    scout_apm (2.6.0)
+      parser
     sdoc (1.0.0)
       rdoc (>= 5.0)
     sexp_processor (4.12.1)
@@ -340,6 +345,7 @@ DEPENDENCIES
   rolify
   rspec-rails
   sass-rails
+  scout_apm
   sdoc
   shoulda-callback-matchers
   shoulda-matchers
