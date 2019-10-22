@@ -16,6 +16,6 @@ module GorgGramApiServer2
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
 
-    config.autoload_paths << Rails.root.join("lib/gorg_rabbitmq_notifier")
+    config.eager_load_paths << Rails.root.join("lib", "gorg_rabbitmq_notifier")
   end
 end
