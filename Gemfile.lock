@@ -4,6 +4,15 @@ GIT
   specs:
     heroku_secrets (0.0.2)
 
+GIT
+  remote: https://github.com/gadzorg/gorg_message_sender
+  revision: 4084134a7c85290223e38b7449789d4cdc041f68
+  ref: v1.4.6
+  specs:
+    gorg_message_sender (1.4.6)
+      bunny (~> 2.2, >= 2.2.2)
+      json-schema (~> 2.6)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -73,7 +82,7 @@ GEM
     bootsnap (1.4.5)
       msgpack (~> 1.0)
     builder (3.2.3)
-    bunny (2.14.2)
+    bunny (2.14.3)
       amq-protocol (~> 2.3, >= 2.3.0)
     byebug (11.0.1)
     case_transform (0.2)
@@ -107,9 +116,6 @@ GEM
     ffi (1.11.1)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    gorg_message_sender (1.4.5)
-      bunny (~> 2.2, >= 2.2.2)
-      json-schema (~> 2.6)
     gorg_service (4.1.0)
       bunny (~> 2.2, >= 2.2.2)
       gorg_message_sender (~> 1)
@@ -327,7 +333,7 @@ DEPENDENCIES
   devise-encryptable
   factory_bot_rails
   faker
-  gorg_message_sender
+  gorg_message_sender!
   gorg_service (< 5)
   haml-rails
   heroku_secrets!

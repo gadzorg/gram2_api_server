@@ -36,7 +36,7 @@ gem "sdoc", group: :doc
 
 gem "active_model_serializers"
 
-gem "gorg_message_sender"
+gem "gorg_message_sender", git: "https://github.com/gadzorg/gorg_message_sender", ref: "v1.4.6"
 gem "gorg_service", "< 5" # v5 changes MessageHandler structure
 
 gem "redis"
