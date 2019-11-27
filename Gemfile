@@ -1,19 +1,18 @@
 source 'https://rubygems.org'
 
-ruby '2.5.5'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~>5.2.3'
+gem 'rails', '~>4.2'
 # gem 'mysql2', '~> 0.3.20'
 gem 'pg'
 # gems for haml
-gem "haml-rails"
+gem "haml-rails", "~> 0.9"
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails'
+gem 'coffee-rails', '~> 4.1.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 gem 'therubyracer', platforms: :ruby
 
@@ -54,7 +53,7 @@ gem 'pundit'
 # Roles
 gem 'rolify', '~> 5.1'
 
-gem 'factory_bot_rails'
+gem 'factory_girl_rails'
 gem 'faker'
 
 # pagination
@@ -65,7 +64,7 @@ gem 'scout_apm'
 
 group :production do
   #HEROKU
-  gem 'heroku_secrets', :git => "https://github.com/gadzorg/heroku_secrets.git"
+  gem 'heroku_secrets', github: 'alexpeattie/heroku_secrets'
   gem 'rails_12factor'
   gem 'puma'
 end
