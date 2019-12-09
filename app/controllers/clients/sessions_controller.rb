@@ -1,83 +1,44 @@
 class Clients::SessionsController < Devise::SessionsController
-# before_action :configure_sign_in_params, only: [:create]
-
-  # GET /resource/sign_in
-  def new
-    super
-    puts "=============nes sess"
-    puts resource
-    puts resource.name
-  end
-
-  # POST /resource/sign_in
-  # def create
-  #   super
-  # end
-
-  # DELETE /resource/sign_out
-  # def destroy
-  #   super
-  # end
-
-  # protected
-
-  # If you have extra params to permit, append them to the sanitizer.
-  # def configure_sign_in_params
-  #   devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])
-  # end
-
-  prepend_before_filter :require_no_authentication, :only => [:create ]
-  # include Devise::Controllers::InternalHelpers
-
-  #before_filter :ensure_params_exist
-
   skip_before_action :verify_authenticity_token
-
 
   respond_to :json
 
+  def after_sign_out_path_for(resource)
+    new_client_session_path
+  end
+
+  # TODO: get rid of this custom behavior :
+  # API clients should use token instead
   def create
-    #build_resource
-    # TODO : clean params and use permit
-    resource = Client.find_by(name: params[:client][:name])
-    puts "======================="
-    puts resource
-    puts params[:client][:name]
+    # default behavior for html requests
+    return super if request.format.html?
+
+    # handle json authentications
+    resource = Client.find_by(name: client_params[:name])
+
     return invalid_login_attempt unless resource
 
-    if resource.valid_password?(params[:client][:password])
+    if resource.valid_password?(client_params[:password])
       sign_in("client", resource)
-      redirect_to root_path
+
+      @client = resource
+      render "clients/show", status: :created
     else
-     invalid_login_attempt
+      invalid_login_attempt
     end
   end
 
-  # def create
-  #   build_resource
-  #   resource = Client.find_for_database_authentication(:login=>params[:client_login][:login])
-  #   return invalid_login_attempt unless resource
-  #
-  #   if resource.valid_password?(params[:client_login][:password])
-  #     sign_in("user", resource)
-  #     render :json=> {:success=>true, :auth_token=>resource.authentication_token, :login=>resource.login, :email=>resource.email}
-  #     return
-  #   end
-  #   invalid_login_attempt
-  # end
-  #
-  def destroy
-    sign_out(resource_name)
-  end
-  #
   protected
-  # def ensure_params_exist
-  #   return unless params[:client_login].blank?
-  #   render :json=>{:success=>false, :message=>"missing user_login parameter"}, :status=>422
-  # end
-  #
+
+  def client_params
+    params.require(:client).permit(:name, :password)
+  end
+
   def invalid_login_attempt
-     warden.custom_failure!
-     render :json=> {:success=>false, :message=>"Error with your login or password"}, :status=>401
+    warden.custom_failure!
+    render json: {
+             success: false, message: "Error with your login or password"
+           },
+           status: 401
   end
 end

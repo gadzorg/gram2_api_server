@@ -1,5 +1,5 @@
 default: &default
-  application_id: "soa-supervision"
+  sender: "soa-supervision"
   host: localhost
   port: 5672
   vhost: /
@@ -8,7 +8,7 @@ default: &default
   max_attempts: 10
   exchange_name: "agoram_event_exchange"
   user: guest
-  password: 
+  password:
   logging_key: "log"
 
 

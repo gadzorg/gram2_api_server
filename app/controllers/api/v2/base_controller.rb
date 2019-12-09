@@ -3,12 +3,12 @@ class Api::V2::BaseController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   before_action :authenticate_client!
-  before_filter :require_login
+  before_action :require_login
 
   # check if authorize is called for every action
   after_action :verify_authorized
 
-  #To send context to serializer. Used to manage fields' filter with special ACL
+  # To send context to serializer. Used to manage fields' filter with special ACL
   serialization_scope :view_context
 
   private
@@ -19,15 +19,11 @@ class Api::V2::BaseController < ApplicationController
 
   def set_group_parent
     @group = MasterData::Group.find_by(uuid: params[:group_uuid])
-
   end
 
   def require_login
-    # TODO : remove lines bellow
-    puts "==============================================="
-    puts current_client.name
     unless current_client
-      render status: :unauthorized, json: {message: "401 Unauthorized"}
+      render status: :unauthorized, json: { message: "401 Unauthorized" }
     end
   end
 end

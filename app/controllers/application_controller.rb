@@ -20,6 +20,7 @@ class ApplicationController < ActionController::Base
     policy_name = exception.policy.class.to_s.underscore
 
     # TODO : remove policy name in exception
-    render status: :forbidden, json: {message: "Forbidden. #{policy_name}.#{exception.query}"}
+    render status: :forbidden,
+           json: { message: "Forbidden. #{policy_name}.#{exception.query}" }
   end
 end

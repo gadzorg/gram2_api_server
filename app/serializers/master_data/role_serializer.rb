@@ -3,6 +3,6 @@ class MasterData::RoleSerializer < BaseSerializer
   attributes :url
 
   def url
-  	api_v2_role_path(object)
+    api_v2_role_path(object)
   end
 end
