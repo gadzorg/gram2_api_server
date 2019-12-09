@@ -28,18 +28,23 @@
 # =>  "other data"
 
 class ExtraConfig
-  def initialize(file_path=nil, env_prefix="" , env=Rails.env)
-    @env_prefix=env_prefix
-    @yaml_config = (file_path && File.exist?(file_path)) ? YAML::load(File.open(file_path))[env] : {}
+  def initialize(file_path = nil, env_prefix = "", env = Rails.env)
+    @env_prefix = env_prefix
+    @yaml_config =
+      if (file_path && File.exist?(file_path))
+        YAML.load(File.open(file_path))[env]
+      else
+        {}
+      end
   end
 
   def [](k)
-    key=k.to_s
-    env_value(key)|| @yaml_config[key]
+    key = k.to_s
+    env_value(key) || @yaml_config[key]
   end
 
   def env_value(key)
-    env_var_name="#{@env_prefix}_#{key.to_s.upcase}"
+    env_var_name = "#{@env_prefix}_#{key.to_s.upcase}"
     ENV[env_var_name]
   end
 end

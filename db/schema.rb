@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161115135718) do
+ActiveRecord::Schema.define(version: 20180216153322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,8 +50,8 @@ ActiveRecord::Schema.define(version: 20161115135718) do
   create_table "gram_accounts", force: :cascade do |t|
     t.uuid     "uuid"
     t.string   "hruid"
-    t.integer  "id_soce",               default: "nextval('id_soce_seq'::regclass)"
-    t.boolean  "enabled",               default: true
+    t.integer  "id_soce",                default: "nextval('id_soce_seq'::regclass)"
+    t.boolean  "enabled",                default: true
     t.string   "password"
     t.string   "lastname"
     t.string   "firstname"
@@ -76,15 +76,15 @@ ActiveRecord::Schema.define(version: 20161115135718) do
     t.string   "gadz_proms_secondaire"
     t.string   "avatar_url"
     t.string   "description"
-    t.datetime "created_at",                                                         null: false
-    t.datetime "updated_at",                                                         null: false
-    t.boolean  "is_soce_employee",      default: false
+    t.datetime "created_at",                                                          null: false
+    t.datetime "updated_at",                                                          null: false
+    t.boolean  "is_soce_employee",       default: false
     t.string   "gapps_id"
     t.boolean  "is_from_legacy_gram1"
-    t.integer  "audit_status",          default: 0
+    t.integer  "audit_status",           default: 0
     t.string   "audit_comments"
-    t.string   "updated_by",            default: ""
-    t.string   "password_updated_by",   default: ""
+    t.string   "updated_by",             default: ""
+    t.string   "password_updated_by",    default: ""
     t.datetime "password_updated_at"
     t.string   "gadz_centre_principal"
     t.string   "gadz_centre_secondaire"
@@ -152,8 +152,8 @@ ActiveRecord::Schema.define(version: 20161115135718) do
     t.string   "name"
     t.integer  "resource_id"
     t.string   "resource_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", using: :btree

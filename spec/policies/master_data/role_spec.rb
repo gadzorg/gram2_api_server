@@ -1,10 +1,10 @@
-require 'spec_helper'
+require "rails_helper"
 require 'rolify'
 
 describe MasterData::RolePolicy do
   subject { MasterData::RolePolicy.new(client, role) }
 
-  let(:role) { FactoryGirl.create(:master_data_role) }
+  let(:role) { create(:master_data_role) }
 
   context "for a not authenticated client" do
     let(:client) { nil }
@@ -16,7 +16,7 @@ describe MasterData::RolePolicy do
   end
 
   context "for a role reader" do
-    let(:client) {FactoryGirl.create(:client)}
+    let(:client) {create(:client)}
     before {client.add_role :read, MasterData::Role}
 
     it { should permit(:index)       }
@@ -26,7 +26,7 @@ describe MasterData::RolePolicy do
   end
 
   context "for a global reader" do
-    let(:client) {FactoryGirl.create(:client)}
+    let(:client) {create(:client)}
     before {client.add_role :read}
 
     it { should permit(:index)       }
@@ -36,7 +36,7 @@ describe MasterData::RolePolicy do
   end
 
   context "for a role admin" do
-    let(:client) {FactoryGirl.create(:client)}
+    let(:client) {create(:client)}
     before {client.add_role :admin, MasterData::Role}
 
     it { should permit(:index)   }
@@ -46,7 +46,7 @@ describe MasterData::RolePolicy do
   end
 
   context "for a global admin" do
-    let(:client) {FactoryGirl.create(:client)}
+    let(:client) {create(:client)}
     before {client.add_role :admin}
 
     it { should permit(:index)   }

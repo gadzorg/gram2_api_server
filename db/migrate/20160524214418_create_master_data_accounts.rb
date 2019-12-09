@@ -1,4 +1,4 @@
-class CreateMasterDataAccounts < ActiveRecord::Migration
+class CreateMasterDataAccounts < ActiveRecord::Migration[4.2]
   def self.up
     create_table :gram_accounts do |t|
       t.uuid :uuid, :unique => true, :index => true

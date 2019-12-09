@@ -6,7 +6,7 @@ class MasterData::Alias < MasterData::Base
   #after_save :sync_attached_account_to_ldap
 
   #model validation
-  validates :name, presence: true, :uniqueness => {:case_sensitive => false}
+  validates :name, presence: true, uniqueness: { case_sensitive: false }
 
   # def sync_attached_account_to_ldap
 
@@ -16,6 +16,4 @@ class MasterData::Alias < MasterData::Base
   def rabbitmq_id
     name
   end
-
 end
-

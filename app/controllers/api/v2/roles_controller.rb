@@ -1,7 +1,6 @@
 class Api::V2::RolesController < Api::V2::BaseController
-  before_action :set_api_v2_role, only: [:show, :edit, :update, :destroy]
-  before_action :set_account_parent, only: [:index]
-
+  before_action :set_api_v2_role, only: %i[show edit update destroy]
+  before_action :set_account_parent, only: %i[index]
 
   # GET /api/v2/roles
   # GET /api/v2/roles.json
@@ -13,8 +12,8 @@ class Api::V2::RolesController < Api::V2::BaseController
     end
     authorize @roles, :index?
     respond_to do |format|
-      format.html {render :index}
-      format.json {render json: @roles}
+      format.html { render :index }
+      format.json { render json: @roles }
     end
   end
 
@@ -23,8 +22,8 @@ class Api::V2::RolesController < Api::V2::BaseController
   def show
     authorize @role, :index?
     respond_to do |format|
-      format.html {render :show}
-      format.json {render json: @role}
+      format.html { render :show }
+      format.json { render json: @role }
     end
   end
 
@@ -47,7 +46,7 @@ class Api::V2::RolesController < Api::V2::BaseController
 
     respond_to do |format|
       if @role.save
-        format.html { render :show, notice: 'Role was successfully created.' }
+        format.html { render :show, notice: "Role was successfully created." }
         format.json { render json: @role, status: :created }
       else
         format.html { render :new }
@@ -62,8 +61,8 @@ class Api::V2::RolesController < Api::V2::BaseController
     authorize @role, :edit?
     respond_to do |format|
       if @role.update(api_v2_role_params)
-        format.html { render :show, notice: 'Role was successfully updated.' }
-        format.json { render json: @role, status: :ok}
+        format.html { render :show, notice: "Role was successfully updated." }
+        format.json { render json: @role, status: :ok }
       else
         format.html { render :edit }
         format.json { render json: @role.errors, status: :unprocessable_entity }
@@ -77,19 +76,22 @@ class Api::V2::RolesController < Api::V2::BaseController
     @role.destroy
     authorize @role, :destroy?
     respond_to do |format|
-      format.html { redirect_to api_v2_roles_url, notice: 'Role was successfully destroyed.' }
+      format.html do
+        redirect_to api_v2_roles_url, notice: "Role was successfully destroyed."
+      end
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_api_v2_role
-      @role = MasterData::Role.find_by(uuid: params[:uuid])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def api_v2_role_params
-      params.require(:role).permit(:name, :application, :description)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_api_v2_role
+    @role = MasterData::Role.find_by!(uuid: params[:uuid])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def api_v2_role_params
+    params.require(:role).permit(:name, :application, :description)
+  end
 end

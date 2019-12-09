@@ -1,4 +1,4 @@
-class AddUuid < ActiveRecord::Migration
+class AddUuid < ActiveRecord::Migration[4.2]
   def change
       rename_column :gram_groups, :guid, :uuid
       add_reference :gram_groups, :uuid, :unique => true, :index => true

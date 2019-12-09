@@ -1,10 +1,10 @@
-class RolifyCreateRoles < ActiveRecord::Migration
+class RolifyCreateRoles < ActiveRecord::Migration[4.2]
   def change
     create_table(:roles) do |t|
       t.string :name
       t.references :resource, :polymorphic => true
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     create_table(:clients_roles, :id => false) do |t|

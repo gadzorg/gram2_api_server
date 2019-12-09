@@ -1,15 +1,10 @@
 class MasterData::Role < MasterData::Base
-
   resourcify
 
   def rabbitmq_id
-    {
-      :name => name,
-      :application => application,
-      :description => description
-    }
+    { name: name, application: application, description: description }
   end
-  
+
   #relations
   has_and_belongs_to_many :accounts
 

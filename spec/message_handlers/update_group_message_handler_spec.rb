@@ -3,11 +3,11 @@ require 'rails_helper'
 RSpec.describe UpdateGroupMessageHandler, type: :message_handler do
 
   subject {UpdateGroupMessageHandler.new(message)}
-  
+
   let(:valid_message_payload) {
     {group_uuid:"70dc1fdb-7964-446e-849e-fedffa4b631e",name:"Dragon's Team",short_name:"dragon",description:"Equipe",members:members_uuid_list}
   }
-  let(:members_uuid_list) {[FactoryGirl.create(:master_data_account).uuid,FactoryGirl.create(:master_data_account).uuid]}
+  let(:members_uuid_list) {[create(:master_data_account).uuid,create(:master_data_account).uuid]}
 
   let(:invalid_message_payload) {
     {group_uuid:"70dc1fdb-7964-446e-849e",name:"Dragon Team",short_name:"dragon",description:"Equipe"}
@@ -33,10 +33,10 @@ RSpec.describe UpdateGroupMessageHandler, type: :message_handler do
     end
 
     context "existing group" do
-      let(:group) {FactoryGirl.create(:master_data_group)}
-      let(:user1) {FactoryGirl.create(:master_data_account)}
-      let(:user2) {FactoryGirl.create(:master_data_account)}
-      let(:user3) {FactoryGirl.create(:master_data_account)}
+      let(:group) {create(:master_data_group)}
+      let(:user1) {create(:master_data_account)}
+      let(:user2) {create(:master_data_account)}
+      let(:user3) {create(:master_data_account)}
 
       let(:valid_message_payload) {
          {group_uuid:group.uuid,name:"Dragon's Team",short_name:"dragon",description:"Equipe",members:members_uuid_list}
@@ -91,5 +91,4 @@ RSpec.describe UpdateGroupMessageHandler, type: :message_handler do
 
     end
   end
-
 end

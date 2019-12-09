@@ -52,10 +52,5 @@ Rspec :
 rspec --format doc
 ```
 
-Test from RAML :
-```
-rake spec:vigia
-
-```
 ## Deployment instructions
 TODO
