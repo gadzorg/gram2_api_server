@@ -12,6 +12,7 @@ gem "pg", "< 1" # 1.0 required postgresql > 9.2
 gem "haml-rails"
 # Use SCSS for stylesheets
 gem "sass-rails"
+gem "sprockets", "< 4"
 # Use Uglifier as compressor for JavaScript assets
 gem "uglifier"
 
@@ -66,7 +67,7 @@ group :production do
   #HEROKU
   gem "heroku_secrets", git: "https://github.com/alexpeattie/heroku_secrets"
   gem "rails_12factor"
-  gem "puma"
+  gem "puma", "~> 4.3"
 end
 
 group :development, :test do
