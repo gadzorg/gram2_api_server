@@ -12,6 +12,7 @@ gem "pg", "< 1" # 1.0 required postgresql > 9.2
 gem "haml-rails"
 # Use SCSS for stylesheets
 gem "sass-rails"
+gem "sprockets", "< 4"
 # Use Uglifier as compressor for JavaScript assets
 gem "uglifier"
 
