@@ -66,7 +66,7 @@ group :production do
   #HEROKU
   gem "heroku_secrets", git: "https://github.com/alexpeattie/heroku_secrets"
   gem "rails_12factor"
-  gem "puma"
+  gem "puma", "~> 4.3"
 end
 
 group :development, :test do
